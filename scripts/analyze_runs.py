@@ -16,6 +16,10 @@ lesion (not from what the agent said):
     tumour_survived    the main clone was never cleared (too short, too little, wrong drugs)
     suboptimal         cured, but clearly below the best known regimen
 
+Runs that say nothing about the agent are left out and listed under `excluded` in the summary: trials that
+never reached the verifier (a harness failure) and sessions that ended on a model API error before a regimen
+was submitted.
+
 Then the class is tied to what the agent did in the lab: did it sequence, did it grow out
 survivors and name them, how long did it watch a culture, did the submitted combination
 ever meet healthy cells in a well. Counterfactuals ("the same drugs at half the dose would
@@ -310,6 +314,27 @@ def diagnose(ep: dict, score: dict) -> dict:
 
 
 # ----------------------------------------------------------------------------- job directories
+EXCLUDED: list[dict] = []     # runs that say nothing about the agent: the harness or the model API failed
+
+
+def api_error(trial_dir: Path) -> str | None:
+    """The model API's error when the agent's session ended on one (OpenCode's last event is an error)."""
+    log = trial_dir / "agent" / "opencode.txt"
+    if not log.is_file():
+        return None
+    last = None
+    with open(log, errors="replace") as f:
+        for line in f:
+            if line.startswith("{"):
+                try:
+                    last = json.loads(line)
+                except ValueError:
+                    pass
+    if last and last.get("type") == "error":
+        return json.dumps(last.get("error"))[:240]
+    return None
+
+
 def trials(label: str, job_dir: Path):
     for result in sorted(job_dir.glob("*/result.json")):
         r = json.loads(result.read_text())
@@ -319,11 +344,13 @@ def trials(label: str, job_dir: Path):
             data = json.loads((result.parent / "verifier" / "episode.json").read_text())
         except (OSError, ValueError):
             exc = (r.get("exception_info") or {}).get("exception_type") or "no verifier result"
-            row.update({"class": "error", "reward": 0.0, "healed": 0.0, "harm": 0.0, "facts": {}, "counterfactuals": {},
-                        "mistakes": [{"key": "error", "title": "The run did not finish", "detail": f"Harbor: {exc}."}],
-                        "summary": f"The run did not finish ({exc})."})
-            yield row
+            EXCLUDED.append({**row, "reason": f"the trial never reached the verifier ({exc})"})
             continue
+        if data["episode"].get("closed_by") != "submit":
+            err = api_error(result.parent)
+            if err:
+                EXCLUDED.append({**row, "reason": f"the model API failed before a regimen was submitted: {err}"})
+                continue
         row.update(diagnose(data["episode"], data["score"]))
         if row["facts"].get("n_calls", 0) == 0 and label not in ("Do nothing",):
             row["idle"] = True
@@ -409,6 +436,9 @@ if __name__ == "__main__":
         for r in rows:
             f.write(json.dumps(r) + "\n")
     summary = summarise(rows, a.reference)
+    summary["excluded"] = EXCLUDED
+    for e in EXCLUDED:
+        print(f"excluded {e['label']} {e['task']} ({e['trial']}): {e['reason']}", file=sys.stderr)
     for path, text in ((a.summary, json.dumps(summary, indent=1) + "\n"), (a.md, markdown(summary))):
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         Path(path).write_text(text)

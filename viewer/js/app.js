@@ -6,13 +6,31 @@
   var $ = function (id) { return document.getElementById(id); };
   var DAYS = 364, BASE_SPEED = 14;               // days per second at 1x
   var SPEEDS = [0.5, 1, 2, 4];
+  var TREAT = window.RemissionTreat;              // js/treat.js: "Treat a patient", served by viewer/serve.py
   var NNBSP = ' ', NBSP = ' ';
 
   if (!IDX || !IDX.patients || !IDX.patients.length) {
     $('replay').hidden = true;
     var f = $('fatal');
-    f.hidden = false;
-    f.innerHTML = 'No run data found. Build it first:<br><code>python3 scripts/build_viewer.py "Reference scientist=JOB_DIR" "Agent name=JOB_DIR"</code><br>then reload this page.';
+    // without run data the Treat view still works (it needs only the server); the replays do not
+    var noData = function () {
+      var treat = /(^|[#&])view=treat(&|$)/.test(location.hash) && TREAT;
+      document.body.className = treat ? 'v-treat' : 'v-replay';
+      [].forEach.call(document.querySelectorAll('.views button'), function (b) {
+        b.setAttribute('aria-pressed', String(treat ? b.dataset.view === 'treat' : b.dataset.view === 'replay'));
+      });
+      $('treat').hidden = !treat;
+      f.hidden = !!treat;
+      if (treat) TREAT.show({ patient: (location.hash.match(/patient=([\w-]+)/) || [])[1] });
+      else if (TREAT) TREAT.hide();
+    };
+    f.innerHTML = 'No run data found. Build it first:<br><code>python3 scripts/build_viewer.py "Reference scientist=JOB_DIR" "Agent name=JOB_DIR"</code><br>then reload this page.'
+      + (TREAT ? '<br><br>Or <a href="#view=treat">treat a simulated patient yourself</a> (needs <code>python3 viewer/serve.py</code>).' : '');
+    [].forEach.call(document.querySelectorAll('.views button'), function (b) {
+      b.onclick = function () { location.hash = b.dataset.view === 'treat' ? '#view=treat' : '#'; };
+    });
+    window.addEventListener('hashchange', noData);
+    noData();
     return;
   }
   var LAB = IDX.lab, DRUGS = IDX.drugs;
@@ -96,6 +114,7 @@
   var lastHash = '';
   function writeHash() {
     var h = S.view === 'overview' ? '#view=overview'
+      : S.view === 'treat' ? '#view=treat&patient=' + encodeURIComponent(TREAT.patientId())
       : '#patient=' + encodeURIComponent(S.patient) + '&left=' + encodeURIComponent(S.left) + '&right=' + encodeURIComponent(S.right)
         + '&day=' + Math.round(S.day);
     if (h === lastHash) return;
@@ -253,7 +272,7 @@
     function item(cls, text) { var li = el('li'); li.appendChild(el('i', 'sw ' + cls)); li.appendChild(document.createTextNode(text)); leg.appendChild(li); }
     item('sw-h', 'healthy cell');
     item('sw-c0', 'tumour: dominant clone');
-    if (S.view === 'overview') item('sw-c1', 'tumour: hidden resistant clone');
+    if (S.view === 'overview' || S.view === 'treat') item('sw-c1', 'tumour: hidden resistant clone');
     else p.clones.slice(1).forEach(function (c, i) { item('sw-c' + (i + 1), 'tumour: ' + c.label); });
     item('sw-e', 'empty site');
   }
@@ -871,7 +890,11 @@
   function show() {
     $('replay').hidden = S.view !== 'replay';
     $('overview').hidden = S.view !== 'overview';
+    $('treat').hidden = S.view !== 'treat';
+    document.body.className = 'v-' + S.view;
+    if (S.view !== 'treat' && TREAT) TREAT.hide();
     if (S.view === 'overview') { pause(); closePop(); renderOverview(); }
+    else if (S.view === 'treat') { pause(); closePop(); hideTip(); TREAT.show({ patient: S.treatPatient }); }
     else if (SIDE.L.run && SIDE.R.run) {            // the year band cannot be measured while hidden: draw it now
       if (layout()) { initLattice(SIDE.L); initLattice(SIDE.R); }
       renderYear(SIDE.L); renderYear(SIDE.R); renderAxis();
@@ -928,11 +951,12 @@
       S.left = (c[0] || options(p)[0]).id;
     }
     if (!S.right) S.right = (reference(p) || options(p)[0]).id;
-    S.view = h.view === 'overview' ? 'overview' : 'replay';
+    S.view = h.view === 'overview' ? 'overview' : h.view === 'treat' && TREAT ? 'treat' : 'replay';
+    S.treatPatient = h.view === 'treat' ? h.patient : null;
     var hasDay = h.day != null && !isNaN(+h.day);
     S.day = hasDay ? clamp(+h.day, 0, DAYS) : 0;
     show();
-    return loadSides(!hasDay && first).then(function () { if (hasDay) { pause(); setDay(S.day, true); } });
+    return loadSides(!hasDay && first && S.view === 'replay').then(function () { if (hasDay) { pause(); setDay(S.day, true); } });
   }
 
   SIDE.L.canvas = $('dish-L').querySelector('canvas');
@@ -951,8 +975,9 @@
   });
   $('play').onclick = function () { S.playing ? pause() : play(); };
   [].forEach.call(document.querySelectorAll('.views button'), function (b) {
-    b.onclick = function () { S.view = b.dataset.view; show(); if (S.view === 'replay') loadSides(false); };
+    b.onclick = function () { S.view = b.dataset.view; S.treatPatient = null; show(); if (S.view === 'replay') loadSides(false); };
   });
+  if (TREAT) TREAT.onHash(function () { if (S.view === 'treat') writeHash(); });
   bindYear();
 
   document.addEventListener('keydown', function (evn) {

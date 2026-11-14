@@ -17,6 +17,10 @@ end of the task instruction.
     scripts/experience.py tasks experience/notes.md tasks/test-* --out jobs/exp-tasks
     scripts/run_eval.sh --agent-only -k 2 -m anthropic/claude-haiku-5-5 -t exp-test jobs/exp-tasks/test-*
 
+    # 4. before and after, on the same test patients
+    scripts/experience.py compare results/run_analysis.jsonl --before "Claude Haiku 5.5" \\
+        --after "Claude Haiku 5.5 with its notes" --out experience/summary.json
+
 Step 2 calls the Anthropic Messages API (ANTHROPIC_API_KEY, optional ANTHROPIC_BASE_URL).
 """
 from __future__ import annotations
@@ -24,6 +28,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import random
 import shutil
 import sys
 import urllib.request
@@ -118,6 +123,54 @@ def tasks(a) -> None:
         print(dst)
 
 
+def compare(a) -> None:
+    """Mean reward before and after on the same patients; 95 % interval of the difference from resampling
+    patients and, within a patient, the runs of each arm."""
+    rows = [json.loads(line) for line in Path(a.analysis).read_text().splitlines() if line.strip()]
+
+    def arm(label: str) -> dict:
+        by: dict[str, list[float]] = {}
+        for r in rows:
+            if r["label"] == label:
+                by.setdefault(r["task"], []).append(r["reward"])
+        if not by:
+            sys.exit(f"no runs labelled {label!r} in {a.analysis}")
+        return by
+
+    def describe(label: str, by: dict) -> dict:
+        mine = [r for r in rows if r["label"] == label]
+        classes: dict[str, int] = {}
+        for r in mine:
+            classes[r.get("class", "error")] = classes.get(r.get("class", "error"), 0) + 1
+        return {"label": label, "runs": len(mine), "patients": len(by),
+                "reward_mean": round(sum(sum(v) / len(v) for v in by.values()) / len(by), 3),
+                "healed_runs": classes.get("solved", 0) + classes.get("suboptimal", 0), "classes": classes}
+
+    before, after = arm(a.before), arm(a.after)
+    tasks = sorted(set(before) & set(after))
+    mean = lambda v: sum(v) / len(v)  # noqa: E731
+    diff = mean([mean(after[t]) - mean(before[t]) for t in tasks])
+    rng = random.Random(0)
+    stats = []
+    for _ in range(20000):
+        pick = [rng.choice(tasks) for _ in tasks]
+        stats.append(mean([mean(rng.choices(after[t], k=len(after[t]))) - mean(rng.choices(before[t], k=len(before[t]))) for t in pick]))
+    stats.sort()
+    out = {"_about": "scripts/experience.py compare: the same model on the same test patients, without and with the notes it "
+                     "wrote from its own development runs",
+           "before": describe(a.before, {t: before[t] for t in tasks}), "after": describe(a.after, {t: after[t] for t in tasks}),
+           "difference": round(diff, 3), "difference_ci95": [round(stats[499], 3), round(stats[19499], 3)],
+           "patients_better": sum(mean(after[t]) > mean(before[t]) + 1e-9 for t in tasks),
+           "patients_worse": sum(mean(after[t]) < mean(before[t]) - 1e-9 for t in tasks),
+           "per_patient": {t: {"before": [round(x, 3) for x in before[t]], "after": [round(x, 3) for x in after[t]]} for t in tasks}}
+    if a.dev and Path(a.dev).exists():
+        dev = json.loads(Path(a.dev).read_text())["labels"]
+        d = next(iter(dev.values()))
+        out["development"] = {"runs": d["runs"], "patients": d["tasks"], "reward_mean": d["reward_mean"], "classes": d["classes"]}
+    Path(a.out).write_text(json.dumps(out, indent=1) + "\n")
+    print(json.dumps({k: out[k] for k in ("before", "after", "difference", "difference_ci95", "patients_better", "patients_worse")}, indent=1))
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -132,6 +185,13 @@ def main() -> None:
     t.add_argument("task_dirs", nargs="+")
     t.add_argument("--out", required=True)
     t.set_defaults(fn=tasks)
+    c = sub.add_parser("compare", help="before and after on the same patients, from scripts/analyze_runs.py --out")
+    c.add_argument("analysis")
+    c.add_argument("--before", required=True)
+    c.add_argument("--after", required=True)
+    c.add_argument("--dev", default="experience/dev_summary.json")
+    c.add_argument("--out", default="experience/summary.json")
+    c.set_defaults(fn=compare)
     a = p.parse_args()
     a.fn(a)
 

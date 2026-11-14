@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Remission replay</title>
-<meta name="description" content="Replay of Remission runs: an AI agent's lab work and regimen for one virtual patient, next to the reference scientist's, on the same tissue and the same clock.">
+<meta name="description" content="Replay of Remission runs: an AI agent's lab work and regimen for one virtual patient, next to the reference scientist's, on the same tissue and the same clock. Or treat a simulated patient yourself.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="css/viewer.css">
 </head>
@@ -14,6 +14,7 @@
   <nav class="views" aria-label="View">
     <button type="button" data-view="replay" aria-pressed="true">Replay</button>
     <button type="button" data-view="overview" aria-pressed="false">All runs</button>
+    <button type="button" data-view="treat" aria-pressed="false">Treat a patient</button>
   </nav>
   <div class="patients" id="patients" role="group" aria-label="Patient"></div>
   <p class="rule"><b>Reward = healed − harm</b><span> · healed: healthy share of the lesion on day 364 · harm: worst loss of normal tissue</span></p>
@@ -77,12 +78,66 @@
   <div class="ov-scroll"><table class="ov" id="ov-table"></table></div>
 </main>
 
+<main id="treat" hidden>
+  <p class="t-lead"><b>Treat a simulated patient yourself.</b> <span>Set the doses, press Treat, and watch the lesion for a year.</span></p>
+  <p class="t-off" id="t-off" role="status" hidden></p>
+
+  <div class="t-grid" id="t-grid" hidden>
+    <section class="t-plan" aria-label="Patient and regimen">
+      <div class="t-pt">
+        <div class="t-h"><h2><label for="t-patient">Patient</label></h2><span class="t-k">simulated</span></div>
+        <select id="t-patient" name="patient"></select>
+        <div class="t-chart" id="t-chart"></div>
+      </div>
+      <div class="t-reg">
+        <div class="t-h"><h2>Regimen</h2><span class="t-k">daily dose, × the label dose</span></div>
+        <div class="t-presets" id="t-presets" role="group" aria-label="Preset regimens"></div>
+        <div class="t-phases" id="t-phases"></div>
+        <div class="t-drugs" id="t-drugs" role="group" aria-label="Doses in this phase"></div>
+        <div class="t-go-row">
+          <button type="button" class="t-go" id="t-go">Treat</button>
+          <p class="t-msg" id="t-msg" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="t-dish" aria-label="One copy of the lesion over a year">
+      <div class="t-clock">
+        <button type="button" class="play" id="t-play" aria-label="Play" disabled>
+          <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path class="i-play" d="M6 3.5v13l11-6.5z"/><path class="i-pause" d="M5 3.5h3.6v13H5zM11.4 3.5H15v13h-3.6z"/></svg>
+        </button>
+        <div class="day"><span class="day-word">day</span><span class="day-num" id="t-day">0</span><span class="day-phase" id="t-phase">before treatment</span></div>
+        <div class="speed" id="t-speed" role="group" aria-label="Playback speed"></div>
+      </div>
+      <div class="lattice t-lattice"><canvas id="t-canvas" aria-label="Tissue lattice: one copy of the lesion"></canvas></div>
+      <div class="counts t-counts" id="t-counts"></div>
+      <div class="t-outcome" id="t-outcome" aria-live="polite"></div>
+    </section>
+
+    <section class="year t-year" id="t-year" aria-label="The year from the first dose: drug levels, cells in the lesion, normal tissue">
+      <div class="year-run" id="t-year-run"></div>
+      <div class="year-axis" id="t-year-axis"></div>
+      <div class="year-hit" id="t-year-hit" role="slider" tabindex="0" aria-label="Day" aria-valuemin="0" aria-valuemax="364" aria-valuenow="0">
+        <div class="t-veil" id="t-veil"></div>
+        <div class="hoverline" id="t-hoverline"></div>
+        <div class="playhead" id="t-playhead"><i></i></div>
+      </div>
+    </section>
+
+    <section class="t-side" aria-label="What was hiding, and your attempts">
+      <div class="t-hiding" id="t-hiding"></div>
+      <div class="t-att" id="t-att"></div>
+    </section>
+  </div>
+</main>
+
 <div class="pop" id="pop" hidden></div>
 <div class="tip" id="tip" hidden></div>
 <p class="fatal" id="fatal" hidden></p>
 
 <script src="js/inflate.js"></script>
 <script src="data/index.js"></script>
+<script src="js/treat.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

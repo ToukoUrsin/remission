@@ -2,6 +2,7 @@
 """Draw the two result figures of the README from the analysed runs.
 
     scripts/make_figures.py [--analysis results/run_analysis.jsonl] [--summary results/summary.json] [--out docs/img]
+                            [--dark]   (dark surface, files end in _dark.png: for the deck)
 
     docs/img/results_ladder.png     mean reward per policy with its 95 % interval and the per-patient means
     docs/img/results_outcomes.png   how each agent's runs ended (the six classes of scripts/analyze_runs.py)
@@ -127,15 +128,20 @@ def main() -> None:
     p.add_argument("--analysis", default="results/run_analysis.jsonl")
     p.add_argument("--summary", default="results/summary.json")
     p.add_argument("--out", default="docs/img")
+    p.add_argument("--dark", action="store_true")
     a = p.parse_args()
+    if a.dark:
+        global SURFACE, INK, INK2, GRID
+        SURFACE, INK, INK2, GRID = "#121110", "#f1eee8", "#c2bdb3", "#2c2a26"
     plt.rcParams["font.family"] = font()
     rows = [json.loads(x) for x in Path(a.analysis).read_text().splitlines() if x.strip()]
     summary = json.loads(Path(a.summary).read_text())
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    ladder(rows, summary, out / "results_ladder.png")
-    outcomes(summary, out / "results_outcomes.png")
-    print(out / "results_ladder.png", out / "results_outcomes.png")
+    end = "_dark.png" if a.dark else ".png"
+    ladder(rows, summary, out / ("results_ladder" + end))
+    outcomes(summary, out / ("results_outcomes" + end))
+    print(out / ("results_ladder" + end), out / ("results_outcomes" + end))
 
 
 if __name__ == "__main__":
