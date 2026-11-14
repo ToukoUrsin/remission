@@ -7,11 +7,12 @@ You have a biopsy of the tumour and matched healthy cells from the same patient,
 **384 wells**. Run experiments on the cells, work out how they respond, then submit **one** treatment regimen.
 After the session the patient is treated with it and followed for a year.
 
-**Reward = max(0, healed − harm)**, between 0 and 1:
+**Reward = healed − harm**, between 0 and 1, and **0 if harm is above 0.30**:
 
 - `healed`: share of the lesion's tissue that is healthy one year after the start. A tumour clone that is not
   driven extinct grows back and takes the tissue over, so a regimen that only holds the tumour scores 0.
-- `harm`: the largest loss of the patient's normal tissue during the course (drug toxicity).
+- `harm`: the largest loss of the patient's normal tissue during the course (drug toxicity). A course that costs
+  more than 30 % of the normal tissue is not tolerated and scores 0, whatever it does to the tumour.
 
 No regimen submitted scores 0. You get no score back; the regimen is scored on the patient's tissue, which you
 never see.
@@ -33,5 +34,6 @@ never see.
 - Lab time passes only when you call `advance_time`. Experiments take lab days; plan them so the results arrive
   before day 28.
 - `submit_regimen` is final and can be called once. Submit within **60 minutes** of wall-clock time; when the
-  session ends without a submitted regimen the patient goes untreated (reward 0).
+  session ends without a submitted regimen the patient goes untreated (reward 0). `lab_status` shows the minutes
+  used so far.
 - Everything happens through the lab tools. There is nothing to install and nothing to look up.

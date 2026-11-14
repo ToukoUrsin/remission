@@ -11,7 +11,8 @@ lesion (not from what the agent said):
 
     solved             within 0.08 of the best regimen known for the patient, or better
     no_regimen         nothing was submitted: the patient went untreated
-    too_toxic          the tumour is gone but the normal tissue paid for it
+    too_toxic          the tumour is gone but the normal tissue paid for it; every cure with harm above the
+                       tolerability limit (model.HARM_LIMIT, 0.30) is here: it scored 0
     missed_clone       the tumour came back from a minor resistant clone
     tumour_survived    the main clone was never cleared (too short, too little, wrong drugs)
     suboptimal         cured, but clearly below the best known regimen
@@ -199,6 +200,8 @@ def diagnose(ep: dict, score: dict) -> dict:
     # ---- what happened in the lesion
     tum_end = np.array(ep["replay"]["tumour"][-1], dtype=float)           # mean cells per clone on day 364
     relapse = cured < 0.5
+    over = harm > M.HARM_LIMIT                                            # not tolerated: the course scores 0
+    facts["over_tolerability_limit"] = bool(over)
     tested_h = cultured(ep, regimen, "healthy", 0.5, 1e9, 3.0, read)
     tested_t = cultured(ep, regimen, "tumour", 0.5, 2.0, 5.0, read)
     facts["final_regimen_cultured_on_healthy_cells"] = tested_h
@@ -207,7 +210,7 @@ def diagnose(ep: dict, score: dict) -> dict:
     facts["days_treated"] = treated
 
     # ---- counterfactuals on the mean model (ranking), the chosen ones re-scored on the lattice
-    scales = [0.25, 0.35, 0.5, 0.7, 1.4, 2.0]
+    scales = [0.25, 0.35, 0.5, 0.7, 0.8, 0.9, 1.4, 2.0]
     variants = [scaled(regimen, s) for s in scales] + [extended(regimen)] + [scaled(extended(regimen), s) for s in scales]
     names = [f"same drugs, doses x{s:g}" for s in scales] + ["same doses, held to day 84"] + \
             [f"held to day 84, doses x{s:g}" for s in scales]
@@ -222,7 +225,7 @@ def diagnose(ep: dict, score: dict) -> dict:
         cf["harm_without_drug"] = {d: round(float(h), 3) for d, h in zip(drugs, drop["harm"])}
         cf["harm_mean_model"] = round(float(base["harm"][0]), 3)
 
-    solved = reward >= best - SOLVED_WITHIN
+    solved = best > 0 and reward >= best - SOLVED_WITHIN
     if solved:
         out["class"] = "solved"
         why = []
@@ -286,10 +289,10 @@ def diagnose(ep: dict, score: dict) -> dict:
             if not tested_t:
                 mistakes[-1]["detail"] += " The submitted combination was never cultured on tumour cells."
     else:
-        out["class"] = "too_toxic" if harm - float(bk.get("harm") or 0.0) >= 0.5 * (best - reward) else "suboptimal"
+        out["class"] = "too_toxic" if over or harm - float(bk.get("harm") or 0.0) >= 0.5 * (best - reward) else "suboptimal"
 
     # ---- harm, for every unsolved run that hurt the patient
-    if harm >= 0.25 and (not relapse or harm >= 0.4):
+    if over or (harm >= 0.25 and (not relapse or harm >= 0.4)):
         worst = None
         if cf.get("harm_without_drug"):
             d, h = min(cf["harm_without_drug"].items(), key=lambda kv: kv[1])
@@ -302,9 +305,15 @@ def diagnose(ep: dict, score: dict) -> dict:
         better = ""
         if best_var["reward"] >= reward + 0.1:
             better = f" {names[j].capitalize()} would have scored {best_var['reward']:.2f}."
-        add("too_toxic", f"Normal tissue fell to {pct(max(0.0, 1 - harm))}",
+        limit = ""
+        if over:
+            limit = (f" That is above the tolerability limit of {pct(M.HARM_LIMIT)}, so the course scores 0"
+                     + (f"; without the limit it would have scored {max(0.0, healed - harm):.2f}." if not relapse else "."))
+        add("over_limit" if over else "too_toxic",
+            f"Over the tolerability limit: harm {harm:.2f}, limit {M.HARM_LIMIT:.2f}" if over
+            else f"Normal tissue fell to {pct(max(0.0, 1 - harm))}",
             f"{'The tumour was gone, but the' if not relapse else 'The'} regimen ({show(regimen)}) cost {pct(harm)} of the normal "
-            f"tissue at its lowest point.{worst or ''} {check}.{better}")
+            f"tissue at its lowest point.{limit}{worst or ''} {check}.{better}")
     if out["class"] == "suboptimal" and not mistakes:
         add("suboptimal", TITLES["suboptimal"],
             f"Cured with {show(regimen)} for a reward of {reward:.2f}; the best regimen known scores {best:.2f} "
@@ -387,7 +396,8 @@ def summarise(rows: list[dict], reference: str) -> dict:
             by_task[r["task"]].append(r["reward"])
         mean, lo, hi = bootstrap(by_task)
         s = {"runs": len(mine), "tasks": len(by_task), "reward_mean": round(mean, 3), "reward_ci95": [round(lo, 3), round(hi, 3)],
-             "cured_runs": sum(1 for r in mine if r.get("cured_share", 0) >= 0.5),
+             "cured_runs": sum(1 for r in mine if r.get("cured_share", 0) >= 0.5 and r.get("harm", 0) <= M.HARM_LIMIT),
+             "over_limit_runs": sum(1 for r in mine if r.get("harm", 0) > M.HARM_LIMIT),
              "solved_runs": sum(1 for r in mine if r.get("class") == "solved"),
              "classes": dict(Counter(r.get("class", "error") for r in mine).most_common()),
              "mistakes": dict(Counter(m["key"] for r in mine for m in r["mistakes"] if m["key"] != "solved").most_common()),

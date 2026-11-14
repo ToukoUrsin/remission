@@ -17,10 +17,7 @@
    "MEKi": 1.0
   },
   "hindsight": {
-   "RAFi": 1.5,
-   "METi": 1.5,
-   "KRASi": 0.5,
-   "MCLi": 0.5
+   "KRASi": 0.25
   }
  },
  "KRAS": {
@@ -29,7 +26,6 @@
    "EGFRi": 1.0
   },
   "hindsight": {
-   "MEKi": 0.5,
    "KRASi": 2.0,
    "MCLi": 2.0
   }
@@ -39,8 +35,7 @@
    "EGFRi": 1.0
   },
   "hindsight": {
-   "EGFRi": 1.0,
-   "METi": 0.5,
+   "EGFRi": 2.0,
    "BCLi": 1.0
   }
  }

@@ -3,13 +3,13 @@
 
     scripts/fixed_regimen_check.py [--procs 16] [--out results/fixed_regimens.json]
 
-For every cohort patient recorded in tasks/suites.json (36 of the test salt, 12 of the development salt) the
+For every cohort patient recorded in tasks/suites.json (15 of the test salt, 5 of the development salt) the
 reward of each of the 3112 constant-dose regimens of remission/cohort.py is computed on the fast model, with
-the patient's hidden parameters. Then:
+the patient's hidden parameters and the tolerability limit. Then:
 
   blind      per tumour type, the regimen with the best mean over the development patients (this is what
-             reference/fixed_regimens.json "hindsight" holds and what the `blind` baseline submits), scored on
-             the test-salt patients, which it never saw
+             reference/fixed_regimens.json "hindsight" holds and what the `blind` baseline submits; --write-reference
+             updates that file), scored on the test-salt patients, which it never saw
   hindsight  the same choice made on the test-salt patients themselves: an upper bound no agent can reach,
              because it needs the hidden parameters of the very patients it is scored on
 
@@ -41,9 +41,10 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--procs", type=int, default=16)
     p.add_argument("--out", default=str(ROOT / "results" / "fixed_regimens.json"))
+    p.add_argument("--write-reference", action="store_true", help="write the blind regimens into reference/fixed_regimens.json")
     a = p.parse_args()
     suites = json.loads((ROOT / "tasks" / "suites.json").read_text())
-    dev, test = suites["remission-v3-dev"]["patients"], suites["remission-v3-test"]["patients"]
+    dev, test = ([q for q in suites[salt]["patients"] if q.get("eligible", True)] for salt in ("remission-v3-dev", "remission-v3-test"))
     with Pool(a.procs) as pool:
         R = dict(zip([q["seed"] for q in dev + test], pool.map(rewards, [q["seed"] for q in dev + test])))
     grid = C.grid()
@@ -77,8 +78,8 @@ def main() -> None:
     out = {
         "_about": "scripts/fixed_regimen_check.py: constant-dose regimens (84 days) on the fast model, hidden parameters",
         "grid_regimens": int(len(grid)),
-        "blind": {"chosen_on": "the 12 development patients, per tumour type", "regimens": blind,
-                  "scored_on": "the 36 test-salt cohort patients",
+        "blind": {"chosen_on": f"the {len(dev)} development patients, per tumour type", "regimens": blind,
+                  "scored_on": f"the {len(test)} test-salt cohort patients",
                   "mean_reward": round(float(np.mean(blind_rewards)), 3),
                   "patients_above_0.10": int(sum(r > 0.10 for r in blind_rewards)),
                   "rewards_above_0.10": sorted((r for r in blind_rewards if r > 0.10), reverse=True)},
@@ -91,6 +92,12 @@ def main() -> None:
     }
     for b in blind.values():
         del b["index"]
+    if a.write_reference:
+        ref = ROOT / "reference" / "fixed_regimens.json"
+        fixed = json.loads(ref.read_text())
+        for kind, b in blind.items():
+            fixed[kind]["hindsight"] = b["regimen"]
+        ref.write_text(json.dumps(fixed, indent=1) + "\n")
     Path(a.out).write_text(json.dumps(out, indent=1) + "\n")
     print(json.dumps({k: out[k] for k in ("blind", "hindsight_on_the_test_patients")}, indent=1))
 

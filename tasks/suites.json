@@ -1,5 +1,5 @@
 {
- "_about": "Cohort patients of the named salts, in the order the salt generates them: every generated patient of the first `screened` that passes all six rules of remission/cohort.py. A suite is the first `count` of them with at most `per_type` of one tumour type (scripts/new_task.py --salt). best is the best constant-dose regimen of the cohort test's grid and its reward on the lattice; hedges are rule 6's two regimens with their reward on the real tumour.",
+ "_about": "Cohort patients of the named salts, in the order the salt generates them. `patients` lists every generated patient of the first `screened` that passes rules 1 to 6 of remission/cohort.py; `tolerable` is rule 7 for that patient (the best regimen the search finds with the true parameters within the tolerability limit, its reward, and its reward with every dose raised by 10 %) and `eligible` says whether the patient passes it and so is in the cohort. A suite is the first `count` eligible patients (scripts/new_task.py --salt). best is the best constant-dose regimen of the 3112-regimen grid without the limit (rule 2), hedges are the two rule-6 regimens.",
  "remission-v3-test": {
   "screened": 14000,
   "passed_rules_1_to_5": 150,
@@ -40,7 +40,35 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 15,
+        "doses": {
+         "RAFi": 1.88,
+         "MEKi": 1.08,
+         "BCLi": 1.03
+        }
+       },
+       {
+        "days": 69,
+        "doses": {
+         "RAFi": 1.21,
+         "MEKi": 0.82,
+         "BCLi": 1.0
+        }
+       }
+      ]
+     },
+     "reward": 0.716,
+     "healed": 0.943,
+     "harm": 0.226,
+     "reward_raised": 0.689,
+     "harm_raised": 0.254
+    },
+    "eligible": true
    },
    {
     "index": 891,
@@ -77,7 +105,35 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 80,
+        "doses": {
+         "EGFRi": 0.1,
+         "METi": 0.35,
+         "BCLi": 0.1
+        }
+       },
+       {
+        "days": 4,
+        "doses": {
+         "METi": 0.38,
+         "PI3Ki": 0.19,
+         "BCLi": 0.1
+        }
+       }
+      ]
+     },
+     "reward": 0.671,
+     "healed": 0.84,
+     "harm": 0.193,
+     "reward_raised": 0.743,
+     "harm_raised": 0.217
+    },
+    "eligible": true
    },
    {
     "index": 1195,
@@ -114,7 +170,26 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.16,
+         "MCLi": 1.5
+        }
+       }
+      ]
+     },
+     "reward": 0.745,
+     "healed": 0.901,
+     "harm": 0.162,
+     "reward_raised": 0.776,
+     "harm_raised": 0.181
+    },
+    "eligible": true
    },
    {
     "index": 1916,
@@ -154,7 +229,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.2,
+         "MEKi": 0.85,
+         "BCLi": 1.42
+        }
+       }
+      ]
+     },
+     "reward": 0.661,
+     "healed": 0.957,
+     "harm": 0.296,
+     "reward_raised": 0.0,
+     "harm_raised": 0.332
+    },
+    "eligible": false
    },
    {
     "index": 3317,
@@ -191,7 +286,33 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 10,
+        "doses": {
+         "RAFi": 0.77,
+         "BCLi": 0.1
+        }
+       },
+       {
+        "days": 43,
+        "doses": {
+         "RAFi": 0.89,
+         "MEKi": 0.26
+        }
+       }
+      ]
+     },
+     "reward": 0.825,
+     "healed": 0.958,
+     "harm": 0.133,
+     "reward_raised": 0.811,
+     "harm_raised": 0.147
+    },
+    "eligible": true
    },
    {
     "index": 3426,
@@ -229,7 +350,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.61,
+         "MEKi": 0.87,
+         "BCLi": 0.84
+        }
+       }
+      ]
+     },
+     "reward": 0.665,
+     "healed": 0.904,
+     "harm": 0.248,
+     "reward_raised": 0.679,
+     "harm_raised": 0.279
+    },
+    "eligible": true
    },
    {
     "index": 3779,
@@ -266,7 +407,33 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 14,
+        "doses": {
+         "EGFRi": 1.18,
+         "BCLi": 1.62
+        }
+       },
+       {
+        "days": 64,
+        "doses": {
+         "EGFRi": 0.85,
+         "BCLi": 1.47
+        }
+       }
+      ]
+     },
+     "reward": 0.74,
+     "healed": 0.95,
+     "harm": 0.209,
+     "reward_raised": 0.713,
+     "harm_raised": 0.236
+    },
+    "eligible": true
    },
    {
     "index": 3872,
@@ -306,7 +473,33 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 58,
+        "doses": {
+         "RAFi": 0.71,
+         "BCLi": 0.65
+        }
+       },
+       {
+        "days": 26,
+        "doses": {
+         "RAFi": 0.9,
+         "MCLi": 0.56
+        }
+       }
+      ]
+     },
+     "reward": 0.905,
+     "healed": 0.962,
+     "harm": 0.058,
+     "reward_raised": 0.896,
+     "harm_raised": 0.066
+    },
+    "eligible": true
    },
    {
     "index": 3889,
@@ -346,7 +539,28 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.52,
+         "MEKi": 0.3,
+         "METi": 0.73,
+         "MCLi": 2.0
+        }
+       }
+      ]
+     },
+     "reward": 0.708,
+     "healed": 0.963,
+     "harm": 0.255,
+     "reward_raised": 0.693,
+     "harm_raised": 0.27
+    },
+    "eligible": true
    },
    {
     "index": 3973,
@@ -384,7 +598,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 81,
+        "doses": {
+         "RAFi": 0.38,
+         "MEKi": 0.88,
+         "BCLi": 0.83
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.899,
+     "harm": 0.347,
+     "reward_raised": 0.0,
+     "harm_raised": 0.388
+    },
+    "eligible": false
    },
    {
     "index": 4410,
@@ -425,7 +659,27 @@
       "reward": 0.002,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 1.25,
+         "METi": 2.0,
+         "BCLi": 0.95
+        }
+       }
+      ]
+     },
+     "reward": 0.568,
+     "healed": 0.829,
+     "harm": 0.298,
+     "reward_raised": 0.0,
+     "harm_raised": 0.322
+    },
+    "eligible": false
    },
    {
     "index": 4514,
@@ -463,7 +717,26 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "EGFRi": 0.26,
+         "METi": 0.14
+        }
+       }
+      ]
+     },
+     "reward": 0.576,
+     "healed": 0.816,
+     "harm": 0.274,
+     "reward_raised": 0.0,
+     "harm_raised": 0.304
+    },
+    "eligible": false
    },
    {
     "index": 4800,
@@ -502,7 +775,34 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 9,
+        "doses": {
+         "MEKi": 0.28,
+         "EGFRi": 2.0,
+         "MCLi": 2.0
+        }
+       },
+       {
+        "days": 64,
+        "doses": {
+         "EGFRi": 1.27,
+         "MCLi": 0.66
+        }
+       }
+      ]
+     },
+     "reward": 0.358,
+     "healed": 0.527,
+     "harm": 0.3,
+     "reward_raised": 0.0,
+     "harm_raised": 0.319
+    },
+    "eligible": false
    },
    {
     "index": 5861,
@@ -539,7 +839,35 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 41,
+        "doses": {
+         "MEKi": 0.65,
+         "EGFRi": 0.17,
+         "METi": 0.42
+        }
+       },
+       {
+        "days": 43,
+        "doses": {
+         "MEKi": 0.59,
+         "EGFRi": 0.17,
+         "METi": 0.42
+        }
+       }
+      ]
+     },
+     "reward": 0.564,
+     "healed": 0.81,
+     "harm": 0.281,
+     "reward_raised": 0.0,
+     "harm_raised": 0.321
+    },
+    "eligible": false
    },
    {
     "index": 5958,
@@ -577,7 +905,37 @@
       "reward": 0.001,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 54,
+        "doses": {
+         "RAFi": 1.24,
+         "EGFRi": 0.14,
+         "METi": 0.8,
+         "MCLi": 2.0
+        }
+       },
+       {
+        "days": 30,
+        "doses": {
+         "RAFi": 1.37,
+         "EGFRi": 0.14,
+         "METi": 0.67,
+         "MCLi": 2.0
+        }
+       }
+      ]
+     },
+     "reward": 0.666,
+     "healed": 0.958,
+     "harm": 0.293,
+     "reward_raised": 0.0,
+     "harm_raised": 0.309
+    },
+    "eligible": false
    },
    {
     "index": 6412,
@@ -614,7 +972,26 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "EGFRi": 2.0,
+         "BCLi": 1.89
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.956,
+     "harm": 0.36,
+     "reward_raised": 0.0,
+     "harm_raised": 0.379
+    },
+    "eligible": false
    },
    {
     "index": 7151,
@@ -653,7 +1030,26 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "METi": 2.0,
+         "MCLi": 0.29
+        }
+       }
+      ]
+     },
+     "reward": 0.458,
+     "healed": 0.658,
+     "harm": 0.29,
+     "reward_raised": 0.0,
+     "harm_raised": 0.311
+    },
+    "eligible": false
    },
    {
     "index": 7517,
@@ -691,7 +1087,35 @@
       "reward": 0.015,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 73,
+        "doses": {
+         "RAFi": 1.35,
+         "MEKi": 1.07,
+         "BCLi": 0.98
+        }
+       },
+       {
+        "days": 11,
+        "doses": {
+         "RAFi": 1.32,
+         "MEKi": 1.07,
+         "BCLi": 0.98
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.892,
+     "harm": 0.432,
+     "reward_raised": 0.0,
+     "harm_raised": 0.488
+    },
+    "eligible": false
    },
    {
     "index": 7732,
@@ -728,7 +1152,35 @@
       "reward": 0.004,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 1,
+        "doses": {
+         "MEKi": 1.12,
+         "EGFRi": 1.08,
+         "PI3Ki": 0.5,
+         "MCLi": 0.92
+        }
+       },
+       {
+        "days": 83,
+        "doses": {
+         "EGFRi": 0.55,
+         "MCLi": 0.16
+        }
+       }
+      ]
+     },
+     "reward": 0.581,
+     "healed": 0.835,
+     "harm": 0.29,
+     "reward_raised": 0.0,
+     "harm_raised": 0.333
+    },
+    "eligible": false
    },
    {
     "index": 8061,
@@ -766,7 +1218,35 @@
       "reward": 0.007,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 68,
+        "doses": {
+         "MEKi": 1.04,
+         "EGFRi": 1.3,
+         "KRASi": 1.22,
+         "BCLi": 1.62
+        }
+       },
+       {
+        "days": 1,
+        "doses": {
+         "MEKi": 1.05,
+         "EGFRi": 1.01
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.961,
+     "harm": 0.667,
+     "reward_raised": 0.0,
+     "harm_raised": 0.736
+    },
+    "eligible": false
    },
    {
     "index": 8449,
@@ -804,7 +1284,34 @@
       "reward": 0.012,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 9,
+        "doses": {
+         "RAFi": 0.41,
+         "EGFRi": 0.48,
+         "BCLi": 0.59
+        }
+       },
+       {
+        "days": 75,
+        "doses": {
+         "RAFi": 0.51,
+         "EGFRi": 0.56
+        }
+       }
+      ]
+     },
+     "reward": 0.331,
+     "healed": 0.488,
+     "harm": 0.298,
+     "reward_raised": 0.0,
+     "harm_raised": 0.327
+    },
+    "eligible": false
    },
    {
     "index": 8658,
@@ -842,7 +1349,35 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 9,
+        "doses": {
+         "RAFi": 1.79,
+         "MEKi": 0.86,
+         "MCLi": 0.72
+        }
+       },
+       {
+        "days": 43,
+        "doses": {
+         "RAFi": 1.44,
+         "MEKi": 1.21,
+         "MCLi": 0.25
+        }
+       }
+      ]
+     },
+     "reward": 0.559,
+     "healed": 0.821,
+     "harm": 0.299,
+     "reward_raised": 0.0,
+     "harm_raised": 0.336
+    },
+    "eligible": false
    },
    {
     "index": 9369,
@@ -879,7 +1414,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "MEKi": 0.19,
+         "EGFRi": 0.11,
+         "METi": 0.2
+        }
+       }
+      ]
+     },
+     "reward": 0.623,
+     "healed": 0.869,
+     "harm": 0.262,
+     "reward_raised": 0.631,
+     "harm_raised": 0.296
+    },
+    "eligible": true
    },
    {
     "index": 9399,
@@ -916,7 +1471,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 1.21,
+         "MEKi": 0.1,
+         "BCLi": 2.0
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.943,
+     "harm": 0.412,
+     "reward_raised": 0.0,
+     "harm_raised": 0.425
+    },
+    "eligible": false
    },
    {
     "index": 9487,
@@ -956,7 +1531,27 @@
       "reward": 0.001,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.24,
+         "MEKi": 0.31,
+         "MCLi": 2.0
+        }
+       }
+      ]
+     },
+     "reward": 0.688,
+     "healed": 0.954,
+     "harm": 0.265,
+     "reward_raised": 0.671,
+     "harm_raised": 0.283
+    },
+    "eligible": true
    },
    {
     "index": 10266,
@@ -996,7 +1591,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "MEKi": 0.92,
+         "EGFRi": 0.22,
+         "BCLi": 1.24
+        }
+       }
+      ]
+     },
+     "reward": 0.166,
+     "healed": 0.24,
+     "harm": 0.297,
+     "reward_raised": 0.0,
+     "harm_raised": 0.347
+    },
+    "eligible": false
    },
    {
     "index": 10307,
@@ -1034,7 +1649,28 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 1.6,
+         "METi": 1.51,
+         "BCLi": 0.1,
+         "MCLi": 0.26
+        }
+       }
+      ]
+     },
+     "reward": 0.725,
+     "healed": 0.962,
+     "harm": 0.237,
+     "reward_raised": 0.702,
+     "harm_raised": 0.259
+    },
+    "eligible": true
    },
    {
     "index": 10439,
@@ -1072,7 +1708,35 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 4,
+        "doses": {
+         "MEKi": 0.33,
+         "EGFRi": 0.16,
+         "BCLi": 0.25
+        }
+       },
+       {
+        "days": 6,
+        "doses": {
+         "MEKi": 0.14,
+         "EGFRi": 0.1,
+         "BCLi": 0.19
+        }
+       }
+      ]
+     },
+     "reward": 0.135,
+     "healed": 0.181,
+     "harm": 0.242,
+     "reward_raised": 0.214,
+     "harm_raised": 0.276
+    },
+    "eligible": false
    },
    {
     "index": 10667,
@@ -1112,7 +1776,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "EGFRi": 0.77,
+         "KRASi": 0.43,
+         "BCLi": 1.79
+        }
+       }
+      ]
+     },
+     "reward": 0.612,
+     "healed": 0.893,
+     "harm": 0.3,
+     "reward_raised": 0.0,
+     "harm_raised": 0.33
+    },
+    "eligible": false
    },
    {
     "index": 11090,
@@ -1149,7 +1833,33 @@
       "reward": 0.011,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 8,
+        "doses": {
+         "EGFRi": 1.51,
+         "MCLi": 0.41
+        }
+       },
+       {
+        "days": 12,
+        "doses": {
+         "EGFRi": 0.68,
+         "MCLi": 0.2
+        }
+       }
+      ]
+     },
+     "reward": 0.653,
+     "healed": 0.95,
+     "harm": 0.297,
+     "reward_raised": 0.0,
+     "harm_raised": 0.32
+    },
+    "eligible": false
    },
    {
     "index": 11558,
@@ -1189,7 +1899,36 @@
       "reward": 0.007,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 11,
+        "doses": {
+         "RAFi": 1.25,
+         "MEKi": 0.19,
+         "METi": 1.8,
+         "BCLi": 0.63
+        }
+       },
+       {
+        "days": 73,
+        "doses": {
+         "RAFi": 1.04,
+         "METi": 1.47,
+         "BCLi": 0.44
+        }
+       }
+      ]
+     },
+     "reward": 0.668,
+     "healed": 0.941,
+     "harm": 0.273,
+     "reward_raised": 0.641,
+     "harm_raised": 0.3
+    },
+    "eligible": true
    },
    {
     "index": 11707,
@@ -1227,7 +1966,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.45,
+         "MEKi": 0.39,
+         "BCLi": 0.94
+        }
+       }
+      ]
+     },
+     "reward": 0.742,
+     "healed": 0.954,
+     "harm": 0.213,
+     "reward_raised": 0.719,
+     "harm_raised": 0.235
+    },
+    "eligible": true
    },
    {
     "index": 12518,
@@ -1267,7 +2026,36 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 11,
+        "doses": {
+         "RAFi": 0.58,
+         "MEKi": 0.62,
+         "METi": 0.12,
+         "MCLi": 1.07
+        }
+       },
+       {
+        "days": 73,
+        "doses": {
+         "RAFi": 0.58,
+         "MEKi": 0.4,
+         "MCLi": 1.01
+        }
+       }
+      ]
+     },
+     "reward": 0.709,
+     "healed": 0.949,
+     "harm": 0.24,
+     "reward_raised": 0.679,
+     "harm_raised": 0.27
+    },
+    "eligible": true
    },
    {
     "index": 12934,
@@ -1307,7 +2095,28 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 2.0,
+         "METi": 1.81,
+         "KRASi": 1.41,
+         "MCLi": 1.24
+        }
+       }
+      ]
+     },
+     "reward": 0.621,
+     "healed": 0.91,
+     "harm": 0.298,
+     "reward_raised": 0.0,
+     "harm_raised": 0.333
+    },
+    "eligible": false
    },
    {
     "index": 13696,
@@ -1348,7 +2157,29 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 2.0,
+         "MEKi": 0.24,
+         "METi": 1.16,
+         "BCLi": 0.1,
+         "MCLi": 0.58
+        }
+       }
+      ]
+     },
+     "reward": 0.734,
+     "healed": 0.957,
+     "harm": 0.223,
+     "reward_raised": 0.711,
+     "harm_raised": 0.246
+    },
+    "eligible": true
    },
    {
     "index": 13849,
@@ -1387,9 +2218,41 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 63,
+        "doses": {
+         "RAFi": 0.52,
+         "MEKi": 0.65,
+         "METi": 1.24,
+         "BCLi": 1.06
+        }
+       },
+       {
+        "days": 21,
+        "doses": {
+         "RAFi": 0.52,
+         "MEKi": 0.65,
+         "METi": 1.12,
+         "BCLi": 1.06
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.962,
+     "harm": 0.347,
+     "reward_raised": 0.0,
+     "harm_raised": 0.392
+    },
+    "eligible": false
    }
-  ]
+  ],
+  "passed_rules_1_to_6": 36,
+  "passed_rule_7": 15
  },
  "remission-v3-dev": {
   "screened": 6000,
@@ -1432,7 +2295,33 @@
       "reward": 0.007,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 82,
+        "doses": {
+         "EGFRi": 0.24,
+         "METi": 0.23
+        }
+       },
+       {
+        "days": 2,
+        "doses": {
+         "EGFRi": 1.31,
+         "PI3Ki": 0.12
+        }
+       }
+      ]
+     },
+     "reward": 0.648,
+     "healed": 0.939,
+     "harm": 0.291,
+     "reward_raised": 0.0,
+     "harm_raised": 0.325
+    },
+    "eligible": false
    },
    {
     "index": 977,
@@ -1470,7 +2359,35 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 40,
+        "doses": {
+         "MEKi": 0.66,
+         "KRASi": 1.95,
+         "MCLi": 2.0
+        }
+       },
+       {
+        "days": 44,
+        "doses": {
+         "MEKi": 0.66,
+         "KRASi": 1.26,
+         "MCLi": 2.0
+        }
+       }
+      ]
+     },
+     "reward": 0.553,
+     "healed": 0.815,
+     "harm": 0.299,
+     "reward_raised": 0.0,
+     "harm_raised": 0.31
+    },
+    "eligible": false
    },
    {
     "index": 1228,
@@ -1510,7 +2427,26 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.38,
+         "BCLi": 1.2
+        }
+       }
+      ]
+     },
+     "reward": 0.205,
+     "healed": 0.358,
+     "harm": 0.299,
+     "reward_raised": 0.0,
+     "harm_raised": 0.332
+    },
+    "eligible": false
    },
    {
     "index": 2522,
@@ -1547,7 +2483,32 @@
       "reward": 0.013,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 4,
+        "doses": {
+         "RAFi": 0.77,
+         "BCLi": 0.8
+        }
+       },
+       {
+        "days": 46,
+        "doses": {
+         "RAFi": 0.89
+        }
+       }
+      ]
+     },
+     "reward": 0.593,
+     "healed": 0.83,
+     "harm": 0.25,
+     "reward_raised": 0.617,
+     "harm_raised": 0.266
+    },
+    "eligible": true
    },
    {
     "index": 2998,
@@ -1587,7 +2548,37 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 67,
+        "doses": {
+         "RAFi": 1.68,
+         "MEKi": 0.76,
+         "METi": 0.31,
+         "KRASi": 0.23
+        }
+       },
+       {
+        "days": 17,
+        "doses": {
+         "RAFi": 1.53,
+         "MEKi": 0.79,
+         "METi": 0.28,
+         "KRASi": 0.23
+        }
+       }
+      ]
+     },
+     "reward": 0.664,
+     "healed": 0.937,
+     "harm": 0.273,
+     "reward_raised": 0.0,
+     "harm_raised": 0.303
+    },
+    "eligible": false
    },
    {
     "index": 3868,
@@ -1628,7 +2619,27 @@
       "reward": 0.021,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "RAFi": 0.1,
+         "MEKi": 0.24,
+         "BCLi": 0.47
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.0,
+     "harm": 0.054,
+     "reward_raised": 0.0,
+     "harm_raised": 0.058
+    },
+    "eligible": false
    },
    {
     "index": 4113,
@@ -1668,7 +2679,33 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 22,
+        "doses": {
+         "EGFRi": 0.95,
+         "BCLi": 0.57
+        }
+       },
+       {
+        "days": 41,
+        "doses": {
+         "EGFRi": 0.85,
+         "MCLi": 0.32
+        }
+       }
+      ]
+     },
+     "reward": 0.803,
+     "healed": 0.961,
+     "harm": 0.158,
+     "reward_raised": 0.786,
+     "harm_raised": 0.175
+    },
+    "eligible": true
    },
    {
     "index": 4237,
@@ -1706,7 +2743,27 @@
       "reward": 0.001,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "MEKi": 0.2,
+         "KRASi": 2.0,
+         "MCLi": 2.0
+        }
+       }
+      ]
+     },
+     "reward": 0.61,
+     "healed": 0.882,
+     "harm": 0.29,
+     "reward_raised": 0.562,
+     "harm_raised": 0.299
+    },
+    "eligible": true
    },
    {
     "index": 4402,
@@ -1744,7 +2801,27 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "EGFRi": 0.15,
+         "METi": 1.38,
+         "PI3Ki": 1.19
+        }
+       }
+      ]
+     },
+     "reward": 0.581,
+     "healed": 0.842,
+     "harm": 0.298,
+     "reward_raised": 0.0,
+     "harm_raised": 0.335
+    },
+    "eligible": false
    },
    {
     "index": 5074,
@@ -1783,7 +2860,39 @@
       "reward": 0.001,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 14,
+        "doses": {
+         "RAFi": 2.0,
+         "MEKi": 0.54,
+         "METi": 2.0,
+         "KRASi": 0.25,
+         "MCLi": 0.1
+        }
+       },
+       {
+        "days": 70,
+        "doses": {
+         "RAFi": 1.28,
+         "MEKi": 0.54,
+         "METi": 1.57,
+         "KRASi": 0.19,
+         "MCLi": 0.1
+        }
+       }
+      ]
+     },
+     "reward": 0.73,
+     "healed": 0.949,
+     "harm": 0.219,
+     "reward_raised": 0.707,
+     "harm_raised": 0.242
+    },
+    "eligible": true
    },
    {
     "index": 5242,
@@ -1820,7 +2929,26 @@
       "reward": 0.0,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 84,
+        "doses": {
+         "EGFRi": 0.1,
+         "MCLi": 0.21
+        }
+       }
+      ]
+     },
+     "reward": 0.743,
+     "healed": 0.946,
+     "harm": 0.203,
+     "reward_raised": 0.721,
+     "harm_raised": 0.224
+    },
+    "eligible": true
    },
    {
     "index": 5997,
@@ -1858,8 +2986,38 @@
       "reward": 0.001,
       "lattice": 0.0
      }
-    ]
+    ],
+    "tolerable": {
+     "regimen": {
+      "phases": [
+       {
+        "days": 32,
+        "doses": {
+         "RAFi": 1.13,
+         "EGFRi": 1.11,
+         "METi": 1.73
+        }
+       },
+       {
+        "days": 51,
+        "doses": {
+         "RAFi": 1.06,
+         "EGFRi": 1.08,
+         "METi": 1.32
+        }
+       }
+      ]
+     },
+     "reward": 0.0,
+     "healed": 0.965,
+     "harm": 0.446,
+     "reward_raised": 0.0,
+     "harm_raised": 0.514
+    },
+    "eligible": false
    }
-  ]
+  ],
+  "passed_rules_1_to_6": 12,
+  "passed_rule_7": 5
  }
 }

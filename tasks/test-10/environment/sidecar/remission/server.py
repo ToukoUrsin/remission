@@ -44,6 +44,7 @@ KEEP_ALIVE_S = int(os.environ.get("REMISSION_KEEP_ALIVE_S", "7200"))
 SCORE_REPS = int(os.environ.get("REMISSION_SCORE_REPS", "16"))
 WELLS = int(os.environ.get("REMISSION_WELLS", "") or L.WELL_BUDGET)          # the suite's lab budget
 LAB_DAYS = float(os.environ.get("REMISSION_LAB_DAYS", "") or L.LAB_DAYS)
+SESSION_MIN = float(os.environ.get("REMISSION_SESSION_MIN", "") or 60)     # shown to the agent; Harbor enforces it
 try:                                    # a regimen known to cure this patient; shown in the replay, never to the agent
     BEST_KNOWN = json.loads(os.environ.get("REMISSION_BEST_KNOWN", "") or "{}")
 except ValueError:
@@ -61,11 +62,13 @@ def brief() -> dict:
             "Cure the tumour without wrecking the patient's normal tissue. Every patient here is refractory: the standard "
             "regimens for the tumour type do not cure them, and at least one regimen of these drugs does."),
         "scoring": {
-            "reward": "max(0, healed - harm), between 0 and 1",
+            "reward": f"healed - harm, between 0 and 1; 0 if harm is above {M.HARM_LIMIT:g}",
             "healed": "share of the lesion's tissue sites that hold healthy cells on day 364 (about 0.74 on day 0; "
                       "an untreated tumour takes the tissue over, healed goes to 0)",
             "harm": "largest fractional loss of the patient's normal tissue at any time during the course "
                     "(drug toxicity to healthy cells elsewhere in the body)",
+            "limit": f"A course with harm above {M.HARM_LIMIT:g} is not tolerated: it scores 0 whatever it does to the "
+                     "tumour. The limit is applied to the patient's true harm, not to your estimate of it.",
             "notes": ["The regimen is scored on the patient's tissue, which you never see; no score is shown to you.",
                       "No regimen submitted = untreated = 0.",
                       "A tumour clone that is not driven extinct grows back and takes the tissue over well before day 364."],
@@ -82,6 +85,8 @@ def brief() -> dict:
                      "dose, in the same units as the wells: a well at that concentration matches dose 1.0 on average.",
         "lab": {
             "clock": f"{LAB_DAYS:g} days; time passes only when you call advance_time; quarter-day resolution",
+            "session": f"{SESSION_MIN:g} minutes of wall-clock time to submit; lab_status and advance_time report the "
+                       "minutes used so far (session.minutes_used)",
             "wells": f"{WELLS} in total; at most {L.MAX_WELLS} per experiment",
             "cells": "'tumour' (the biopsy), 'healthy' (matched healthy cells), and lines you derive ('L1', 'L2', ...)",
             "assays": {
@@ -139,8 +144,15 @@ class Episode:
         self.calls: list[dict[str, Any]] = []
         self.lock = threading.Lock()
         self.started_wall = time.time()
+        self.first_call_wall: float | None = None
         self.closed_by: str | None = None
         self._final: dict | None = None
+
+    def session(self) -> dict[str, Any]:
+        """Wall-clock minutes since the agent's first lab call, next to the session limit."""
+        used = 0.0 if self.first_call_wall is None else (time.time() - self.first_call_wall) / 60.0
+        return {"minutes_used": round(used, 1), "minutes_limit": SESSION_MIN,
+                "note": "wall-clock time since your first lab call"}
 
     @staticmethod
     def _summarise(result: Any) -> Any:
@@ -152,6 +164,8 @@ class Episode:
     def call(self, tool: str, args: dict[str, Any], fn) -> dict[str, Any]:
         with self.lock:
             day_before = self.lab.day
+            if self.first_call_wall is None:
+                self.first_call_wall = time.time()
             t_wall = round(time.time() - self.started_wall, 3)
             if self.closed_by == "verifier":
                 result, ok = {"error": "the session is over"}, False
@@ -278,8 +292,9 @@ async def patient_chart() -> dict:
 
 @mcp.tool()
 async def lab_status() -> dict:
-    """Lab day, days and wells left, the cell sources you can use and every experiment with its status. Free."""
-    return await _play("lab_status", {}, LAB.status)
+    """Lab day, days and wells left, the cell sources you can use, every experiment with its status, and the
+    wall-clock minutes of the session used so far. Free."""
+    return await _play("lab_status", {}, lambda: {**LAB.status(), "session": EPISODE.session()})
 
 
 @mcp.tool()
@@ -318,7 +333,7 @@ async def derive_line(experiment_id: str, well: Int) -> dict:
 @mcp.tool()
 async def advance_time(days: Num) -> dict:
     """Let the lab clock run for `days` (quarter-day steps). The only way time passes. Returns lab_status."""
-    return await _play("advance_time", {"days": days}, lambda: LAB.advance_time(days))
+    return await _play("advance_time", {"days": days}, lambda: {**LAB.advance_time(days), "session": EPISODE.session()})
 
 
 @mcp.tool()

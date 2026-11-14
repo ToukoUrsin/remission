@@ -2,102 +2,65 @@
  "_about": "scripts/fixed_regimen_check.py: constant-dose regimens (84 days) on the fast model, hidden parameters",
  "grid_regimens": 3112,
  "blind": {
-  "chosen_on": "the 12 development patients, per tumour type",
+  "chosen_on": "the 5 development patients, per tumour type",
   "regimens": {
+   "BRAF_MEL": {
+    "regimen": {
+     "KRASi": 0.25
+    },
+    "development_patients": 2,
+    "mean_on_development": 0.01
+   },
    "EGFR": {
     "regimen": {
-     "EGFRi": 1.0,
-     "METi": 0.5,
+     "EGFRi": 2.0,
      "BCLi": 1.0
     },
-    "development_patients": 4,
-    "mean_on_development": 0.222
+    "development_patients": 2,
+    "mean_on_development": 0.279
    },
    "KRAS": {
     "regimen": {
-     "MEKi": 0.5,
      "KRASi": 2.0,
      "MCLi": 2.0
     },
-    "development_patients": 2,
-    "mean_on_development": 0.428
-   },
-   "BRAF_MEL": {
-    "regimen": {
-     "RAFi": 1.5,
-     "METi": 1.5,
-     "KRASi": 0.5,
-     "MCLi": 0.5
-    },
-    "development_patients": 5,
-    "mean_on_development": 0.142
-   },
-   "BRAF_CRC": {
-    "regimen": {
-     "RAFi": 1.0,
-     "EGFRi": 1.0,
-     "METi": 2.0
-    },
     "development_patients": 1,
-    "mean_on_development": 0.513
+    "mean_on_development": 0.004
    }
   },
-  "scored_on": "the 36 test-salt cohort patients",
-  "mean_reward": 0.04,
-  "patients_above_0.10": 4,
-  "rewards_above_0.10": [
-   0.48,
-   0.38,
-   0.287,
-   0.277
-  ]
+  "scored_on": "the 15 test-salt cohort patients",
+  "mean_reward": 0.0,
+  "patients_above_0.10": 0,
+  "rewards_above_0.10": []
  },
  "hindsight_on_the_test_patients": {
   "per_tumour_type": {
    "BRAF_MEL": {
     "regimen": {
      "RAFi": 0.5,
-     "MEKi": 1.0,
-     "BCLi": 2.0
+     "MEKi": 0.5,
+     "MCLi": 1.0
     },
-    "test_patients": 22,
-    "mean_on_test": 0.143
+    "test_patients": 12,
+    "mean_on_test": 0.114
    },
    "EGFR": {
     "regimen": {
-     "EGFRi": 0.25,
-     "METi": 0.25
-    },
-    "test_patients": 12,
-    "mean_on_test": 0.14
-   },
-   "KRAS": {
-    "regimen": {
      "EGFRi": 1.0,
-     "KRASi": 1.0,
      "BCLi": 2.0
     },
-    "test_patients": 1,
-    "mean_on_test": 0.511
-   },
-   "BRAF_CRC": {
-    "regimen": {
-     "RAFi": 0.5,
-     "EGFRi": 0.5,
-     "BCLi": 0.5
-    },
-    "test_patients": 1,
-    "mean_on_test": 0.548
+    "test_patients": 3,
+    "mean_on_test": 0.22
    }
   },
-  "per_tumour_type_mean_over_patients": 0.163,
+  "per_tumour_type_mean_over_patients": 0.135,
   "one_regimen_for_all": {
    "regimen": {
     "RAFi": 0.5,
-    "MEKi": 1.0,
-    "BCLi": 2.0
+    "MEKi": 0.5,
+    "MCLi": 1.0
    },
-   "mean_on_test": 0.088
+   "mean_on_test": 0.091
   }
  },
  "per_patient": [
@@ -113,7 +76,7 @@
    "seed": 1551177275,
    "tumour_type": "EGFR",
    "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.615
+   "best_constant_regimen_for_this_patient": 0.513
   },
   {
    "index": 1195,
@@ -123,18 +86,11 @@
    "best_constant_regimen_for_this_patient": 0.726
   },
   {
-   "index": 1916,
-   "seed": 1059807690,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.536
-  },
-  {
    "index": 3317,
    "seed": 1451944932,
    "tumour_type": "BRAF_MEL",
    "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.586
+   "best_constant_regimen_for_this_patient": 0.0
   },
   {
    "index": 3426,
@@ -147,7 +103,7 @@
    "index": 3779,
    "seed": 2014354864,
    "tumour_type": "EGFR",
-   "blind_reward": 0.38,
+   "blind_reward": 0.0,
    "best_constant_regimen_for_this_patient": 0.66
   },
   {
@@ -155,168 +111,42 @@
    "seed": 253942617,
    "tumour_type": "BRAF_MEL",
    "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.552
+   "best_constant_regimen_for_this_patient": 0.0
   },
   {
    "index": 3889,
    "seed": 1661806466,
    "tumour_type": "BRAF_MEL",
    "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.643
-  },
-  {
-   "index": 3973,
-   "seed": 561023924,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.582
-  },
-  {
-   "index": 4410,
-   "seed": 1635055385,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.566
-  },
-  {
-   "index": 4514,
-   "seed": 1762563845,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.615
-  },
-  {
-   "index": 4800,
-   "seed": 322991120,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.538
-  },
-  {
-   "index": 5861,
-   "seed": 1439458463,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.577
-  },
-  {
-   "index": 5958,
-   "seed": 387287581,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.001,
-   "best_constant_regimen_for_this_patient": 0.578
-  },
-  {
-   "index": 6412,
-   "seed": 1305950128,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.576
-  },
-  {
-   "index": 7151,
-   "seed": 2046911573,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.519
-  },
-  {
-   "index": 7517,
-   "seed": 1212444909,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.515
-  },
-  {
-   "index": 7732,
-   "seed": 334808188,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.001,
-   "best_constant_regimen_for_this_patient": 0.533
-  },
-  {
-   "index": 8061,
-   "seed": 2140662377,
-   "tumour_type": "KRAS",
-   "blind_reward": 0.007,
-   "best_constant_regimen_for_this_patient": 0.511
-  },
-  {
-   "index": 8449,
-   "seed": 2129256489,
-   "tumour_type": "BRAF_CRC",
-   "blind_reward": 0.002,
-   "best_constant_regimen_for_this_patient": 0.548
-  },
-  {
-   "index": 8658,
-   "seed": 318346904,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.564
+   "best_constant_regimen_for_this_patient": 0.123
   },
   {
    "index": 9369,
    "seed": 1464100753,
    "tumour_type": "EGFR",
    "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.565
-  },
-  {
-   "index": 9399,
-   "seed": 650142597,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.528
+   "best_constant_regimen_for_this_patient": 0.0
   },
   {
    "index": 9487,
    "seed": 1367041212,
    "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.001,
-   "best_constant_regimen_for_this_patient": 0.574
-  },
-  {
-   "index": 10266,
-   "seed": 1850100226,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.277,
-   "best_constant_regimen_for_this_patient": 0.517
+   "blind_reward": 0.002,
+   "best_constant_regimen_for_this_patient": 0.002
   },
   {
    "index": 10307,
    "seed": 1906679306,
    "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.48,
-   "best_constant_regimen_for_this_patient": 0.682
-  },
-  {
-   "index": 10439,
-   "seed": 1559685183,
-   "tumour_type": "EGFR",
    "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.581
-  },
-  {
-   "index": 10667,
-   "seed": 261312356,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.287,
-   "best_constant_regimen_for_this_patient": 0.59
-  },
-  {
-   "index": 11090,
-   "seed": 1122405946,
-   "tumour_type": "EGFR",
-   "blind_reward": 0.005,
-   "best_constant_regimen_for_this_patient": 0.576
+   "best_constant_regimen_for_this_patient": 0.682
   },
   {
    "index": 11558,
    "seed": 2030086682,
    "tumour_type": "BRAF_MEL",
    "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.616
+   "best_constant_regimen_for_this_patient": 0.536
   },
   {
    "index": 11707,
@@ -333,25 +163,11 @@
    "best_constant_regimen_for_this_patient": 0.694
   },
   {
-   "index": 12934,
-   "seed": 1993709194,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.606
-  },
-  {
    "index": 13696,
    "seed": 516027265,
    "tumour_type": "BRAF_MEL",
    "blind_reward": 0.0,
    "best_constant_regimen_for_this_patient": 0.684
-  },
-  {
-   "index": 13849,
-   "seed": 1812254895,
-   "tumour_type": "BRAF_MEL",
-   "blind_reward": 0.0,
-   "best_constant_regimen_for_this_patient": 0.57
   }
  ]
 }

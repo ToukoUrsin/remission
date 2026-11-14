@@ -16,6 +16,8 @@ in days, rates are per day.
 """
 from __future__ import annotations
 
+import contextlib
+
 import numpy as np
 
 DRUGS = ("RAFi", "MEKi", "EGFRi", "METi", "KRASi", "PI3Ki", "BCLi", "MCLi")
@@ -64,6 +66,7 @@ TREAT_DAYS = 84         # the regimen may dose on days 0..83
 FOLLOW_DAYS = 364       # the tissue is read one year after the start
 WASHOUT_DAYS = 42       # drug levels are followed this long after the last dosing day; then they are zero
 SHED = 0.06             # per day; normal tissue is a renewing tissue that sheds this share of its cells
+HARM_LIMIT = 0.30       # tolerability: a course that costs more normal tissue than this is not tolerated and scores 0
 DT = 0.25               # days; integration step everywhere
 
 # Tissue lattice
@@ -207,6 +210,23 @@ ALTERATIONS = {
 }
 # A minor clone is the dominant clone plus one more alteration, at 0.4 % to 6 % of the tumour cells.
 MINOR_SHARE = (0.004, 0.06)
+
+
+@contextlib.contextmanager
+def harm_limit(value):
+    """Another tolerability limit for the duration of a with-block (None = no limit). For analyses only."""
+    global HARM_LIMIT
+    old = HARM_LIMIT
+    HARM_LIMIT = float("inf") if value is None else float(value)
+    try:
+        yield
+    finally:
+        HARM_LIMIT = old
+
+
+def reward_of(healed, harm):
+    """The reward of a course: max(0, healed - harm), and 0 if harm is above HARM_LIMIT (not tolerated)."""
+    return np.where(np.asarray(harm) > HARM_LIMIT, 0.0, np.maximum(0.0, np.asarray(healed) - harm))
 
 
 def death_drive0(clone: dict) -> float:
@@ -480,7 +500,7 @@ def simulate_tissue(K, healthy: dict, tumour: list[dict], frac_tumour, regimen: 
       conc [days, ND]   mean drug concentration each day
       healed [reps]     healthy share of the lesion's sites on the last day
       harm              largest fractional loss of normal tissue
-      reward [reps]     max(0, healed - harm)
+      reward [reps]     max(0, healed - harm); 0 if harm > HARM_LIMIT (see reward_of)
       frames            (if record_every) list of (day, grid copy of lesion 0)
     """
     rng = np.random.default_rng(seed)
@@ -538,7 +558,7 @@ def simulate_tissue(K, healthy: dict, tumour: list[dict], frac_tumour, regimen: 
     conc_day = np.zeros((days, ND))
     conc_day[:S // spd] = course["conc"][0].reshape(S // spd, spd, ND).mean(axis=1)
     out = {"healthy": H, "tumour": T, "normal": course["normal"][0], "conc": conc_day,
-           "healed": healed, "harm": harm, "reward": np.maximum(0.0, healed - harm), "sites": sites}
+           "healed": healed, "harm": harm, "reward": reward_of(healed, harm), "sites": sites}
     if record_every:
         out["frames"] = frames
     return out
@@ -608,7 +628,7 @@ def simulate_tissue_mean(K, healthy: dict, tumour: list[dict], frac_tumour, plan
     healed_if_relapse = Hs[:, -1] / sites
     healed_if_cure = _regrow_healthy(pack(clones), Hs, Ts, sites, days)
     healed = cure * healed_if_cure + (1.0 - cure) * healed_if_relapse
-    reward = cure * np.maximum(0.0, healed_if_cure - harm) + (1.0 - cure) * np.maximum(0.0, healed_if_relapse - harm)
+    reward = cure * reward_of(healed_if_cure, harm) + (1.0 - cure) * reward_of(healed_if_relapse, harm)
     return {"healed": healed, "harm": harm, "reward": reward, "cure": cure, "kill": kill,
             "healthy": Hs, "tumour": Ts, "normal": course["normal"]}
 

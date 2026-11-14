@@ -19,9 +19,9 @@ services:
       REMISSION_SEED: "1019416027"
       REMISSION_WELLS: "384"
       REMISSION_LAB_DAYS: "28"
-      REMISSION_ADMIN_TOKEN: "f79b96166fe069f61561e878019f1cec63871ddd0a04815a"
+      REMISSION_ADMIN_TOKEN: "cec38a72669df223d6db99029c2ed9b7c0f2d96080affdf8"
       # A regimen known to cure this patient (found with the hidden parameters); only for the replay viewer.
-      REMISSION_BEST_KNOWN: "{\"regimen\": {\"phases\": [{\"days\": 84, \"doses\": {\"RAFi\": 2.0, \"MEKi\": 1.0, \"BCLi\": 1.0}}]}, \"reward\": 0.673}"
+      REMISSION_BEST_KNOWN: "{\"regimen\": {\"phases\": [{\"days\": 15, \"doses\": {\"RAFi\": 1.88, \"MEKi\": 1.08, \"BCLi\": 1.03}}, {\"days\": 69, \"doses\": {\"RAFi\": 1.21, \"MEKi\": 0.82, \"BCLi\": 1.0}}]}, \"reward\": 0.716}"
     # Explicit networking, and no `expose:`. With a restricted network_mode
     # Harbor moves every service without explicit networking into its
     # egress-control namespace; the service name then stops resolving.

@@ -27,14 +27,26 @@ Hidden side. A generated patient joins the cohort when all of this holds
      has). Done twice, for typical clones at 1 % and for the strongest clones
      at 6 %. Both regimens score below REFRACTORY_BELOW on the real tumour.
 
+  7. tolerable: a cure exists within the tolerability limit (model.HARM_LIMIT:
+     a course that costs more normal tissue than that scores 0). The regimen
+     search, run with the patient's true parameters, finds a regimen that
+     scores CURABLE_FROM or more, and the same regimen with every dose raised
+     by 10 % still does. So the window between "the tumour survives" and "not
+     tolerated" is not a knife edge.
+
+Rules 1 to 6 are checked on healed - harm without the tolerability limit, as
+they were when the cohort was first drawn. With the limit every reward can
+only be lower, so rules 1 and 3 to 6 hold with it too; rule 7 replaces rule 2.
+
 So a guess from the chart fails, a screen fails, the answer for the visible
-tumour fails, covering everything that might be there fails, and a cure exists
-for every patient. What is left is to find out which clone is hiding.
+tumour fails, covering everything that might be there fails, and a cure that
+the patient tolerates exists for every patient. What is left is to find out which clone is hiding.
 Functional precision oncology is used for exactly these patients: the ones
 whose tumour comes back from cells nobody saw.
 
 Rule 6 costs a few minutes of one core per patient that passes rules 1 to 5,
-and about 1 generated patient in 400 passes all six.
+and about 1 generated patient in 400 passes rules 1 to 6. About 4 in 10 of
+those pass rule 7 (20 of the 48 recorded in tasks/suites.json).
 """
 from __future__ import annotations
 
@@ -51,6 +63,7 @@ UNTREATED_BELOW = 0.02
 VISIBLE_TOP = 3
 SEQ_LOD = 0.02          # the detection limit of sequencing (lab.SEQ_LOD)
 HEDGES = (("typical", 0.5, 0.01), ("strong", 1.0, 0.06))    # (name, strength within the generator's range, share)
+TOLERABLE_HEADROOM = 1.10   # rule 7: the cure must still score CURABLE_FROM with every dose raised by this factor
 
 GUIDELINES = {
     "BRAF_CRC": [{"RAFi": 1.0, "MEKi": 1.0, "EGFRi": 1.0},
@@ -180,9 +193,53 @@ def hedges(patient: dict, lattice_reps: int = 6, seed: int = 3) -> list[dict]:
     return out
 
 
+def scaled(regimen: dict, factor: float) -> dict:
+    """The regimen with every dose multiplied by `factor` (capped at the highest allowed dose)."""
+    return {"phases": [{"days": ph["days"], "doses": {d: round(min(v * factor, M.DOSE_MAX), 3) for d, v in ph["doses"].items()}}
+                       for ph in regimen["phases"]]}
+
+
+def tolerable(patient: dict, lattice_reps: int = 6, seed: int = 3) -> dict:
+    """Rule 7. The best regimen the search finds with the patient's true parameters, where a course above
+    model.HARM_LIMIT scores 0; its reward on the lattice as it is and with every dose raised by 10 %."""
+    from . import oracle as RS
+    ps = [dict(K=patient["K"], healthy=patient["healthy"], tumour=patient["tumour"], frac=patient["frac"])]
+    cands = []
+    for rs in range(2):
+        x, _, elite = RS.search(ps, seed=seed + 1000 * rs)
+        cands.append(RS.polish(ps, x, seed=rs)[0])
+        cands += [RS.polish(ps, e, rounds=2, seed=rs + 1)[0] for e in elite[:3]]
+    best, best_r = None, -1.0
+    for x in cands:
+        reg = RS.regimen_from_x(x)
+        r = float(_lattice(patient, reg, "cohort-t", lattice_reps)["reward"].mean())
+        if r > best_r:
+            best, best_r = reg, r
+    at = _lattice(patient, best, "cohort-t2", 16)
+    up = _lattice(patient, scaled(best, TOLERABLE_HEADROOM), "cohort-t2", 16)
+    return {"regimen": best, "reward": round(float(at["reward"].mean()), 3), "healed": round(float(at["healed"].mean()), 3),
+            "harm": round(float(at["harm"]), 3), "reward_raised": round(float(up["reward"].mean()), 3),
+            "harm_raised": round(float(up["harm"]), 3)}
+
+
+def passes_rule_7(t: dict) -> bool:
+    return t["reward"] >= CURABLE_FROM and t["reward_raised"] >= CURABLE_FROM
+
+
 def screen(patient: dict, lattice_reps: int = 6, keep_rewards: bool = False, hedge: bool = True) -> dict:
     """Cohort test for one patient. Returns dict(eligible, why, guideline, best, best_reward, ...).
-    hedge=False stops after rule 5 (out["rules_1_to_5"] says whether those hold)."""
+    hedge=False stops after rule 5 (out["rules_1_to_5"] says whether those hold) and skips rule 7."""
+    with M.harm_limit(None):
+        out = _screen_1_to_6(patient, lattice_reps, keep_rewards, hedge)
+    if out["eligible"]:
+        out["tolerable"] = tolerable(patient, lattice_reps)
+        if not passes_rule_7(out["tolerable"]):
+            out["eligible"] = False
+            out["why"] = "no cure within the tolerability limit with 10 % dose headroom"
+    return out
+
+
+def _screen_1_to_6(patient: dict, lattice_reps: int, keep_rewards: bool, hedge: bool) -> dict:
     global _GRID
     out = {"seed": patient["seed"], "archetype": patient["archetype"], "eligible": False,
            "minors": [c["name"][6:] for c in patient["tumour"][1:]],

@@ -6,14 +6,14 @@
     scripts/new_task.py --seed 123456 --name demo                      -> one given patient seed
 
 A salt names a suite: its patients are the first `count` generated patients that
-pass the cohort test (remission/cohort.py: six rules), taking at most
-`--per-type` of one tumour type. --fresh draws a random salt, so the patients
-are new.
+pass the cohort test (remission/cohort.py: seven rules). --fresh draws a random
+salt, so the patients are new.
 
 The cohort test is slow: about 1 generated patient in 400 passes, and the last
 rule costs minutes of one core per candidate (plan on roughly one core-hour per
-cohort patient). The cohort patients of the named salts are therefore recorded
-in tasks/suites.json (index in the salt's sequence, seed, the cohort test's
+cohort patient passing rules 1 to 6, and about 4 in 10 of those pass rule 7).
+The cohort patients of the named salts are therefore recorded in
+tasks/suites.json (index in the salt's sequence, seed, the cohort test's
 verdict); --salt reads them from there. --rescreen repeats the test instead.
 
 What is different per task:
@@ -129,7 +129,7 @@ def recorded(salt: str, count: int, per_type: int) -> list[tuple[int, dict]] | N
         suite = json.loads(SUITES.read_text())[salt]
     except (OSError, KeyError, ValueError):
         return None
-    return capped([(p["index"], p["seed"], p) for p in suite["patients"]], count, per_type)
+    return capped([(p["index"], p["seed"], p) for p in suite["patients"] if p.get("eligible", True)], count, per_type)
 
 
 def cohort(salt: str, count: int, per_type: int, procs: int) -> list[tuple[int, dict]]:
@@ -155,7 +155,7 @@ def main() -> None:
     g.add_argument("--fresh", type=int, metavar="N", help="N new patients from a random salt")
     g.add_argument("--seed", type=int, help="one given patient seed (no cohort test)")
     p.add_argument("--count", type=int, default=10)
-    p.add_argument("--per-type", type=int, default=4, help="at most this many patients of one tumour type in a suite")
+    p.add_argument("--per-type", type=int, default=1000, help="at most this many patients of one tumour type in a suite (default: no cap)")
     p.add_argument("--name", help="task directory name (with --seed)")
     p.add_argument("--prefix", default="patient", help="name prefix: <prefix>-01, <prefix>-02, ...")
     p.add_argument("--out", type=Path, default=REPO / "tasks", help="directory to create the tasks in")
@@ -173,7 +173,8 @@ def main() -> None:
     salt, count = (a.salt, a.count) if a.salt else ("fresh-" + secrets.token_hex(8), a.fresh)
     found = (None if a.fresh or a.rescreen else recorded(salt, count, a.per_type)) or cohort(salt, count, a.per_type, a.procs)
     for n, (seed, res) in enumerate(found, start=1):
-        best = {"regimen": res["best"], "reward": res["best_reward"]}
+        tol = res.get("tolerable") or {"regimen": res["best"], "reward": res["best_reward"]}
+        best = {"regimen": tol["regimen"], "reward": tol["reward"]}
         print(stamp(seed, f"{a.prefix}-{n:02d}", best, a.out, a.force, wells=a.wells, lab_days=a.lab_days))
 
 

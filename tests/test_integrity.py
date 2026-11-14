@@ -43,7 +43,38 @@ def test_reward_is_bounded_and_harm_counts():
     pt = P.make_patient(SEEDS[0])
     res = score(pt, {"phases": [{"days": 84, "doses": {"BCLi": 2.0, "MCLi": 2.0}}]})
     assert np.all((res["reward"] >= 0) & (res["reward"] <= 1))
-    assert np.allclose(res["reward"], np.maximum(0.0, res["healed"] - res["harm"]))
+    assert np.allclose(res["reward"], M.reward_of(res["healed"], res["harm"]))
+
+
+SUITES = json.loads((ROOT / "tasks" / "suites.json").read_text())
+
+
+def test_a_course_above_the_tolerability_limit_scores_zero():
+    assert float(M.reward_of(0.95, M.HARM_LIMIT + 1e-6)) == 0.0
+    assert float(M.reward_of(0.95, M.HARM_LIMIT)) == pytest.approx(0.95 - M.HARM_LIMIT)
+    q = SUITES["remission-v3-test"]["patients"][1]          # its best constant-dose regimen cures and costs 35 % of the normal tissue
+    pt = P.make_patient(q["seed"])
+    with M.harm_limit(None):
+        free = score(pt, q["best"], reps=4)
+    assert float(free["reward"].mean()) >= 0.5 and float(free["harm"]) > M.HARM_LIMIT
+    assert float(score(pt, q["best"], reps=4)["reward"].max()) == 0.0
+    plans = np.stack([M.expand_regimen(q["best"])])         # the fast model the search uses applies the same limit
+    assert float(M.simulate_tissue_mean(pt["K"], pt["healthy"], pt["tumour"], pt["frac"], plans)["reward"][0]) == 0.0
+
+
+def test_the_suites_are_the_recorded_cohort_patients_that_pass_rule_7():
+    for salt, prefix in (("remission-v3-test", "test-"), ("remission-v3-dev", "dev/dev-")):
+        for q in SUITES[salt]["patients"]:
+            assert q["eligible"] == C.passes_rule_7(q["tolerable"])
+        eligible = [q for q in SUITES[salt]["patients"] if q["eligible"]]
+        tasks = sorted((ROOT / "tasks").glob(prefix + "[0-9][0-9]"))
+        assert len(tasks) == min(10, len(eligible))
+        for q, task in zip(eligible, tasks):
+            assert f'REMISSION_SEED: "{q["seed"]}"' in (task / "environment" / "docker-compose.yaml").read_text()
+    q = [q for q in SUITES["remission-v3-test"]["patients"] if q["eligible"]][0]
+    pt, t = P.make_patient(q["seed"]), q["tolerable"]       # the recorded cure, as recorded, and with 10 % more of every dose
+    assert float(C._lattice(pt, t["regimen"], "cohort-t2", 16)["reward"].mean()) == pytest.approx(t["reward"], abs=2e-3)
+    assert float(C._lattice(pt, C.scaled(t["regimen"], C.TOLERABLE_HEADROOM), "cohort-t2", 16)["reward"].mean()) >= C.CURABLE_FROM
 
 
 @pytest.mark.parametrize("bad", [
@@ -152,7 +183,8 @@ def test_cohort_rules_one_to_five_hold_on_a_cohort_patient():
     assert res["rules_1_to_5"] and res["hidden"] == ["mcl1"]
     for g in C.GUIDELINES[pt["archetype"]]:                                    # 1. standard treatment fails
         assert float(score(pt, C.constant(g), reps=4)["reward"].mean()) < C.REFRACTORY_BELOW
-    assert float(score(pt, res["best"], reps=4)["reward"].mean()) >= 0.4                 # 2. a cure exists (0.615 over the cohort test's lesions)
+    with M.harm_limit(None):                                                   # rules 1 to 6 are stated without the tolerability limit
+        assert float(score(pt, res["best"], reps=4)["reward"].mean()) >= 0.4             # 2. a cure exists (0.615 over the cohort test's lesions)
     assert float(score(pt, {"phases": [{"days": 1, "doses": {}}]})["healed"].mean()) <= 0.05   # 3. untreated: lost
     assert float(score(pt, C.constant(res["label_best"][0]), reps=4)["reward"].mean()) < C.REFRACTORY_BELOW   # 4.
     for doses, on_visible, on_real in res["visible_best"]:                     # 5. the answer for what sequencing shows
@@ -181,3 +213,15 @@ def test_hedge_worlds_cover_every_clone_that_could_hide():
 def test_hedging_fails_on_a_cohort_patient():
     for h in C.hedges(P.make_patient(COHORT_SEED), lattice_reps=4):            # 6. covering everything fails
         assert h["expected"] >= 0.3 and max(h["reward"], h["lattice"]) < C.REFRACTORY_BELOW
+
+
+def test_lab_status_reports_the_session_clock():
+    os.environ.setdefault("REMISSION_SEED", str(SEEDS[0]))
+    from remission import server as S
+    ep = S.Episode(SEEDS[0])
+    assert ep.session()["minutes_used"] == 0.0 and ep.session()["minutes_limit"] == 60
+    ep.call("lab_status", {}, lambda: {**ep.lab.status(), "session": ep.session()})
+    ep.first_call_wall -= 600                                                  # ten minutes ago
+    out = ep.call("lab_status", {}, lambda: {**ep.lab.status(), "session": ep.session()})
+    assert 9.9 <= out["session"]["minutes_used"] <= 10.2
+    assert "session" in S.brief()["lab"] and f"{M.HARM_LIMIT:g}" in S.brief()["scoring"]["limit"]
