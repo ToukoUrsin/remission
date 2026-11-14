@@ -1,0 +1,7782 @@
+{
+ "description": "GDSC2 (release 8.5, GDSC2_fitted_dose_response_27Oct23) per drug x genotype group summaries. LN_IC50 = natural log of IC50 in micromolar (extrapolated beyond the screened range by the GDSC NLME fit, so values above ln(max_conc) are extrapolations). AUC = area under the fitted viability curve over the screened range, normalised to 1 (1 = no effect).",
+ "mutation_source": "Cell Model Passports mutations_all_latest (coding variants); PTEN homozygous deletion from cnv_summary_latest (cn_category == Deletion). Lines without CMP mutation data are excluded from genotype groups but included in g_all_solid.",
+ "flag_definitions": {
+  "BRAF_V600E": "protein_mutation == p.V600E",
+  "KRAS_mut/NRAS_mut/HRAS_mut": "missense at codon 12, 13, 59, 61, 117 or 146",
+  "PIK3CA_mut": "CMP cancer_driver == t and missense/inframe",
+  "PTEN_null": "truncating (nonsense/frameshift/essential splice) or homozygous deletion",
+  "RAS_RAF_wt": "no KRAS/NRAS/HRAS hotspot and no BRAF variant flagged cancer_driver"
+ },
+ "drugs_not_in_GDSC2": [
+  "Vemurafenib",
+  "Cetuximab",
+  "Encorafenib",
+  "Binimetinib",
+  "Panitumumab"
+ ],
+ "group_definitions": {
+  "a_BRAF_V600E_melanoma": "cancer_type Melanoma, BRAF p.V600E",
+  "b_BRAF_V600E_colorectal": "cancer_type Colorectal Carcinoma, BRAF p.V600E",
+  "c_KRAS_mut_colorectal": "Colorectal, KRAS missense at codon 12/13/59/61/117/146",
+  "d_KRAS_mut_lung_or_pancreas": "tissue Lung (any lung cancer type) or Pancreatic Carcinoma, KRAS hotspot",
+  "d1_KRAS_mut_NSCLC": "NSCLC incl. squamous, KRAS hotspot",
+  "d2_KRAS_mut_pancreas": "Pancreatic Carcinoma, KRAS hotspot",
+  "e_RAS_RAF_wt_colorectal": "Colorectal with mutation data, no KRAS/NRAS/HRAS hotspot and no BRAF driver mutation",
+  "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": "Colorectal or Breast; PIK3CA driver missense/inframe or PTEN truncating/homozygous deletion",
+  "f1_PIK3CA_mut_or_PTEN_null_breast": "Breast subset of f",
+  "f2_PIK3CA_mut_or_PTEN_null_colorectal": "Colorectal subset of f",
+  "f3_breast_PIK3CA_PTEN_wt": "comparator: Breast with mutation data, PIK3CA wt and PTEN not null",
+  "g_all_solid": "all solid-tumour lines (CMP tissue not Haematopoietic and Lymphoid)",
+  "h_BRAF_wt_NRAS_mut_melanoma": "extra: NRAS-mutant, BRAF V600-wt melanoma",
+  "i_EGFR_mut_NSCLC": "extra: NSCLC with EGFR driver mutation (CMP cancer_driver flag)",
+  "j_RAS_RAF_wt_solid": "extra: all solid lines with no RAS hotspot / BRAF driver"
+ },
+ "group_line_counts": {
+  "a_BRAF_V600E_melanoma": 40,
+  "b_BRAF_V600E_colorectal": 7,
+  "c_KRAS_mut_colorectal": 26,
+  "d_KRAS_mut_lung_or_pancreas": 62,
+  "d1_KRAS_mut_NSCLC": 30,
+  "d2_KRAS_mut_pancreas": 29,
+  "e_RAS_RAF_wt_colorectal": 13,
+  "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": 44,
+  "f1_PIK3CA_mut_or_PTEN_null_breast": 25,
+  "f2_PIK3CA_mut_or_PTEN_null_colorectal": 19,
+  "f3_breast_PIK3CA_PTEN_wt": 27,
+  "g_all_solid": 801,
+  "h_BRAF_wt_NRAS_mut_melanoma": 11,
+  "i_EGFR_mut_NSCLC": 7,
+  "j_RAS_RAF_wt_solid": 572
+ },
+ "drugs": {
+  "Dabrafenib": {
+   "drug_class": "RAF_inhibitor",
+   "drug_id": 1373,
+   "role": "requested",
+   "putative_target": "BRAF",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 38,
+     "ln_IC50_uM_quantiles": {
+      "p5": -4.382,
+      "p25": -2.965,
+      "p50": -0.875,
+      "p75": 1.778,
+      "p95": 4.373
+     },
+     "AUC_quantiles": {
+      "p5": 0.158,
+      "p25": 0.2883,
+      "p50": 0.5322,
+      "p75": 0.8196,
+      "p95": 0.9641
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.789,
+     "median_RMSE": 0.2108
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.003,
+      "p25": 0.557,
+      "p50": 1.441,
+      "p75": 2.043,
+      "p95": 2.54
+     },
+     "AUC_quantiles": {
+      "p5": 0.6362,
+      "p25": 0.701,
+      "p50": 0.7528,
+      "p75": 0.8205,
+      "p95": 0.8598
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.857,
+     "median_RMSE": 0.1834
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.548,
+      "p25": 4.403,
+      "p50": 5.135,
+      "p75": 6.477,
+      "p95": 7.584
+     },
+     "AUC_quantiles": {
+      "p5": 0.8925,
+      "p25": 0.9468,
+      "p50": 0.9708,
+      "p75": 0.9821,
+      "p95": 0.9889
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.08,
+     "median_RMSE": 0.0634
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.216,
+      "p25": 4.523,
+      "p50": 5.176,
+      "p75": 5.905,
+      "p95": 7.221
+     },
+     "AUC_quantiles": {
+      "p5": 0.8964,
+      "p25": 0.9468,
+      "p50": 0.967,
+      "p75": 0.9751,
+      "p95": 0.9854
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.049
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.162,
+      "p25": 4.144,
+      "p50": 4.846,
+      "p75": 5.263,
+      "p95": 6.884
+     },
+     "AUC_quantiles": {
+      "p5": 0.8934,
+      "p25": 0.9423,
+      "p50": 0.9649,
+      "p75": 0.9737,
+      "p95": 0.9831
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0563
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 4.355,
+      "p25": 5.135,
+      "p50": 5.431,
+      "p75": 6.516,
+      "p95": 7.253
+     },
+     "AUC_quantiles": {
+      "p5": 0.929,
+      "p25": 0.9571,
+      "p50": 0.9671,
+      "p75": 0.9761,
+      "p95": 0.9856
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0454
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.581,
+      "p25": 4.361,
+      "p50": 5.088,
+      "p75": 5.658,
+      "p95": 6.182
+     },
+     "AUC_quantiles": {
+      "p5": 0.9269,
+      "p25": 0.9489,
+      "p50": 0.9806,
+      "p75": 0.9848,
+      "p95": 0.9879
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0687
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.132,
+      "p25": 3.557,
+      "p50": 5.073,
+      "p75": 5.719,
+      "p95": 6.494
+     },
+     "AUC_quantiles": {
+      "p5": 0.8352,
+      "p25": 0.9416,
+      "p50": 0.9705,
+      "p75": 0.9846,
+      "p95": 0.9917
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.093,
+     "median_RMSE": 0.072
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.443,
+      "p25": 4.246,
+      "p50": 5.383,
+      "p75": 5.826,
+      "p95": 6.474
+     },
+     "AUC_quantiles": {
+      "p5": 0.9294,
+      "p25": 0.9489,
+      "p50": 0.9722,
+      "p75": 0.9883,
+      "p95": 0.9926
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0705
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.313,
+      "p25": 2.873,
+      "p50": 4.737,
+      "p75": 5.552,
+      "p95": 6.182
+     },
+     "AUC_quantiles": {
+      "p5": 0.7942,
+      "p25": 0.8915,
+      "p50": 0.9639,
+      "p75": 0.9826,
+      "p95": 0.9894
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.211,
+     "median_RMSE": 0.0806
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.658,
+      "p25": 4.51,
+      "p50": 5.347,
+      "p75": 6.093,
+      "p95": 7.635
+     },
+     "AUC_quantiles": {
+      "p5": 0.9486,
+      "p25": 0.971,
+      "p50": 0.9777,
+      "p75": 0.9821,
+      "p95": 0.9926
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.037,
+     "median_RMSE": 0.0623
+    },
+    "g_all_solid": {
+     "n_lines": 789,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.48,
+      "p25": 3.959,
+      "p50": 4.834,
+      "p75": 5.596,
+      "p95": 6.596
+     },
+     "AUC_quantiles": {
+      "p5": 0.7813,
+      "p25": 0.9439,
+      "p50": 0.9688,
+      "p75": 0.9805,
+      "p95": 0.9881
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.075,
+     "median_RMSE": 0.0607
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.498,
+      "p25": 2.948,
+      "p50": 4.174,
+      "p75": 4.889,
+      "p95": 5.527
+     },
+     "AUC_quantiles": {
+      "p5": 0.7879,
+      "p25": 0.8825,
+      "p50": 0.9624,
+      "p75": 0.9734,
+      "p95": 0.9894
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.182,
+     "median_RMSE": 0.0765
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 4.239,
+      "p25": 4.778,
+      "p50": 5.299,
+      "p75": 6.708,
+      "p95": 6.98
+     },
+     "AUC_quantiles": {
+      "p5": 0.9326,
+      "p25": 0.9499,
+      "p50": 0.9744,
+      "p75": 0.9772,
+      "p95": 0.9818
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0602
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 564,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.037,
+      "p25": 4.172,
+      "p50": 4.901,
+      "p75": 5.629,
+      "p95": 6.555
+     },
+     "AUC_quantiles": {
+      "p5": 0.9082,
+      "p25": 0.9549,
+      "p50": 0.9723,
+      "p75": 0.9817,
+      "p95": 0.9883
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.014,
+     "median_RMSE": 0.0587
+    }
+   }
+  },
+  "PLX-4720": {
+   "drug_class": "RAF_inhibitor",
+   "drug_id": 1036,
+   "role": "requested",
+   "putative_target": "BRAF",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.317,
+      "p25": -0.132,
+      "p50": 0.948,
+      "p75": 2.386,
+      "p95": 3.088
+     },
+     "AUC_quantiles": {
+      "p5": 0.4774,
+      "p25": 0.6246,
+      "p50": 0.7337,
+      "p75": 0.8641,
+      "p95": 0.9173
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.725,
+     "median_RMSE": 0.0999
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.009,
+      "p25": 1.991,
+      "p50": 2.193,
+      "p75": 3.027,
+      "p95": 3.534
+     },
+     "AUC_quantiles": {
+      "p5": 0.7403,
+      "p25": 0.8237,
+      "p50": 0.8491,
+      "p75": 0.8795,
+      "p95": 0.9138
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.571,
+     "median_RMSE": 0.0933
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.435,
+      "p25": 4.527,
+      "p50": 5.437,
+      "p75": 6.122,
+      "p95": 6.765
+     },
+     "AUC_quantiles": {
+      "p5": 0.9325,
+      "p25": 0.9605,
+      "p50": 0.97,
+      "p75": 0.9812,
+      "p95": 0.9895
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0673
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.07,
+      "p25": 4.186,
+      "p50": 5.143,
+      "p75": 5.824,
+      "p95": 7.072
+     },
+     "AUC_quantiles": {
+      "p5": 0.879,
+      "p25": 0.9419,
+      "p50": 0.9651,
+      "p75": 0.9739,
+      "p95": 0.9875
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0565
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.743,
+      "p25": 3.499,
+      "p50": 4.715,
+      "p75": 5.599,
+      "p95": 6.922
+     },
+     "AUC_quantiles": {
+      "p5": 0.8775,
+      "p25": 0.9204,
+      "p50": 0.9598,
+      "p75": 0.9735,
+      "p95": 0.9871
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0547
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.997,
+      "p25": 5.054,
+      "p50": 5.457,
+      "p75": 6.014,
+      "p95": 7.724
+     },
+     "AUC_quantiles": {
+      "p5": 0.9206,
+      "p25": 0.9463,
+      "p50": 0.9688,
+      "p75": 0.9767,
+      "p95": 0.9871
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0555
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.882,
+      "p25": 4.612,
+      "p50": 5.072,
+      "p75": 5.441,
+      "p95": 6.043
+     },
+     "AUC_quantiles": {
+      "p5": 0.9486,
+      "p25": 0.9579,
+      "p50": 0.9786,
+      "p75": 0.9808,
+      "p95": 0.9857
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0761
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.961,
+      "p25": 3.863,
+      "p50": 4.64,
+      "p75": 5.378,
+      "p95": 6.189
+     },
+     "AUC_quantiles": {
+      "p5": 0.8966,
+      "p25": 0.9515,
+      "p50": 0.9692,
+      "p75": 0.9787,
+      "p95": 0.9837
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.047,
+     "median_RMSE": 0.0752
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.3,
+      "p25": 4.027,
+      "p50": 4.7,
+      "p75": 5.289,
+      "p95": 6.167
+     },
+     "AUC_quantiles": {
+      "p5": 0.9249,
+      "p25": 0.952,
+      "p50": 0.9704,
+      "p75": 0.9754,
+      "p95": 0.9867
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0785
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.085,
+      "p25": 3.51,
+      "p50": 4.64,
+      "p75": 5.581,
+      "p95": 6.242
+     },
+     "AUC_quantiles": {
+      "p5": 0.8288,
+      "p25": 0.9416,
+      "p50": 0.9656,
+      "p75": 0.9796,
+      "p95": 0.9823
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.105,
+     "median_RMSE": 0.0691
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.988,
+      "p25": 4.211,
+      "p50": 4.776,
+      "p75": 5.785,
+      "p95": 6.244
+     },
+     "AUC_quantiles": {
+      "p5": 0.8971,
+      "p25": 0.9475,
+      "p50": 0.9786,
+      "p75": 0.9846,
+      "p95": 0.9892
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.037,
+     "median_RMSE": 0.0713
+    },
+    "g_all_solid": {
+     "n_lines": 794,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.046,
+      "p25": 3.49,
+      "p50": 4.474,
+      "p75": 5.343,
+      "p95": 6.563
+     },
+     "AUC_quantiles": {
+      "p5": 0.8278,
+      "p25": 0.9279,
+      "p50": 0.9601,
+      "p75": 0.9755,
+      "p95": 0.9877
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.072,
+     "median_RMSE": 0.0671
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.326,
+      "p25": 3.013,
+      "p50": 3.972,
+      "p75": 5.275,
+      "p95": 5.756
+     },
+     "AUC_quantiles": {
+      "p5": 0.8601,
+      "p25": 0.8993,
+      "p50": 0.9483,
+      "p75": 0.9828,
+      "p95": 0.9896
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0586
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.479,
+      "p25": 3.986,
+      "p50": 4.625,
+      "p75": 4.92,
+      "p95": 6.371
+     },
+     "AUC_quantiles": {
+      "p5": 0.8917,
+      "p25": 0.9278,
+      "p50": 0.9478,
+      "p75": 0.958,
+      "p95": 0.9724
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.071
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 565,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.516,
+      "p25": 3.692,
+      "p50": 4.549,
+      "p75": 5.305,
+      "p95": 6.353
+     },
+     "AUC_quantiles": {
+      "p5": 0.889,
+      "p25": 0.9384,
+      "p50": 0.9624,
+      "p75": 0.9769,
+      "p95": 0.988
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.028,
+     "median_RMSE": 0.0659
+    }
+   }
+  },
+  "SB590885": {
+   "drug_class": "RAF_inhibitor",
+   "drug_id": 1061,
+   "role": "extra",
+   "putative_target": "BRAF",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 39,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.423,
+      "p25": 0.68,
+      "p50": 1.261,
+      "p75": 2.653,
+      "p95": 4.192
+     },
+     "AUC_quantiles": {
+      "p5": 0.6783,
+      "p25": 0.7817,
+      "p50": 0.8336,
+      "p75": 0.9205,
+      "p95": 0.9762
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.59,
+     "median_RMSE": 0.0896
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.245,
+      "p25": 2.495,
+      "p50": 2.995,
+      "p75": 3.83,
+      "p95": 4.903
+     },
+     "AUC_quantiles": {
+      "p5": 0.7159,
+      "p25": 0.9129,
+      "p50": 0.9291,
+      "p75": 0.9434,
+      "p95": 0.9611
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.143,
+     "median_RMSE": 0.0794
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.002,
+      "p25": 4.241,
+      "p50": 4.872,
+      "p75": 5.348,
+      "p95": 7.249
+     },
+     "AUC_quantiles": {
+      "p5": 0.9199,
+      "p25": 0.9685,
+      "p50": 0.977,
+      "p75": 0.9839,
+      "p95": 0.9915
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0368
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 59,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.037,
+      "p25": 4.495,
+      "p50": 5.144,
+      "p75": 5.69,
+      "p95": 7.169
+     },
+     "AUC_quantiles": {
+      "p5": 0.9348,
+      "p25": 0.9654,
+      "p50": 0.9774,
+      "p75": 0.9821,
+      "p95": 0.9879
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.017,
+     "median_RMSE": 0.0445
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 28,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.021,
+      "p25": 4.439,
+      "p50": 5.103,
+      "p75": 5.562,
+      "p95": 6.845
+     },
+     "AUC_quantiles": {
+      "p5": 0.9314,
+      "p25": 0.969,
+      "p50": 0.9788,
+      "p75": 0.9847,
+      "p95": 0.9877
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.036,
+     "median_RMSE": 0.042
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 28,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.487,
+      "p25": 4.569,
+      "p50": 5.298,
+      "p75": 6.07,
+      "p95": 7.151
+     },
+     "AUC_quantiles": {
+      "p5": 0.9508,
+      "p25": 0.9646,
+      "p50": 0.9721,
+      "p75": 0.981,
+      "p95": 0.9852
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0452
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.167,
+      "p25": 3.462,
+      "p50": 4.241,
+      "p75": 4.947,
+      "p95": 5.347
+     },
+     "AUC_quantiles": {
+      "p5": 0.8844,
+      "p25": 0.9526,
+      "p50": 0.9741,
+      "p75": 0.9817,
+      "p95": 0.988
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.083,
+     "median_RMSE": 0.0406
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 41,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.518,
+      "p25": 3.793,
+      "p50": 4.62,
+      "p75": 4.983,
+      "p95": 5.515
+     },
+     "AUC_quantiles": {
+      "p5": 0.9324,
+      "p25": 0.9639,
+      "p50": 0.9777,
+      "p75": 0.9841,
+      "p95": 0.9885
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.024,
+     "median_RMSE": 0.0507
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 23,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.633,
+      "p25": 4.419,
+      "p50": 4.62,
+      "p75": 4.954,
+      "p95": 5.463
+     },
+     "AUC_quantiles": {
+      "p5": 0.9593,
+      "p25": 0.97,
+      "p50": 0.9826,
+      "p75": 0.9848,
+      "p95": 0.9884
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0516
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.221,
+      "p25": 3.346,
+      "p50": 4.579,
+      "p75": 5.071,
+      "p95": 5.379
+     },
+     "AUC_quantiles": {
+      "p5": 0.8902,
+      "p25": 0.9567,
+      "p50": 0.9735,
+      "p75": 0.9811,
+      "p95": 0.9873
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.056,
+     "median_RMSE": 0.0398
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.594,
+      "p25": 4.134,
+      "p50": 4.674,
+      "p75": 5.35,
+      "p95": 5.768
+     },
+     "AUC_quantiles": {
+      "p5": 0.934,
+      "p25": 0.966,
+      "p50": 0.9786,
+      "p75": 0.9838,
+      "p95": 0.9898
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.037,
+     "median_RMSE": 0.04
+    },
+    "g_all_solid": {
+     "n_lines": 780,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.256,
+      "p25": 4.112,
+      "p50": 4.784,
+      "p75": 5.33,
+      "p95": 6.241
+     },
+     "AUC_quantiles": {
+      "p5": 0.897,
+      "p25": 0.9676,
+      "p50": 0.9794,
+      "p75": 0.9847,
+      "p95": 0.9893
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.038,
+     "median_RMSE": 0.0429
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 10,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.44,
+      "p25": 4.374,
+      "p50": 4.661,
+      "p75": 5.05,
+      "p95": 5.343
+     },
+     "AUC_quantiles": {
+      "p5": 0.9148,
+      "p25": 0.9658,
+      "p50": 0.9805,
+      "p75": 0.9858,
+      "p95": 0.9895
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0259
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 5.331,
+      "p25": 5.505,
+      "p50": 5.635,
+      "p75": 6.138,
+      "p95": 6.623
+     },
+     "AUC_quantiles": {
+      "p5": 0.9721,
+      "p25": 0.974,
+      "p50": 0.9786,
+      "p75": 0.9816,
+      "p95": 0.9909
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0412
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 557,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.027,
+      "p25": 4.254,
+      "p50": 4.795,
+      "p75": 5.34,
+      "p95": 6.064
+     },
+     "AUC_quantiles": {
+      "p5": 0.9446,
+      "p25": 0.9729,
+      "p50": 0.9814,
+      "p75": 0.9853,
+      "p95": 0.9894
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 5.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.005,
+     "median_RMSE": 0.0411
+    }
+   }
+  },
+  "Trametinib": {
+   "drug_class": "MEK_inhibitor",
+   "drug_id": 1372,
+   "role": "requested",
+   "putative_target": "MEK1, MEK2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": -6.242,
+      "p25": -5.113,
+      "p50": -3.704,
+      "p75": -1.768,
+      "p95": -0.361
+     },
+     "AUC_quantiles": {
+      "p5": 0.1754,
+      "p25": 0.2986,
+      "p50": 0.4691,
+      "p75": 0.6938,
+      "p95": 0.8397
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.975,
+     "median_RMSE": 0.1703
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -5.406,
+      "p25": -4.969,
+      "p50": -3.515,
+      "p75": -2.177,
+      "p95": -1.127
+     },
+     "AUC_quantiles": {
+      "p5": 0.2748,
+      "p25": 0.3214,
+      "p50": 0.4943,
+      "p75": 0.64,
+      "p95": 0.7553
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 1.0,
+     "median_RMSE": 0.183
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -5.108,
+      "p25": -3.35,
+      "p50": -2.169,
+      "p75": -0.962,
+      "p95": 0.287
+     },
+     "AUC_quantiles": {
+      "p5": 0.2946,
+      "p25": 0.5139,
+      "p50": 0.6516,
+      "p75": 0.7373,
+      "p95": 0.8755
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.885,
+     "median_RMSE": 0.1573
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.386,
+      "p25": -1.926,
+      "p50": -0.16,
+      "p75": 0.453,
+      "p95": 3.032
+     },
+     "AUC_quantiles": {
+      "p5": 0.5073,
+      "p25": 0.6771,
+      "p50": 0.8255,
+      "p75": 0.883,
+      "p95": 0.9647
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.629,
+     "median_RMSE": 0.1319
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.49,
+      "p25": -2.27,
+      "p50": -0.586,
+      "p75": 0.256,
+      "p95": 2.903
+     },
+     "AUC_quantiles": {
+      "p5": 0.496,
+      "p25": 0.6422,
+      "p50": 0.7854,
+      "p75": 0.8725,
+      "p95": 0.9697
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.733,
+     "median_RMSE": 0.1285
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.146,
+      "p25": -0.557,
+      "p50": -0.013,
+      "p75": 0.677,
+      "p95": 2.803
+     },
+     "AUC_quantiles": {
+      "p5": 0.6383,
+      "p25": 0.7725,
+      "p50": 0.8361,
+      "p75": 0.886,
+      "p95": 0.9616
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.517,
+     "median_RMSE": 0.1346
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.628,
+      "p25": -2.059,
+      "p50": -1.041,
+      "p75": 0.115,
+      "p95": 2.066
+     },
+     "AUC_quantiles": {
+      "p5": 0.5983,
+      "p25": 0.6588,
+      "p50": 0.7839,
+      "p75": 0.8874,
+      "p95": 0.962
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.692,
+     "median_RMSE": 0.1688
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.208,
+      "p25": -1.109,
+      "p50": 0.411,
+      "p75": 1.981,
+      "p95": 3.777
+     },
+     "AUC_quantiles": {
+      "p5": 0.5324,
+      "p25": 0.782,
+      "p50": 0.8948,
+      "p75": 0.9654,
+      "p95": 0.9791
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.372,
+     "median_RMSE": 0.1399
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.055,
+      "p25": 0.719,
+      "p50": 1.611,
+      "p75": 2.503,
+      "p95": 3.976
+     },
+     "AUC_quantiles": {
+      "p5": 0.853,
+      "p25": 0.9162,
+      "p50": 0.9474,
+      "p75": 0.9757,
+      "p95": 0.9796
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.042,
+     "median_RMSE": 0.1013
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.655,
+      "p25": -2.466,
+      "p50": -1.327,
+      "p75": -0.776,
+      "p95": 0.62
+     },
+     "AUC_quantiles": {
+      "p5": 0.4783,
+      "p25": 0.6192,
+      "p50": 0.7417,
+      "p75": 0.8063,
+      "p95": 0.9015
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.789,
+     "median_RMSE": 0.1759
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.228,
+      "p25": 0.076,
+      "p50": 1.984,
+      "p75": 2.849,
+      "p95": 4.746
+     },
+     "AUC_quantiles": {
+      "p5": 0.7474,
+      "p25": 0.8784,
+      "p50": 0.9612,
+      "p75": 0.9763,
+      "p95": 0.9894
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.259,
+     "median_RMSE": 0.1067
+    },
+    "g_all_solid": {
+     "n_lines": 799,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.949,
+      "p25": -1.0,
+      "p50": 0.483,
+      "p75": 1.876,
+      "p95": 3.106
+     },
+     "AUC_quantiles": {
+      "p5": 0.4379,
+      "p25": 0.7673,
+      "p50": 0.8848,
+      "p75": 0.9548,
+      "p95": 0.9851
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.409,
+     "median_RMSE": 0.1249
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": -5.213,
+      "p25": -3.99,
+      "p50": -3.613,
+      "p75": -2.427,
+      "p95": -0.191
+     },
+     "AUC_quantiles": {
+      "p5": 0.2967,
+      "p25": 0.4361,
+      "p50": 0.479,
+      "p75": 0.6254,
+      "p95": 0.8289
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.909,
+     "median_RMSE": 0.1472
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.67,
+      "p25": 0.431,
+      "p50": 1.325,
+      "p75": 1.875,
+      "p95": 3.299
+     },
+     "AUC_quantiles": {
+      "p5": 0.7977,
+      "p25": 0.8613,
+      "p50": 0.8963,
+      "p75": 0.932,
+      "p95": 0.9563
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.286,
+     "median_RMSE": 0.1128
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 570,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.228,
+      "p25": -0.135,
+      "p50": 1.077,
+      "p75": 2.199,
+      "p95": 3.253
+     },
+     "AUC_quantiles": {
+      "p5": 0.648,
+      "p25": 0.8449,
+      "p50": 0.9205,
+      "p75": 0.9671,
+      "p95": 0.987
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.279,
+     "median_RMSE": 0.1149
+    }
+   }
+  },
+  "Selumetinib_1062": {
+   "drug_class": "MEK_inhibitor",
+   "drug_id": 1062,
+   "role": "requested",
+   "putative_target": "MEK1, MEK2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 39,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.938,
+      "p25": -1.142,
+      "p50": -0.167,
+      "p75": 1.812,
+      "p95": 3.53
+     },
+     "AUC_quantiles": {
+      "p5": 0.4054,
+      "p25": 0.5011,
+      "p50": 0.6136,
+      "p75": 0.825,
+      "p95": 0.9287
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.795,
+     "median_RMSE": 0.1142
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.993,
+      "p25": -0.621,
+      "p50": 1.264,
+      "p75": 2.414,
+      "p95": 3.015
+     },
+     "AUC_quantiles": {
+      "p5": 0.5197,
+      "p25": 0.5622,
+      "p50": 0.7484,
+      "p75": 0.8199,
+      "p95": 0.9145
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.714,
+     "median_RMSE": 0.1065
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.582,
+      "p25": 0.803,
+      "p50": 2.011,
+      "p75": 2.599,
+      "p95": 3.604
+     },
+     "AUC_quantiles": {
+      "p5": 0.5683,
+      "p25": 0.6978,
+      "p50": 0.8194,
+      "p75": 0.8536,
+      "p95": 0.9463
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.654,
+     "median_RMSE": 0.0955
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 59,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.216,
+      "p25": 2.174,
+      "p50": 2.871,
+      "p75": 3.575,
+      "p95": 5.663
+     },
+     "AUC_quantiles": {
+      "p5": 0.6681,
+      "p25": 0.8051,
+      "p50": 0.8879,
+      "p75": 0.9287,
+      "p95": 0.9781
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.288,
+     "median_RMSE": 0.0822
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.001,
+      "p25": 1.781,
+      "p50": 2.738,
+      "p75": 3.542,
+      "p95": 5.815
+     },
+     "AUC_quantiles": {
+      "p5": 0.6374,
+      "p25": 0.7873,
+      "p50": 0.8775,
+      "p75": 0.9296,
+      "p95": 0.9766
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.379,
+     "median_RMSE": 0.0767
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.724,
+      "p25": 2.507,
+      "p50": 2.915,
+      "p75": 3.751,
+      "p95": 5.043
+     },
+     "AUC_quantiles": {
+      "p5": 0.7707,
+      "p25": 0.8145,
+      "p50": 0.8879,
+      "p75": 0.9195,
+      "p95": 0.9689
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.185,
+     "median_RMSE": 0.0842
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.036,
+      "p25": 2.084,
+      "p50": 2.805,
+      "p75": 3.617,
+      "p95": 5.13
+     },
+     "AUC_quantiles": {
+      "p5": 0.7407,
+      "p25": 0.8462,
+      "p50": 0.9058,
+      "p75": 0.9362,
+      "p95": 0.9686
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.333,
+     "median_RMSE": 0.0536
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.839,
+      "p25": 2.598,
+      "p50": 3.759,
+      "p75": 4.371,
+      "p95": 5.86
+     },
+     "AUC_quantiles": {
+      "p5": 0.7307,
+      "p25": 0.8842,
+      "p50": 0.9449,
+      "p75": 0.9597,
+      "p95": 0.9776
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.214,
+     "median_RMSE": 0.074
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.706,
+      "p25": 3.901,
+      "p50": 4.34,
+      "p75": 4.928,
+      "p95": 6.157
+     },
+     "AUC_quantiles": {
+      "p5": 0.917,
+      "p25": 0.9458,
+      "p50": 0.9588,
+      "p75": 0.9712,
+      "p95": 0.9801
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.042,
+     "median_RMSE": 0.0663
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.277,
+      "p25": 1.595,
+      "p50": 2.454,
+      "p75": 3.226,
+      "p95": 3.827
+     },
+     "AUC_quantiles": {
+      "p5": 0.6022,
+      "p25": 0.8012,
+      "p50": 0.869,
+      "p75": 0.929,
+      "p95": 0.9502
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.444,
+     "median_RMSE": 0.0978
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.008,
+      "p25": 3.228,
+      "p50": 4.478,
+      "p75": 5.09,
+      "p95": 6.207
+     },
+     "AUC_quantiles": {
+      "p5": 0.8568,
+      "p25": 0.925,
+      "p50": 0.9545,
+      "p75": 0.9751,
+      "p95": 0.9824
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.111,
+     "median_RMSE": 0.0851
+    },
+    "g_all_solid": {
+     "n_lines": 786,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.171,
+      "p25": 2.518,
+      "p50": 3.633,
+      "p75": 4.576,
+      "p95": 5.718
+     },
+     "AUC_quantiles": {
+      "p5": 0.613,
+      "p25": 0.8637,
+      "p50": 0.932,
+      "p75": 0.9655,
+      "p95": 0.9852
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.218,
+     "median_RMSE": 0.0765
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.3,
+      "p25": -1.045,
+      "p50": 0.197,
+      "p75": 1.004,
+      "p95": 3.546
+     },
+     "AUC_quantiles": {
+      "p5": 0.363,
+      "p25": 0.5127,
+      "p50": 0.6505,
+      "p75": 0.7646,
+      "p95": 0.9143
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.818,
+     "median_RMSE": 0.1208
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.628,
+      "p25": 3.665,
+      "p50": 5.096,
+      "p75": 6.024,
+      "p95": 6.481
+     },
+     "AUC_quantiles": {
+      "p5": 0.8714,
+      "p25": 0.9239,
+      "p50": 0.9456,
+      "p75": 0.9687,
+      "p95": 0.9746
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0638
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 562,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.631,
+      "p25": 3.165,
+      "p50": 4.051,
+      "p75": 4.826,
+      "p95": 5.809
+     },
+     "AUC_quantiles": {
+      "p5": 0.8069,
+      "p25": 0.908,
+      "p50": 0.9494,
+      "p75": 0.9705,
+      "p95": 0.9862
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.107,
+     "median_RMSE": 0.0692
+    }
+   }
+  },
+  "Selumetinib_1736": {
+   "drug_class": "MEK_inhibitor",
+   "drug_id": 1736,
+   "role": "requested",
+   "putative_target": "MEK1, MEK2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 23,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.979,
+      "p25": -0.599,
+      "p50": 0.919,
+      "p75": 1.646,
+      "p95": 3.278
+     },
+     "AUC_quantiles": {
+      "p5": 0.3944,
+      "p25": 0.566,
+      "p50": 0.7192,
+      "p75": 0.8033,
+      "p95": 0.9294
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.783,
+     "median_RMSE": 0.1106
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.709,
+      "p25": -0.176,
+      "p50": 0.641,
+      "p75": 3.14,
+      "p95": 3.829
+     },
+     "AUC_quantiles": {
+      "p5": 0.5517,
+      "p25": 0.6124,
+      "p50": 0.7182,
+      "p75": 0.8573,
+      "p95": 0.947
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.571,
+     "median_RMSE": 0.1136
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.516,
+      "p25": 1.165,
+      "p50": 2.376,
+      "p75": 2.662,
+      "p95": 3.808
+     },
+     "AUC_quantiles": {
+      "p5": 0.6666,
+      "p25": 0.7389,
+      "p50": 0.8586,
+      "p75": 0.8884,
+      "p95": 0.9449
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.423,
+     "median_RMSE": 0.0985
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 49,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.625,
+      "p25": 2.45,
+      "p50": 3.202,
+      "p75": 4.5,
+      "p95": 5.928
+     },
+     "AUC_quantiles": {
+      "p5": 0.6889,
+      "p25": 0.8295,
+      "p50": 0.8998,
+      "p75": 0.9522,
+      "p95": 0.9855
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.224,
+     "median_RMSE": 0.0885
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 22,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.056,
+      "p25": 2.529,
+      "p50": 3.348,
+      "p75": 4.792,
+      "p95": 6.096
+     },
+     "AUC_quantiles": {
+      "p5": 0.6422,
+      "p25": 0.8494,
+      "p50": 0.915,
+      "p75": 0.9594,
+      "p95": 0.9833
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.227,
+     "median_RMSE": 0.0741
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.068,
+      "p25": 2.416,
+      "p50": 3.037,
+      "p75": 4.062,
+      "p95": 5.493
+     },
+     "AUC_quantiles": {
+      "p5": 0.7369,
+      "p25": 0.8284,
+      "p50": 0.8807,
+      "p75": 0.9329,
+      "p95": 0.9762
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.208,
+     "median_RMSE": 0.0902
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.34,
+      "p25": 2.722,
+      "p50": 3.531,
+      "p75": 4.735,
+      "p95": 5.87
+     },
+     "AUC_quantiles": {
+      "p5": 0.7715,
+      "p25": 0.8617,
+      "p50": 0.9292,
+      "p75": 0.9746,
+      "p95": 0.9906
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0673
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 38,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.676,
+      "p25": 2.821,
+      "p50": 4.266,
+      "p75": 5.343,
+      "p95": 6.371
+     },
+     "AUC_quantiles": {
+      "p5": 0.8222,
+      "p25": 0.9056,
+      "p50": 0.9571,
+      "p75": 0.9832,
+      "p95": 0.9878
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.132,
+     "median_RMSE": 0.0851
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 20,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.977,
+      "p25": 4.523,
+      "p50": 5.192,
+      "p75": 5.854,
+      "p95": 7.121
+     },
+     "AUC_quantiles": {
+      "p5": 0.9238,
+      "p25": 0.9641,
+      "p50": 0.9779,
+      "p75": 0.9861,
+      "p95": 0.9894
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.05,
+     "median_RMSE": 0.0692
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.084,
+      "p25": 2.404,
+      "p50": 2.84,
+      "p75": 3.983,
+      "p95": 5.291
+     },
+     "AUC_quantiles": {
+      "p5": 0.6235,
+      "p25": 0.8654,
+      "p50": 0.9064,
+      "p75": 0.9466,
+      "p95": 0.9857
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.222,
+     "median_RMSE": 0.1008
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 22,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.325,
+      "p25": 3.616,
+      "p50": 4.922,
+      "p75": 6.149,
+      "p95": 6.693
+     },
+     "AUC_quantiles": {
+      "p5": 0.8666,
+      "p25": 0.9333,
+      "p50": 0.9756,
+      "p75": 0.9843,
+      "p95": 0.9912
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.045,
+     "median_RMSE": 0.0735
+    },
+    "g_all_solid": {
+     "n_lines": 585,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.456,
+      "p25": 2.803,
+      "p50": 4.331,
+      "p75": 5.46,
+      "p95": 6.458
+     },
+     "AUC_quantiles": {
+      "p5": 0.672,
+      "p25": 0.8811,
+      "p50": 0.9522,
+      "p75": 0.9819,
+      "p95": 0.9904
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.169,
+     "median_RMSE": 0.0765
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 5,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.686,
+      "p25": -0.395,
+      "p50": 0.865,
+      "p75": 1.962,
+      "p95": 3.328
+     },
+     "AUC_quantiles": {
+      "p5": 0.5531,
+      "p25": 0.5857,
+      "p50": 0.7442,
+      "p75": 0.8609,
+      "p95": 0.926
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.8,
+     "median_RMSE": 0.1117
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 6,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.578,
+      "p25": 3.384,
+      "p50": 4.447,
+      "p75": 4.958,
+      "p95": 6.375
+     },
+     "AUC_quantiles": {
+      "p5": 0.6694,
+      "p25": 0.9078,
+      "p50": 0.9455,
+      "p75": 0.9568,
+      "p95": 0.9724
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0666
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 407,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.932,
+      "p25": 3.754,
+      "p50": 4.877,
+      "p75": 5.748,
+      "p95": 6.602
+     },
+     "AUC_quantiles": {
+      "p5": 0.8245,
+      "p25": 0.9302,
+      "p50": 0.9711,
+      "p75": 0.9853,
+      "p95": 0.9911
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.071,
+     "median_RMSE": 0.0688
+    }
+   }
+  },
+  "PD0325901": {
+   "drug_class": "MEK_inhibitor",
+   "drug_id": 1060,
+   "role": "extra",
+   "putative_target": "MEK1, MEK2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": -4.577,
+      "p25": -3.757,
+      "p50": -2.752,
+      "p75": -0.527,
+      "p95": 1.054
+     },
+     "AUC_quantiles": {
+      "p5": 0.31,
+      "p25": 0.4336,
+      "p50": 0.5471,
+      "p75": 0.7925,
+      "p95": 0.8753
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.925,
+     "median_RMSE": 0.1615
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.112,
+      "p25": -2.714,
+      "p50": -2.017,
+      "p75": -0.897,
+      "p95": 0.167
+     },
+     "AUC_quantiles": {
+      "p5": 0.5581,
+      "p25": 0.5968,
+      "p50": 0.6597,
+      "p75": 0.7473,
+      "p95": 0.842
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 1.0,
+     "median_RMSE": 0.1303
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.059,
+      "p25": -1.592,
+      "p50": -1.119,
+      "p75": 0.035,
+      "p95": 1.106
+     },
+     "AUC_quantiles": {
+      "p5": 0.5579,
+      "p25": 0.6989,
+      "p50": 0.7353,
+      "p75": 0.8159,
+      "p95": 0.9111
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.846,
+     "median_RMSE": 0.1233
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.36,
+      "p25": -0.383,
+      "p50": 0.496,
+      "p75": 1.344,
+      "p95": 3.324
+     },
+     "AUC_quantiles": {
+      "p5": 0.6219,
+      "p25": 0.7872,
+      "p50": 0.8479,
+      "p75": 0.9124,
+      "p95": 0.966
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.629,
+     "median_RMSE": 0.1117
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.576,
+      "p25": -0.487,
+      "p50": 0.478,
+      "p75": 1.231,
+      "p95": 4.074
+     },
+     "AUC_quantiles": {
+      "p5": 0.6105,
+      "p25": 0.7791,
+      "p50": 0.8479,
+      "p75": 0.9166,
+      "p95": 0.9706
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.6,
+     "median_RMSE": 0.112
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.904,
+      "p25": -0.219,
+      "p50": 0.5,
+      "p75": 1.367,
+      "p95": 3.22
+     },
+     "AUC_quantiles": {
+      "p5": 0.7406,
+      "p25": 0.7873,
+      "p50": 0.8293,
+      "p75": 0.8944,
+      "p95": 0.9585
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.655,
+     "median_RMSE": 0.107
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.503,
+      "p25": -0.219,
+      "p50": 0.513,
+      "p75": 1.553,
+      "p95": 2.604
+     },
+     "AUC_quantiles": {
+      "p5": 0.7096,
+      "p25": 0.8286,
+      "p50": 0.837,
+      "p75": 0.9345,
+      "p95": 0.9811
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.538,
+     "median_RMSE": 0.1188
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.489,
+      "p25": -0.098,
+      "p50": 1.777,
+      "p75": 3.128,
+      "p95": 4.892
+     },
+     "AUC_quantiles": {
+      "p5": 0.7091,
+      "p25": 0.8211,
+      "p50": 0.9369,
+      "p75": 0.9767,
+      "p95": 0.9866
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.326,
+     "median_RMSE": 0.0995
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.223,
+      "p25": 2.112,
+      "p50": 3.054,
+      "p75": 3.726,
+      "p95": 5.394
+     },
+     "AUC_quantiles": {
+      "p5": 0.9204,
+      "p25": 0.9447,
+      "p50": 0.9728,
+      "p75": 0.9816,
+      "p95": 0.9885
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.042,
+     "median_RMSE": 0.0674
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.059,
+      "p25": -1.335,
+      "p50": -0.491,
+      "p75": 1.027,
+      "p95": 1.797
+     },
+     "AUC_quantiles": {
+      "p5": 0.656,
+      "p25": 0.7261,
+      "p50": 0.8135,
+      "p75": 0.8821,
+      "p95": 0.9651
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.684,
+     "median_RMSE": 0.1303
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.135,
+      "p25": 1.278,
+      "p50": 3.145,
+      "p75": 3.998,
+      "p95": 5.065
+     },
+     "AUC_quantiles": {
+      "p5": 0.8312,
+      "p25": 0.9123,
+      "p50": 0.9707,
+      "p75": 0.9854,
+      "p95": 0.9886
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.222,
+     "median_RMSE": 0.0914
+    },
+    "g_all_solid": {
+     "n_lines": 800,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.719,
+      "p25": 0.187,
+      "p50": 1.668,
+      "p75": 2.957,
+      "p95": 4.213
+     },
+     "AUC_quantiles": {
+      "p5": 0.5816,
+      "p25": 0.8381,
+      "p50": 0.9226,
+      "p75": 0.9678,
+      "p95": 0.9884
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.359,
+     "median_RMSE": 0.1002
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": -4.468,
+      "p25": -3.241,
+      "p50": -2.269,
+      "p75": -1.079,
+      "p95": 1.837
+     },
+     "AUC_quantiles": {
+      "p5": 0.2691,
+      "p25": 0.5026,
+      "p50": 0.6023,
+      "p75": 0.7275,
+      "p95": 0.9027
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.909,
+     "median_RMSE": 0.1351
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.658,
+      "p25": 1.562,
+      "p50": 3.152,
+      "p75": 3.371,
+      "p95": 3.956
+     },
+     "AUC_quantiles": {
+      "p5": 0.8721,
+      "p25": 0.9156,
+      "p50": 0.9481,
+      "p75": 0.9526,
+      "p95": 0.9629
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.286,
+     "median_RMSE": 0.0879
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 571,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.729,
+      "p25": 1.158,
+      "p50": 2.291,
+      "p75": 3.198,
+      "p95": 4.39
+     },
+     "AUC_quantiles": {
+      "p5": 0.7698,
+      "p25": 0.8955,
+      "p50": 0.9487,
+      "p75": 0.9764,
+      "p95": 0.9892
+     },
+     "screened_conc_uM": {
+      "min": 0.00025,
+      "max": 2.5,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.21,
+     "median_RMSE": 0.0927
+    }
+   }
+  },
+  "Refametinib": {
+   "drug_class": "MEK_inhibitor",
+   "drug_id": 1014,
+   "role": "extra",
+   "putative_target": "MEK1, MEK2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 39,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.813,
+      "p25": -1.809,
+      "p50": -0.828,
+      "p75": 0.835,
+      "p95": 2.762
+     },
+     "AUC_quantiles": {
+      "p5": 0.3006,
+      "p25": 0.4199,
+      "p50": 0.5351,
+      "p75": 0.7284,
+      "p95": 0.9125
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.872,
+     "median_RMSE": 0.1579
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.006,
+      "p25": -1.779,
+      "p50": -0.021,
+      "p75": 0.554,
+      "p95": 1.272
+     },
+     "AUC_quantiles": {
+      "p5": 0.394,
+      "p25": 0.4254,
+      "p50": 0.6007,
+      "p75": 0.698,
+      "p95": 0.7711
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 1.0,
+     "median_RMSE": 0.104
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.682,
+      "p25": -0.238,
+      "p50": 0.24,
+      "p75": 1.176,
+      "p95": 2.319
+     },
+     "AUC_quantiles": {
+      "p5": 0.444,
+      "p25": 0.6042,
+      "p50": 0.6699,
+      "p75": 0.7524,
+      "p95": 0.8704
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.923,
+     "median_RMSE": 0.1079
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 59,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.726,
+      "p25": 0.417,
+      "p50": 1.745,
+      "p75": 2.809,
+      "p95": 4.624
+     },
+     "AUC_quantiles": {
+      "p5": 0.542,
+      "p25": 0.6814,
+      "p50": 0.8113,
+      "p75": 0.8738,
+      "p95": 0.9595
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.661,
+     "median_RMSE": 0.0999
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.155,
+      "p25": -0.042,
+      "p50": 1.377,
+      "p75": 2.538,
+      "p95": 5.373
+     },
+     "AUC_quantiles": {
+      "p5": 0.5005,
+      "p25": 0.6233,
+      "p50": 0.7777,
+      "p75": 0.873,
+      "p95": 0.9628
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.69,
+     "median_RMSE": 0.0878
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.295,
+      "p25": 1.309,
+      "p50": 1.795,
+      "p75": 2.864,
+      "p95": 4.099
+     },
+     "AUC_quantiles": {
+      "p5": 0.6011,
+      "p25": 0.7123,
+      "p50": 0.8176,
+      "p75": 0.866,
+      "p95": 0.9453
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.63,
+     "median_RMSE": 0.1054
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.299,
+      "p25": 0.97,
+      "p50": 1.267,
+      "p75": 2.478,
+      "p95": 4.423
+     },
+     "AUC_quantiles": {
+      "p5": 0.603,
+      "p25": 0.7306,
+      "p50": 0.7888,
+      "p75": 0.8629,
+      "p95": 0.9733
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.583,
+     "median_RMSE": 0.122
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.012,
+      "p25": 1.056,
+      "p50": 2.454,
+      "p75": 3.339,
+      "p95": 4.599
+     },
+     "AUC_quantiles": {
+      "p5": 0.6298,
+      "p25": 0.754,
+      "p50": 0.8851,
+      "p75": 0.9264,
+      "p95": 0.9629
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.452,
+     "median_RMSE": 0.1069
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.514,
+      "p25": 2.682,
+      "p50": 3.139,
+      "p75": 4.133,
+      "p95": 4.811
+     },
+     "AUC_quantiles": {
+      "p5": 0.7665,
+      "p25": 0.8953,
+      "p50": 0.9204,
+      "p75": 0.933,
+      "p95": 0.975
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0977
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.415,
+      "p25": 0.174,
+      "p50": 1.013,
+      "p75": 1.312,
+      "p95": 2.604
+     },
+     "AUC_quantiles": {
+      "p5": 0.5893,
+      "p25": 0.6652,
+      "p50": 0.7296,
+      "p75": 0.7774,
+      "p95": 0.8894
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.833,
+     "median_RMSE": 0.1206
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.563,
+      "p25": 2.33,
+      "p50": 3.775,
+      "p75": 4.524,
+      "p95": 6.008
+     },
+     "AUC_quantiles": {
+      "p5": 0.7019,
+      "p25": 0.8463,
+      "p50": 0.9442,
+      "p75": 0.9692,
+      "p95": 0.9811
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.259,
+     "median_RMSE": 0.0796
+    },
+    "g_all_solid": {
+     "n_lines": 785,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.121,
+      "p25": 1.134,
+      "p50": 2.488,
+      "p75": 3.61,
+      "p95": 5.104
+     },
+     "AUC_quantiles": {
+      "p5": 0.5034,
+      "p25": 0.7519,
+      "p50": 0.8617,
+      "p75": 0.9349,
+      "p95": 0.9803
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.465,
+     "median_RMSE": 0.1018
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.501,
+      "p25": -1.185,
+      "p50": -0.836,
+      "p75": 0.217,
+      "p95": 1.909
+     },
+     "AUC_quantiles": {
+      "p5": 0.3348,
+      "p25": 0.4956,
+      "p50": 0.5359,
+      "p75": 0.6741,
+      "p95": 0.8234
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.909,
+     "median_RMSE": 0.1556
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.469,
+      "p25": 2.135,
+      "p50": 2.965,
+      "p75": 3.558,
+      "p95": 5.059
+     },
+     "AUC_quantiles": {
+      "p5": 0.7838,
+      "p25": 0.8242,
+      "p50": 0.8852,
+      "p75": 0.8954,
+      "p95": 0.9415
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.286,
+     "median_RMSE": 0.117
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 561,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.23,
+      "p25": 1.85,
+      "p50": 2.952,
+      "p75": 3.917,
+      "p95": 5.193
+     },
+     "AUC_quantiles": {
+      "p5": 0.6605,
+      "p25": 0.8201,
+      "p50": 0.9004,
+      "p75": 0.9469,
+      "p95": 0.9829
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.351,
+     "median_RMSE": 0.0973
+    }
+   }
+  },
+  "Gefitinib": {
+   "drug_class": "EGFR_inhibitor",
+   "drug_id": 1010,
+   "role": "requested",
+   "putative_target": "EGFR",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.59,
+      "p25": 3.207,
+      "p50": 3.676,
+      "p75": 4.031,
+      "p95": 4.569
+     },
+     "AUC_quantiles": {
+      "p5": 0.9545,
+      "p25": 0.97,
+      "p50": 0.9747,
+      "p75": 0.9827,
+      "p95": 0.9876
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0683
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.41,
+      "p25": 3.671,
+      "p50": 3.718,
+      "p75": 4.726,
+      "p95": 5.206
+     },
+     "AUC_quantiles": {
+      "p5": 0.9531,
+      "p25": 0.9682,
+      "p50": 0.9803,
+      "p75": 0.985,
+      "p95": 0.9873
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0693
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.754,
+      "p25": 2.894,
+      "p50": 3.591,
+      "p75": 4.064,
+      "p95": 5.058
+     },
+     "AUC_quantiles": {
+      "p5": 0.9026,
+      "p25": 0.9513,
+      "p50": 0.9686,
+      "p75": 0.9805,
+      "p95": 0.9878
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0648
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.319,
+      "p25": 3.012,
+      "p50": 3.646,
+      "p75": 4.568,
+      "p95": 5.112
+     },
+     "AUC_quantiles": {
+      "p5": 0.9277,
+      "p25": 0.9478,
+      "p50": 0.9711,
+      "p75": 0.9787,
+      "p95": 0.9851
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.059
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.984,
+      "p25": 2.993,
+      "p50": 3.452,
+      "p75": 4.375,
+      "p95": 5.31
+     },
+     "AUC_quantiles": {
+      "p5": 0.9322,
+      "p25": 0.9532,
+      "p50": 0.9723,
+      "p75": 0.9812,
+      "p95": 0.9865
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0609
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.349,
+      "p25": 3.288,
+      "p50": 4.166,
+      "p75": 4.752,
+      "p95": 5.039
+     },
+     "AUC_quantiles": {
+      "p5": 0.9242,
+      "p25": 0.9461,
+      "p50": 0.9698,
+      "p75": 0.9755,
+      "p95": 0.9841
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0588
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.829,
+      "p25": 1.352,
+      "p50": 2.892,
+      "p75": 3.572,
+      "p95": 4.341
+     },
+     "AUC_quantiles": {
+      "p5": 0.721,
+      "p25": 0.9091,
+      "p50": 0.9579,
+      "p75": 0.9744,
+      "p95": 0.9851
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.25,
+     "median_RMSE": 0.0782
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.766,
+      "p25": 2.941,
+      "p50": 3.401,
+      "p75": 4.059,
+      "p95": 4.957
+     },
+     "AUC_quantiles": {
+      "p5": 0.8606,
+      "p25": 0.9647,
+      "p50": 0.9772,
+      "p75": 0.9824,
+      "p95": 0.9881
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.048,
+     "median_RMSE": 0.0665
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.97,
+      "p25": 3.1,
+      "p50": 3.401,
+      "p75": 3.991,
+      "p95": 5.049
+     },
+     "AUC_quantiles": {
+      "p5": 0.9323,
+      "p25": 0.9681,
+      "p50": 0.9792,
+      "p75": 0.984,
+      "p95": 0.9881
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0621
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.232,
+      "p25": 2.899,
+      "p50": 3.387,
+      "p75": 4.02,
+      "p95": 4.551
+     },
+     "AUC_quantiles": {
+      "p5": 0.8228,
+      "p25": 0.9617,
+      "p50": 0.9746,
+      "p75": 0.9808,
+      "p95": 0.9878
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.111,
+     "median_RMSE": 0.0687
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.803,
+      "p25": 1.973,
+      "p50": 3.523,
+      "p75": 4.116,
+      "p95": 5.081
+     },
+     "AUC_quantiles": {
+      "p5": 0.8772,
+      "p25": 0.9431,
+      "p50": 0.977,
+      "p75": 0.9833,
+      "p95": 0.9874
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.037,
+     "median_RMSE": 0.0518
+    },
+    "g_all_solid": {
+     "n_lines": 793,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.736,
+      "p25": 2.549,
+      "p50": 3.446,
+      "p75": 4.029,
+      "p95": 4.901
+     },
+     "AUC_quantiles": {
+      "p5": 0.8522,
+      "p25": 0.9529,
+      "p50": 0.9738,
+      "p75": 0.9809,
+      "p95": 0.9876
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.047,
+     "median_RMSE": 0.0676
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.488,
+      "p25": 2.94,
+      "p50": 3.79,
+      "p75": 4.022,
+      "p95": 4.501
+     },
+     "AUC_quantiles": {
+      "p5": 0.9578,
+      "p25": 0.9653,
+      "p50": 0.9803,
+      "p75": 0.9851,
+      "p95": 0.9871
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0601
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.446,
+      "p25": -1.583,
+      "p50": -0.438,
+      "p75": 2.015,
+      "p95": 2.746
+     },
+     "AUC_quantiles": {
+      "p5": 0.5339,
+      "p25": 0.634,
+      "p50": 0.7238,
+      "p75": 0.9102,
+      "p95": 0.9386
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.571,
+     "median_RMSE": 0.1461
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 565,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.438,
+      "p25": 2.378,
+      "p50": 3.288,
+      "p75": 3.92,
+      "p95": 4.695
+     },
+     "AUC_quantiles": {
+      "p5": 0.8349,
+      "p25": 0.9476,
+      "p50": 0.9739,
+      "p75": 0.9809,
+      "p95": 0.9879
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 2.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.064,
+     "median_RMSE": 0.0695
+    }
+   }
+  },
+  "Erlotinib": {
+   "drug_class": "EGFR_inhibitor",
+   "drug_id": 1168,
+   "role": "requested",
+   "putative_target": "EGFR",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.893,
+      "p25": 2.656,
+      "p50": 3.418,
+      "p75": 4.09,
+      "p95": 5.119
+     },
+     "AUC_quantiles": {
+      "p5": 0.8864,
+      "p25": 0.9271,
+      "p50": 0.9579,
+      "p75": 0.9736,
+      "p95": 0.9801
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.05,
+     "median_RMSE": 0.0689
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.341,
+      "p25": 3.114,
+      "p50": 3.651,
+      "p75": 4.429,
+      "p95": 4.9
+     },
+     "AUC_quantiles": {
+      "p5": 0.933,
+      "p25": 0.9524,
+      "p50": 0.9627,
+      "p75": 0.9778,
+      "p95": 0.9848
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0444
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.934,
+      "p25": 2.141,
+      "p50": 2.746,
+      "p75": 3.689,
+      "p95": 4.901
+     },
+     "AUC_quantiles": {
+      "p5": 0.8584,
+      "p25": 0.9323,
+      "p50": 0.9455,
+      "p75": 0.9683,
+      "p95": 0.984
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.066
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.5,
+      "p25": 2.871,
+      "p50": 3.559,
+      "p75": 4.636,
+      "p95": 5.873
+     },
+     "AUC_quantiles": {
+      "p5": 0.8785,
+      "p25": 0.9148,
+      "p50": 0.9383,
+      "p75": 0.9728,
+      "p95": 0.9842
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.048,
+     "median_RMSE": 0.0657
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.17,
+      "p25": 2.096,
+      "p50": 3.065,
+      "p75": 3.739,
+      "p95": 5.161
+     },
+     "AUC_quantiles": {
+      "p5": 0.868,
+      "p25": 0.9007,
+      "p50": 0.9389,
+      "p75": 0.9677,
+      "p95": 0.9842
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.1,
+     "median_RMSE": 0.0625
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.839,
+      "p25": 3.579,
+      "p50": 4.392,
+      "p75": 5.113,
+      "p95": 6.057
+     },
+     "AUC_quantiles": {
+      "p5": 0.8962,
+      "p25": 0.9278,
+      "p50": 0.9354,
+      "p75": 0.971,
+      "p95": 0.9842
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0684
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.926,
+      "p25": 1.396,
+      "p50": 2.305,
+      "p75": 3.07,
+      "p95": 3.404
+     },
+     "AUC_quantiles": {
+      "p5": 0.7208,
+      "p25": 0.8728,
+      "p50": 0.9308,
+      "p75": 0.9434,
+      "p95": 0.9752
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.25,
+     "median_RMSE": 0.0712
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.217,
+      "p25": 2.268,
+      "p50": 2.779,
+      "p75": 3.688,
+      "p95": 4.491
+     },
+     "AUC_quantiles": {
+      "p5": 0.7953,
+      "p25": 0.9378,
+      "p50": 0.9612,
+      "p75": 0.9739,
+      "p95": 0.9843
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.095,
+     "median_RMSE": 0.0756
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.957,
+      "p25": 2.384,
+      "p50": 2.832,
+      "p75": 3.597,
+      "p95": 4.369
+     },
+     "AUC_quantiles": {
+      "p5": 0.9289,
+      "p25": 0.9526,
+      "p50": 0.965,
+      "p75": 0.973,
+      "p95": 0.9812
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.042,
+     "median_RMSE": 0.0756
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.087,
+      "p25": 2.176,
+      "p50": 2.638,
+      "p75": 3.688,
+      "p95": 4.505
+     },
+     "AUC_quantiles": {
+      "p5": 0.7444,
+      "p25": 0.9298,
+      "p50": 0.9463,
+      "p75": 0.9732,
+      "p95": 0.9866
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0766
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.49,
+      "p25": 2.01,
+      "p50": 2.894,
+      "p75": 4.138,
+      "p95": 5.087
+     },
+     "AUC_quantiles": {
+      "p5": 0.8368,
+      "p25": 0.9393,
+      "p50": 0.9675,
+      "p75": 0.9771,
+      "p95": 0.9854
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.074,
+     "median_RMSE": 0.0743
+    },
+    "g_all_solid": {
+     "n_lines": 793,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.435,
+      "p25": 2.079,
+      "p50": 3.001,
+      "p75": 3.844,
+      "p95": 5.113
+     },
+     "AUC_quantiles": {
+      "p5": 0.7891,
+      "p25": 0.9189,
+      "p50": 0.954,
+      "p75": 0.9726,
+      "p95": 0.9855
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.112,
+     "median_RMSE": 0.0701
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.562,
+      "p25": 3.25,
+      "p50": 3.554,
+      "p75": 4.27,
+      "p95": 5.084
+     },
+     "AUC_quantiles": {
+      "p5": 0.8869,
+      "p25": 0.9265,
+      "p50": 0.9633,
+      "p75": 0.9786,
+      "p95": 0.9868
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0538
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.562,
+      "p25": -1.857,
+      "p50": 0.325,
+      "p75": 0.776,
+      "p95": 1.616
+     },
+     "AUC_quantiles": {
+      "p5": 0.4854,
+      "p25": 0.5665,
+      "p50": 0.6472,
+      "p75": 0.8378,
+      "p95": 0.8936
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.714,
+     "median_RMSE": 0.1288
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 565,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.109,
+      "p25": 1.905,
+      "p50": 2.867,
+      "p75": 3.684,
+      "p95": 4.964
+     },
+     "AUC_quantiles": {
+      "p5": 0.7747,
+      "p25": 0.9124,
+      "p50": 0.9531,
+      "p75": 0.9724,
+      "p95": 0.9859
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.143,
+     "median_RMSE": 0.0721
+    }
+   }
+  },
+  "Afatinib": {
+   "drug_class": "EGFR_inhibitor",
+   "drug_id": 1032,
+   "role": "requested",
+   "putative_target": "EGFR, ERBB2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.44,
+      "p25": 1.958,
+      "p50": 2.484,
+      "p75": 2.985,
+      "p95": 4.431
+     },
+     "AUC_quantiles": {
+      "p5": 0.8329,
+      "p25": 0.8696,
+      "p50": 0.8969,
+      "p75": 0.9302,
+      "p95": 0.9671
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.35,
+     "median_RMSE": 0.1126
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.623,
+      "p25": 1.768,
+      "p50": 1.931,
+      "p75": 2.315,
+      "p95": 4.241
+     },
+     "AUC_quantiles": {
+      "p5": 0.8359,
+      "p25": 0.8556,
+      "p50": 0.8595,
+      "p75": 0.8847,
+      "p95": 0.9103
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.714,
+     "median_RMSE": 0.103
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.252,
+      "p25": 1.164,
+      "p50": 1.686,
+      "p75": 2.228,
+      "p95": 3.129
+     },
+     "AUC_quantiles": {
+      "p5": 0.7313,
+      "p25": 0.7839,
+      "p50": 0.8424,
+      "p75": 0.8708,
+      "p95": 0.9101
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.769,
+     "median_RMSE": 0.12
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.981,
+      "p25": 1.705,
+      "p50": 2.263,
+      "p75": 2.907,
+      "p95": 4.39
+     },
+     "AUC_quantiles": {
+      "p5": 0.765,
+      "p25": 0.8249,
+      "p50": 0.8664,
+      "p75": 0.9057,
+      "p95": 0.9655
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.516,
+     "median_RMSE": 0.1018
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.693,
+      "p25": 1.549,
+      "p50": 2.068,
+      "p75": 2.786,
+      "p95": 4.426
+     },
+     "AUC_quantiles": {
+      "p5": 0.7718,
+      "p25": 0.8205,
+      "p50": 0.857,
+      "p75": 0.9219,
+      "p95": 0.9688
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.567,
+     "median_RMSE": 0.1058
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.187,
+      "p25": 1.752,
+      "p50": 2.356,
+      "p75": 3.3,
+      "p95": 3.76
+     },
+     "AUC_quantiles": {
+      "p5": 0.766,
+      "p25": 0.8398,
+      "p50": 0.8718,
+      "p75": 0.9005,
+      "p95": 0.9272
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.483,
+     "median_RMSE": 0.1015
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.395,
+      "p25": 0.267,
+      "p50": 1.292,
+      "p75": 2.22,
+      "p95": 3.142
+     },
+     "AUC_quantiles": {
+      "p5": 0.3528,
+      "p25": 0.735,
+      "p50": 0.8173,
+      "p75": 0.8705,
+      "p95": 0.9221
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.692,
+     "median_RMSE": 0.1611
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.346,
+      "p25": 0.716,
+      "p50": 1.686,
+      "p75": 2.065,
+      "p95": 3.198
+     },
+     "AUC_quantiles": {
+      "p5": 0.4557,
+      "p25": 0.769,
+      "p50": 0.8474,
+      "p75": 0.8737,
+      "p95": 0.9298
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.791,
+     "median_RMSE": 0.1189
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.968,
+      "p25": 1.181,
+      "p50": 1.898,
+      "p75": 2.39,
+      "p95": 3.229
+     },
+     "AUC_quantiles": {
+      "p5": 0.5988,
+      "p25": 0.8103,
+      "p50": 0.855,
+      "p75": 0.8962,
+      "p95": 0.929
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.708,
+     "median_RMSE": 0.1189
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.521,
+      "p25": 0.576,
+      "p50": 1.619,
+      "p75": 1.936,
+      "p95": 2.384
+     },
+     "AUC_quantiles": {
+      "p5": 0.4338,
+      "p25": 0.7623,
+      "p50": 0.8282,
+      "p75": 0.8556,
+      "p95": 0.8969
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.895,
+     "median_RMSE": 0.1237
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.259,
+      "p25": 0.413,
+      "p50": 1.616,
+      "p75": 2.469,
+      "p95": 3.675
+     },
+     "AUC_quantiles": {
+      "p5": 0.3292,
+      "p25": 0.7376,
+      "p50": 0.8489,
+      "p75": 0.8934,
+      "p95": 0.9555
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.692,
+     "median_RMSE": 0.1318
+    },
+    "g_all_solid": {
+     "n_lines": 798,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.437,
+      "p25": 1.131,
+      "p50": 1.829,
+      "p75": 2.571,
+      "p95": 3.856
+     },
+     "AUC_quantiles": {
+      "p5": 0.5638,
+      "p25": 0.8063,
+      "p50": 0.8577,
+      "p75": 0.8985,
+      "p95": 0.957
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.615,
+     "median_RMSE": 0.1177
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.505,
+      "p25": 1.548,
+      "p50": 1.878,
+      "p75": 2.793,
+      "p95": 4.019
+     },
+     "AUC_quantiles": {
+      "p5": 0.8467,
+      "p25": 0.8734,
+      "p50": 0.8791,
+      "p75": 0.9329,
+      "p95": 0.9723
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.273,
+     "median_RMSE": 0.0989
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.813,
+      "p25": -3.389,
+      "p50": -2.487,
+      "p75": -0.404,
+      "p95": 1.356
+     },
+     "AUC_quantiles": {
+      "p5": 0.3217,
+      "p25": 0.3467,
+      "p50": 0.4187,
+      "p75": 0.6559,
+      "p95": 0.7911
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 1.0,
+     "median_RMSE": 0.1745
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 569,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.917,
+      "p25": 0.89,
+      "p50": 1.673,
+      "p75": 2.439,
+      "p95": 3.693
+     },
+     "AUC_quantiles": {
+      "p5": 0.5127,
+      "p25": 0.7913,
+      "p50": 0.8529,
+      "p75": 0.8954,
+      "p95": 0.9537
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.656,
+     "median_RMSE": 0.1212
+    }
+   }
+  },
+  "Osimertinib": {
+   "drug_class": "EGFR_inhibitor",
+   "drug_id": 1919,
+   "role": "extra",
+   "putative_target": "EGFR",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.292,
+      "p25": 2.127,
+      "p50": 2.403,
+      "p75": 3.012,
+      "p95": 3.661
+     },
+     "AUC_quantiles": {
+      "p5": 0.9359,
+      "p25": 0.9611,
+      "p50": 0.9671,
+      "p75": 0.9778,
+      "p95": 0.9845
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0643
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.06,
+      "p25": 2.387,
+      "p50": 2.504,
+      "p75": 3.042,
+      "p95": 3.289
+     },
+     "AUC_quantiles": {
+      "p5": 0.9322,
+      "p25": 0.9572,
+      "p50": 0.9642,
+      "p75": 0.968,
+      "p95": 0.982
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0542
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.057,
+      "p25": 1.195,
+      "p50": 1.805,
+      "p75": 2.295,
+      "p95": 3.525
+     },
+     "AUC_quantiles": {
+      "p5": 0.851,
+      "p25": 0.9074,
+      "p50": 0.9395,
+      "p75": 0.9564,
+      "p95": 0.9771
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.08,
+     "median_RMSE": 0.0546
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.769,
+      "p25": 1.89,
+      "p50": 2.596,
+      "p75": 3.226,
+      "p95": 4.545
+     },
+     "AUC_quantiles": {
+      "p5": 0.892,
+      "p25": 0.9356,
+      "p50": 0.9588,
+      "p75": 0.9731,
+      "p95": 0.9857
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0443
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.669,
+      "p25": 1.553,
+      "p50": 2.424,
+      "p75": 3.213,
+      "p95": 4.588
+     },
+     "AUC_quantiles": {
+      "p5": 0.8838,
+      "p25": 0.9248,
+      "p50": 0.9665,
+      "p75": 0.9781,
+      "p95": 0.9877
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0448
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.55,
+      "p25": 2.033,
+      "p50": 2.684,
+      "p75": 3.22,
+      "p95": 4.228
+     },
+     "AUC_quantiles": {
+      "p5": 0.9119,
+      "p25": 0.9367,
+      "p50": 0.9517,
+      "p75": 0.965,
+      "p95": 0.9824
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0441
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.711,
+      "p25": -0.747,
+      "p50": 0.703,
+      "p75": 1.958,
+      "p95": 3.416
+     },
+     "AUC_quantiles": {
+      "p5": 0.7079,
+      "p25": 0.8112,
+      "p50": 0.9091,
+      "p75": 0.9529,
+      "p95": 0.9749
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.417,
+     "median_RMSE": 0.0647
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.23,
+      "p25": 1.007,
+      "p50": 1.664,
+      "p75": 2.466,
+      "p95": 3.165
+     },
+     "AUC_quantiles": {
+      "p5": 0.7493,
+      "p25": 0.9203,
+      "p50": 0.9472,
+      "p75": 0.9669,
+      "p95": 0.9835
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0596
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.761,
+      "p25": 0.722,
+      "p50": 1.528,
+      "p75": 2.417,
+      "p95": 3.118
+     },
+     "AUC_quantiles": {
+      "p5": 0.8116,
+      "p25": 0.9175,
+      "p50": 0.9419,
+      "p75": 0.9606,
+      "p95": 0.9835
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0641
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.269,
+      "p25": 1.199,
+      "p50": 1.831,
+      "p75": 2.454,
+      "p95": 3.146
+     },
+     "AUC_quantiles": {
+      "p5": 0.7472,
+      "p25": 0.9249,
+      "p50": 0.9493,
+      "p75": 0.9705,
+      "p95": 0.98
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0544
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.749,
+      "p25": -0.081,
+      "p50": 1.274,
+      "p75": 2.567,
+      "p95": 4.093
+     },
+     "AUC_quantiles": {
+      "p5": 0.6978,
+      "p25": 0.8581,
+      "p50": 0.9541,
+      "p75": 0.9718,
+      "p95": 0.9839
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.333,
+     "median_RMSE": 0.0622
+    },
+    "g_all_solid": {
+     "n_lines": 793,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.656,
+      "p25": 1.001,
+      "p50": 1.847,
+      "p75": 2.59,
+      "p95": 3.693
+     },
+     "AUC_quantiles": {
+      "p5": 0.7995,
+      "p25": 0.9179,
+      "p50": 0.951,
+      "p75": 0.9679,
+      "p95": 0.9839
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.086,
+     "median_RMSE": 0.059
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.27,
+      "p25": 1.762,
+      "p50": 2.324,
+      "p75": 2.639,
+      "p95": 2.985
+     },
+     "AUC_quantiles": {
+      "p5": 0.9347,
+      "p25": 0.953,
+      "p50": 0.9662,
+      "p75": 0.9738,
+      "p95": 0.981
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0695
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -3.505,
+      "p25": -3.288,
+      "p50": -2.605,
+      "p75": -1.115,
+      "p95": 0.374
+     },
+     "AUC_quantiles": {
+      "p5": 0.4952,
+      "p25": 0.5196,
+      "p50": 0.5919,
+      "p75": 0.7195,
+      "p95": 0.862
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.714,
+     "median_RMSE": 0.1572
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 565,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.038,
+      "p25": 0.77,
+      "p50": 1.606,
+      "p75": 2.396,
+      "p95": 3.492
+     },
+     "AUC_quantiles": {
+      "p5": 0.7584,
+      "p25": 0.909,
+      "p50": 0.9466,
+      "p75": 0.9657,
+      "p95": 0.9833
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.115,
+     "median_RMSE": 0.062
+    }
+   }
+  },
+  "Lapatinib": {
+   "drug_class": "EGFR_inhibitor",
+   "drug_id": 1558,
+   "role": "extra",
+   "putative_target": "EGFR, ERBB2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.896,
+      "p25": 2.492,
+      "p50": 3.778,
+      "p75": 4.776,
+      "p95": 6.078
+     },
+     "AUC_quantiles": {
+      "p5": 0.8455,
+      "p25": 0.8827,
+      "p50": 0.9423,
+      "p75": 0.9668,
+      "p95": 0.9801
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.2,
+     "median_RMSE": 0.0971
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.354,
+      "p25": 3.078,
+      "p50": 3.93,
+      "p75": 4.748,
+      "p95": 5.891
+     },
+     "AUC_quantiles": {
+      "p5": 0.8624,
+      "p25": 0.916,
+      "p50": 0.939,
+      "p75": 0.9555,
+      "p95": 0.9564
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.143,
+     "median_RMSE": 0.0908
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.08,
+      "p25": 2.426,
+      "p50": 2.992,
+      "p75": 4.442,
+      "p95": 5.218
+     },
+     "AUC_quantiles": {
+      "p5": 0.8259,
+      "p25": 0.8676,
+      "p50": 0.9019,
+      "p75": 0.9298,
+      "p95": 0.9675
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.231,
+     "median_RMSE": 0.0754
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.049,
+      "p25": 3.095,
+      "p50": 4.238,
+      "p75": 4.98,
+      "p95": 6.187
+     },
+     "AUC_quantiles": {
+      "p5": 0.8204,
+      "p25": 0.9129,
+      "p50": 0.9385,
+      "p75": 0.9597,
+      "p95": 0.9779
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.065,
+     "median_RMSE": 0.0858
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.912,
+      "p25": 2.925,
+      "p50": 3.858,
+      "p75": 4.689,
+      "p95": 6.408
+     },
+     "AUC_quantiles": {
+      "p5": 0.8154,
+      "p25": 0.9038,
+      "p50": 0.9344,
+      "p75": 0.9618,
+      "p95": 0.9794
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.133,
+     "median_RMSE": 0.0834
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.939,
+      "p25": 3.969,
+      "p50": 4.455,
+      "p75": 5.335,
+      "p95": 6.037
+     },
+     "AUC_quantiles": {
+      "p5": 0.8949,
+      "p25": 0.9122,
+      "p50": 0.943,
+      "p75": 0.9574,
+      "p95": 0.9728
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0856
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.817,
+      "p25": 1.48,
+      "p50": 2.582,
+      "p75": 2.83,
+      "p95": 5.436
+     },
+     "AUC_quantiles": {
+      "p5": 0.5421,
+      "p25": 0.8053,
+      "p50": 0.8721,
+      "p75": 0.8999,
+      "p95": 0.9695
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.417,
+     "median_RMSE": 0.1096
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.596,
+      "p25": 1.744,
+      "p50": 2.531,
+      "p75": 3.231,
+      "p95": 4.763
+     },
+     "AUC_quantiles": {
+      "p5": 0.5689,
+      "p25": 0.8404,
+      "p50": 0.8707,
+      "p75": 0.9103,
+      "p95": 0.9688
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.452,
+     "median_RMSE": 0.1137
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.19,
+      "p25": 1.634,
+      "p50": 2.263,
+      "p75": 3.043,
+      "p95": 4.315
+     },
+     "AUC_quantiles": {
+      "p5": 0.6478,
+      "p25": 0.825,
+      "p50": 0.863,
+      "p75": 0.9031,
+      "p95": 0.9598
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.5,
+     "median_RMSE": 0.1227
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.838,
+      "p25": 2.1,
+      "p50": 2.716,
+      "p75": 3.435,
+      "p95": 4.814
+     },
+     "AUC_quantiles": {
+      "p5": 0.5403,
+      "p25": 0.8449,
+      "p50": 0.8891,
+      "p75": 0.9168,
+      "p95": 0.9709
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.389,
+     "median_RMSE": 0.1051
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.947,
+      "p25": 1.045,
+      "p50": 2.367,
+      "p75": 3.405,
+      "p95": 5.083
+     },
+     "AUC_quantiles": {
+      "p5": 0.5285,
+      "p25": 0.7448,
+      "p50": 0.8649,
+      "p75": 0.9082,
+      "p95": 0.9805
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.481,
+     "median_RMSE": 0.1347
+    },
+    "g_all_solid": {
+     "n_lines": 798,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.671,
+      "p25": 2.242,
+      "p50": 3.275,
+      "p75": 4.467,
+      "p95": 6.056
+     },
+     "AUC_quantiles": {
+      "p5": 0.7107,
+      "p25": 0.8598,
+      "p50": 0.9162,
+      "p75": 0.956,
+      "p95": 0.9806
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.262,
+     "median_RMSE": 0.092
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.344,
+      "p25": 2.523,
+      "p50": 4.094,
+      "p75": 4.713,
+      "p95": 5.644
+     },
+     "AUC_quantiles": {
+      "p5": 0.86,
+      "p25": 0.8788,
+      "p50": 0.9449,
+      "p75": 0.9774,
+      "p95": 0.9821
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.091,
+     "median_RMSE": 0.0947
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.473,
+      "p25": 0.586,
+      "p50": 1.139,
+      "p75": 3.308,
+      "p95": 3.986
+     },
+     "AUC_quantiles": {
+      "p5": 0.6695,
+      "p25": 0.6921,
+      "p50": 0.7295,
+      "p75": 0.8913,
+      "p95": 0.9281
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.571,
+     "median_RMSE": 0.0938
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 569,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.348,
+      "p25": 2.011,
+      "p50": 3.027,
+      "p75": 4.213,
+      "p95": 5.708
+     },
+     "AUC_quantiles": {
+      "p5": 0.6713,
+      "p25": 0.8481,
+      "p50": 0.9053,
+      "p75": 0.9536,
+      "p95": 0.9797
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.315,
+     "median_RMSE": 0.0948
+    }
+   }
+  },
+  "Alpelisib": {
+   "drug_class": "PI3K_inhibitor",
+   "drug_id": 1560,
+   "role": "requested",
+   "putative_target": "PI3Kalpha",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.106,
+      "p25": 3.484,
+      "p50": 4.201,
+      "p75": 4.971,
+      "p95": 5.464
+     },
+     "AUC_quantiles": {
+      "p5": 0.8498,
+      "p25": 0.9383,
+      "p50": 0.9669,
+      "p75": 0.9789,
+      "p95": 0.9877
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.075,
+     "median_RMSE": 0.0747
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.45,
+      "p25": 2.896,
+      "p50": 3.266,
+      "p75": 4.756,
+      "p95": 5.091
+     },
+     "AUC_quantiles": {
+      "p5": 0.8775,
+      "p25": 0.9233,
+      "p50": 0.9319,
+      "p75": 0.9635,
+      "p95": 0.9831
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.143,
+     "median_RMSE": 0.0744
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.971,
+      "p25": 2.752,
+      "p50": 3.543,
+      "p75": 4.565,
+      "p95": 5.414
+     },
+     "AUC_quantiles": {
+      "p5": 0.8691,
+      "p25": 0.9195,
+      "p50": 0.9417,
+      "p75": 0.9637,
+      "p95": 0.9834
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.038,
+     "median_RMSE": 0.0709
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.054,
+      "p25": 3.273,
+      "p50": 4.052,
+      "p75": 4.948,
+      "p95": 5.925
+     },
+     "AUC_quantiles": {
+      "p5": 0.8609,
+      "p25": 0.9182,
+      "p50": 0.9474,
+      "p75": 0.9712,
+      "p95": 0.987
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.048,
+     "median_RMSE": 0.0605
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.319,
+      "p25": 2.792,
+      "p50": 3.359,
+      "p75": 4.815,
+      "p95": 5.797
+     },
+     "AUC_quantiles": {
+      "p5": 0.842,
+      "p25": 0.8944,
+      "p50": 0.9312,
+      "p75": 0.9667,
+      "p95": 0.9882
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.1,
+     "median_RMSE": 0.0626
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.275,
+      "p25": 3.719,
+      "p50": 4.623,
+      "p75": 5.064,
+      "p95": 6.001
+     },
+     "AUC_quantiles": {
+      "p5": 0.9033,
+      "p25": 0.9323,
+      "p50": 0.9493,
+      "p75": 0.9714,
+      "p95": 0.9843
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0579
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.993,
+      "p25": 2.304,
+      "p50": 3.225,
+      "p75": 4.128,
+      "p95": 5.078
+     },
+     "AUC_quantiles": {
+      "p5": 0.8804,
+      "p25": 0.922,
+      "p50": 0.9391,
+      "p75": 0.9591,
+      "p95": 0.9831
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0686
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.356,
+      "p25": 1.676,
+      "p50": 2.714,
+      "p75": 3.498,
+      "p95": 5.201
+     },
+     "AUC_quantiles": {
+      "p5": 0.6839,
+      "p25": 0.8407,
+      "p50": 0.8974,
+      "p75": 0.9431,
+      "p95": 0.9804
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.372,
+     "median_RMSE": 0.0807
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.176,
+      "p25": 1.166,
+      "p50": 2.252,
+      "p75": 3.471,
+      "p95": 4.295
+     },
+     "AUC_quantiles": {
+      "p5": 0.6847,
+      "p25": 0.7994,
+      "p50": 0.8639,
+      "p75": 0.9351,
+      "p95": 0.9656
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.542,
+     "median_RMSE": 0.0828
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.241,
+      "p25": 2.096,
+      "p50": 2.84,
+      "p75": 4.074,
+      "p95": 5.378
+     },
+     "AUC_quantiles": {
+      "p5": 0.8434,
+      "p25": 0.8933,
+      "p50": 0.9296,
+      "p75": 0.9509,
+      "p95": 0.9875
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.158,
+     "median_RMSE": 0.0778
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.886,
+      "p25": 2.717,
+      "p50": 3.315,
+      "p75": 4.351,
+      "p95": 5.954
+     },
+     "AUC_quantiles": {
+      "p5": 0.7905,
+      "p25": 0.8936,
+      "p50": 0.9496,
+      "p75": 0.9731,
+      "p95": 0.9863
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.148,
+     "median_RMSE": 0.0851
+    },
+    "g_all_solid": {
+     "n_lines": 797,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.173,
+      "p25": 2.65,
+      "p50": 3.541,
+      "p75": 4.56,
+      "p95": 5.558
+     },
+     "AUC_quantiles": {
+      "p5": 0.8144,
+      "p25": 0.9037,
+      "p50": 0.9449,
+      "p75": 0.9714,
+      "p95": 0.9872
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.118,
+     "median_RMSE": 0.0686
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.909,
+      "p25": 3.412,
+      "p50": 3.71,
+      "p75": 4.68,
+      "p95": 5.088
+     },
+     "AUC_quantiles": {
+      "p5": 0.9073,
+      "p25": 0.9253,
+      "p50": 0.9461,
+      "p75": 0.9744,
+      "p95": 0.9904
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0824
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.584,
+      "p25": 3.322,
+      "p50": 4.042,
+      "p75": 4.171,
+      "p95": 4.661
+     },
+     "AUC_quantiles": {
+      "p5": 0.9018,
+      "p25": 0.9194,
+      "p50": 0.9383,
+      "p75": 0.9451,
+      "p95": 0.9538
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0665
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 568,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.013,
+      "p25": 2.455,
+      "p50": 3.347,
+      "p75": 4.313,
+      "p95": 5.394
+     },
+     "AUC_quantiles": {
+      "p5": 0.7955,
+      "p25": 0.8968,
+      "p50": 0.9424,
+      "p75": 0.9683,
+      "p95": 0.9867
+     },
+     "screened_conc_uM": {
+      "min": 0.005003,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.144,
+     "median_RMSE": 0.0698
+    }
+   }
+  },
+  "Pictilisib": {
+   "drug_class": "PI3K_inhibitor",
+   "drug_id": 1058,
+   "role": "requested",
+   "putative_target": "PI3K (class 1)",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.37,
+      "p25": 0.985,
+      "p50": 1.479,
+      "p75": 2.094,
+      "p95": 3.738
+     },
+     "AUC_quantiles": {
+      "p5": 0.7303,
+      "p25": 0.7947,
+      "p50": 0.833,
+      "p75": 0.8786,
+      "p95": 0.9493
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.625,
+     "median_RMSE": 0.0756
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.458,
+      "p25": 0.914,
+      "p50": 1.093,
+      "p75": 1.435,
+      "p95": 1.911
+     },
+     "AUC_quantiles": {
+      "p5": 0.7159,
+      "p25": 0.7582,
+      "p50": 0.7768,
+      "p75": 0.7982,
+      "p95": 0.817
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 1.0,
+     "median_RMSE": 0.0876
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.089,
+      "p25": 0.532,
+      "p50": 1.268,
+      "p75": 2.286,
+      "p95": 3.151
+     },
+     "AUC_quantiles": {
+      "p5": 0.6473,
+      "p25": 0.7443,
+      "p50": 0.8045,
+      "p75": 0.8458,
+      "p95": 0.9229
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.692,
+     "median_RMSE": 0.0977
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.103,
+      "p25": 0.992,
+      "p50": 1.605,
+      "p75": 2.344,
+      "p95": 3.363
+     },
+     "AUC_quantiles": {
+      "p5": 0.6909,
+      "p25": 0.7603,
+      "p50": 0.8068,
+      "p75": 0.8611,
+      "p95": 0.9231
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.726,
+     "median_RMSE": 0.0822
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.021,
+      "p25": 0.657,
+      "p50": 1.298,
+      "p75": 2.423,
+      "p95": 3.097
+     },
+     "AUC_quantiles": {
+      "p5": 0.685,
+      "p25": 0.7522,
+      "p50": 0.7972,
+      "p75": 0.8625,
+      "p95": 0.9245
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.7,
+     "median_RMSE": 0.0788
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.786,
+      "p25": 1.082,
+      "p50": 1.889,
+      "p75": 2.248,
+      "p95": 3.406
+     },
+     "AUC_quantiles": {
+      "p5": 0.7085,
+      "p25": 0.7756,
+      "p50": 0.8127,
+      "p75": 0.8584,
+      "p95": 0.9033
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.759,
+     "median_RMSE": 0.0825
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.222,
+      "p25": -0.135,
+      "p50": 0.97,
+      "p75": 1.683,
+      "p95": 2.085
+     },
+     "AUC_quantiles": {
+      "p5": 0.6472,
+      "p25": 0.657,
+      "p50": 0.7849,
+      "p75": 0.8247,
+      "p95": 0.9206
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.833,
+     "median_RMSE": 0.0937
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.578,
+      "p25": 0.257,
+      "p50": 0.786,
+      "p75": 1.261,
+      "p95": 2.054
+     },
+     "AUC_quantiles": {
+      "p5": 0.6268,
+      "p25": 0.7084,
+      "p50": 0.7668,
+      "p75": 0.7973,
+      "p95": 0.8688
+     },
+     "screened_conc_uM": {
+      "min": 0.003906,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.93,
+     "median_RMSE": 0.0889
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.583,
+      "p25": -0.298,
+      "p50": 0.504,
+      "p75": 0.943,
+      "p95": 1.44
+     },
+     "AUC_quantiles": {
+      "p5": 0.6229,
+      "p25": 0.659,
+      "p50": 0.7505,
+      "p75": 0.7759,
+      "p95": 0.8225
+     },
+     "screened_conc_uM": {
+      "min": 0.003906,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.96,
+     "median_RMSE": 0.0956
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.037,
+      "p25": 0.5,
+      "p50": 0.921,
+      "p75": 1.553,
+      "p95": 2.093
+     },
+     "AUC_quantiles": {
+      "p5": 0.6969,
+      "p25": 0.7357,
+      "p50": 0.7686,
+      "p75": 0.8168,
+      "p95": 0.9251
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.889,
+     "median_RMSE": 0.0862
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.875,
+      "p25": 0.23,
+      "p50": 1.193,
+      "p75": 2.087,
+      "p95": 3.197
+     },
+     "AUC_quantiles": {
+      "p5": 0.5821,
+      "p25": 0.7312,
+      "p50": 0.7957,
+      "p75": 0.8717,
+      "p95": 0.9486
+     },
+     "screened_conc_uM": {
+      "min": 0.003906,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.778,
+     "median_RMSE": 0.1051
+    },
+    "g_all_solid": {
+     "n_lines": 799,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.399,
+      "p25": 0.51,
+      "p50": 1.214,
+      "p75": 2.02,
+      "p95": 3.446
+     },
+     "AUC_quantiles": {
+      "p5": 0.64,
+      "p25": 0.7429,
+      "p50": 0.8005,
+      "p75": 0.8672,
+      "p95": 0.9383
+     },
+     "screened_conc_uM": {
+      "min": 0.003906,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.751,
+     "median_RMSE": 0.0852
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.667,
+      "p25": 1.425,
+      "p50": 2.296,
+      "p75": 2.394,
+      "p95": 4.09
+     },
+     "AUC_quantiles": {
+      "p5": 0.7838,
+      "p25": 0.8361,
+      "p50": 0.8985,
+      "p75": 0.917,
+      "p95": 0.9711
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.364,
+     "median_RMSE": 0.0645
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.37,
+      "p25": 1.101,
+      "p50": 1.347,
+      "p75": 1.715,
+      "p95": 2.399
+     },
+     "AUC_quantiles": {
+      "p5": 0.7001,
+      "p25": 0.7684,
+      "p50": 0.8083,
+      "p75": 0.816,
+      "p95": 0.8449
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.857,
+     "median_RMSE": 0.0816
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 570,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.472,
+      "p25": 0.372,
+      "p50": 1.122,
+      "p75": 1.905,
+      "p95": 3.37
+     },
+     "AUC_quantiles": {
+      "p5": 0.6336,
+      "p25": 0.7311,
+      "p50": 0.7934,
+      "p75": 0.8601,
+      "p95": 0.9411
+     },
+     "screened_conc_uM": {
+      "min": 0.003906,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.775,
+     "median_RMSE": 0.0859
+    }
+   }
+  },
+  "Taselisib": {
+   "drug_class": "PI3K_inhibitor",
+   "drug_id": 1561,
+   "role": "requested",
+   "putative_target": "PI3K (beta sparing)",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.942,
+      "p25": 1.639,
+      "p50": 2.206,
+      "p75": 3.129,
+      "p95": 4.752
+     },
+     "AUC_quantiles": {
+      "p5": 0.7699,
+      "p25": 0.8113,
+      "p50": 0.8655,
+      "p75": 0.9209,
+      "p95": 0.9545
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.525,
+     "median_RMSE": 0.0938
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.218,
+      "p25": 1.103,
+      "p50": 1.689,
+      "p75": 2.103,
+      "p95": 2.464
+     },
+     "AUC_quantiles": {
+      "p5": 0.6925,
+      "p25": 0.766,
+      "p50": 0.8303,
+      "p75": 0.8489,
+      "p95": 0.8665
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.857,
+     "median_RMSE": 0.135
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.073,
+      "p25": 0.838,
+      "p50": 1.725,
+      "p75": 3.192,
+      "p95": 3.92
+     },
+     "AUC_quantiles": {
+      "p5": 0.6668,
+      "p25": 0.7441,
+      "p50": 0.8483,
+      "p75": 0.8877,
+      "p95": 0.9355
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.615,
+     "median_RMSE": 0.1167
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.027,
+      "p25": 1.646,
+      "p50": 2.608,
+      "p75": 3.556,
+      "p95": 4.657
+     },
+     "AUC_quantiles": {
+      "p5": 0.6755,
+      "p25": 0.7868,
+      "p50": 0.862,
+      "p75": 0.9253,
+      "p95": 0.9668
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.435,
+     "median_RMSE": 0.106
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.397,
+      "p25": 0.855,
+      "p50": 1.719,
+      "p75": 3.677,
+      "p95": 4.586
+     },
+     "AUC_quantiles": {
+      "p5": 0.6212,
+      "p25": 0.7433,
+      "p50": 0.8109,
+      "p75": 0.9405,
+      "p95": 0.9659
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.6,
+     "median_RMSE": 0.1045
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.328,
+      "p25": 2.095,
+      "p50": 2.951,
+      "p75": 3.499,
+      "p95": 4.699
+     },
+     "AUC_quantiles": {
+      "p5": 0.7549,
+      "p25": 0.8368,
+      "p50": 0.8842,
+      "p75": 0.901,
+      "p95": 0.957
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.276,
+     "median_RMSE": 0.1102
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.414,
+      "p25": 0.309,
+      "p50": 1.26,
+      "p75": 2.005,
+      "p95": 2.45
+     },
+     "AUC_quantiles": {
+      "p5": 0.63,
+      "p25": 0.7111,
+      "p50": 0.8205,
+      "p75": 0.8721,
+      "p95": 0.8924
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.846,
+     "median_RMSE": 0.1392
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 43,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.407,
+      "p25": -0.092,
+      "p50": 0.601,
+      "p75": 2.086,
+      "p95": 2.663
+     },
+     "AUC_quantiles": {
+      "p5": 0.4046,
+      "p25": 0.6669,
+      "p50": 0.7418,
+      "p75": 0.8512,
+      "p95": 0.891
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.884,
+     "median_RMSE": 0.1292
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.448,
+      "p25": -1.164,
+      "p50": 0.463,
+      "p75": 1.574,
+      "p95": 2.624
+     },
+     "AUC_quantiles": {
+      "p5": 0.3838,
+      "p25": 0.554,
+      "p50": 0.7283,
+      "p75": 0.8327,
+      "p95": 0.8743
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.917,
+     "median_RMSE": 0.1205
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.799,
+      "p25": 0.183,
+      "p50": 0.838,
+      "p75": 2.105,
+      "p95": 2.563
+     },
+     "AUC_quantiles": {
+      "p5": 0.5907,
+      "p25": 0.6982,
+      "p50": 0.7633,
+      "p75": 0.8758,
+      "p95": 0.8935
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.842,
+     "median_RMSE": 0.1334
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.303,
+      "p25": 1.201,
+      "p50": 1.737,
+      "p75": 3.088,
+      "p95": 4.054
+     },
+     "AUC_quantiles": {
+      "p5": 0.6196,
+      "p25": 0.7745,
+      "p50": 0.8487,
+      "p75": 0.9303,
+      "p95": 0.9735
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.556,
+     "median_RMSE": 0.1127
+    },
+    "g_all_solid": {
+     "n_lines": 799,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.008,
+      "p25": 0.849,
+      "p50": 1.925,
+      "p75": 2.977,
+      "p95": 4.443
+     },
+     "AUC_quantiles": {
+      "p5": 0.5535,
+      "p25": 0.7494,
+      "p50": 0.8467,
+      "p75": 0.9045,
+      "p95": 0.9579
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.596,
+     "median_RMSE": 0.1103
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.579,
+      "p25": 2.34,
+      "p50": 2.443,
+      "p75": 3.095,
+      "p95": 4.238
+     },
+     "AUC_quantiles": {
+      "p5": 0.8021,
+      "p25": 0.8575,
+      "p50": 0.8837,
+      "p75": 0.923,
+      "p95": 0.9634
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.273,
+     "median_RMSE": 0.0999
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.544,
+      "p25": 1.575,
+      "p50": 1.911,
+      "p75": 2.296,
+      "p95": 2.658
+     },
+     "AUC_quantiles": {
+      "p5": 0.712,
+      "p25": 0.7862,
+      "p50": 0.8467,
+      "p75": 0.8507,
+      "p95": 0.8625
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.714,
+     "median_RMSE": 0.1043
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 570,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.261,
+      "p25": 0.642,
+      "p50": 1.812,
+      "p75": 2.755,
+      "p95": 4.015
+     },
+     "AUC_quantiles": {
+      "p5": 0.5309,
+      "p25": 0.7291,
+      "p50": 0.8339,
+      "p75": 0.8953,
+      "p95": 0.9544
+     },
+     "screened_conc_uM": {
+      "min": 0.004002,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.637,
+     "median_RMSE": 0.1136
+    }
+   }
+  },
+  "Buparlisib": {
+   "drug_class": "PI3K_inhibitor",
+   "drug_id": 1873,
+   "role": "extra",
+   "putative_target": "PI3Kalpha, PI3Kdelta, PI3Kbeta, PI3Kgamma",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.477,
+      "p25": 0.885,
+      "p50": 1.395,
+      "p75": 1.915,
+      "p95": 2.567
+     },
+     "AUC_quantiles": {
+      "p5": 0.7077,
+      "p25": 0.7404,
+      "p50": 0.7719,
+      "p75": 0.8173,
+      "p95": 0.8767
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.9,
+     "median_RMSE": 0.0758
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.386,
+      "p25": 0.491,
+      "p50": 1.108,
+      "p75": 1.353,
+      "p95": 2.185
+     },
+     "AUC_quantiles": {
+      "p5": 0.6845,
+      "p25": 0.6895,
+      "p50": 0.7526,
+      "p75": 0.7778,
+      "p95": 0.7844
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.857,
+     "median_RMSE": 0.1024
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.357,
+      "p25": 0.573,
+      "p50": 1.491,
+      "p75": 2.062,
+      "p95": 3.2
+     },
+     "AUC_quantiles": {
+      "p5": 0.6644,
+      "p25": 0.7154,
+      "p50": 0.7732,
+      "p75": 0.835,
+      "p95": 0.885
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.76,
+     "median_RMSE": 0.0813
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.355,
+      "p25": 0.991,
+      "p50": 1.381,
+      "p75": 2.049,
+      "p95": 3.407
+     },
+     "AUC_quantiles": {
+      "p5": 0.6829,
+      "p25": 0.7356,
+      "p50": 0.7725,
+      "p75": 0.8071,
+      "p95": 0.8684
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.823,
+     "median_RMSE": 0.083
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.375,
+      "p25": 0.564,
+      "p50": 1.204,
+      "p75": 1.448,
+      "p95": 3.325
+     },
+     "AUC_quantiles": {
+      "p5": 0.6832,
+      "p25": 0.7075,
+      "p50": 0.7584,
+      "p75": 0.7836,
+      "p95": 0.8847
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.833,
+     "median_RMSE": 0.0891
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.479,
+      "p25": 1.215,
+      "p50": 1.695,
+      "p75": 2.262,
+      "p95": 3.91
+     },
+     "AUC_quantiles": {
+      "p5": 0.6871,
+      "p25": 0.7578,
+      "p50": 0.7792,
+      "p75": 0.8076,
+      "p95": 0.8683
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.828,
+     "median_RMSE": 0.0745
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.297,
+      "p25": 0.448,
+      "p50": 0.657,
+      "p75": 1.175,
+      "p95": 1.695
+     },
+     "AUC_quantiles": {
+      "p5": 0.6659,
+      "p25": 0.6866,
+      "p50": 0.7247,
+      "p75": 0.7723,
+      "p95": 0.8083
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 1.0,
+     "median_RMSE": 0.0906
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.18,
+      "p25": 0.527,
+      "p50": 0.826,
+      "p75": 1.258,
+      "p95": 2.164
+     },
+     "AUC_quantiles": {
+      "p5": 0.6684,
+      "p25": 0.697,
+      "p50": 0.7367,
+      "p75": 0.7768,
+      "p95": 0.8345
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.976,
+     "median_RMSE": 0.0911
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.169,
+      "p25": 0.504,
+      "p50": 0.826,
+      "p75": 1.316,
+      "p95": 2.204
+     },
+     "AUC_quantiles": {
+      "p5": 0.66,
+      "p25": 0.6999,
+      "p50": 0.7392,
+      "p75": 0.775,
+      "p95": 0.8344
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.958,
+     "median_RMSE": 0.0881
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.368,
+      "p25": 0.57,
+      "p50": 0.857,
+      "p75": 1.235,
+      "p95": 1.649
+     },
+     "AUC_quantiles": {
+      "p5": 0.6832,
+      "p25": 0.6988,
+      "p50": 0.7325,
+      "p75": 0.7776,
+      "p95": 0.7937
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 1.0,
+     "median_RMSE": 0.0938
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.2,
+      "p25": 0.572,
+      "p50": 1.073,
+      "p75": 1.83,
+      "p95": 2.677
+     },
+     "AUC_quantiles": {
+      "p5": 0.6495,
+      "p25": 0.7094,
+      "p50": 0.7463,
+      "p75": 0.8356,
+      "p95": 0.8856
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.889,
+     "median_RMSE": 0.0929
+    },
+    "g_all_solid": {
+     "n_lines": 793,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.08,
+      "p25": 0.633,
+      "p50": 1.119,
+      "p75": 1.781,
+      "p95": 2.984
+     },
+     "AUC_quantiles": {
+      "p5": 0.6519,
+      "p25": 0.7122,
+      "p50": 0.7594,
+      "p75": 0.8058,
+      "p95": 0.8832
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.868,
+     "median_RMSE": 0.0841
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.213,
+      "p25": 1.516,
+      "p50": 1.753,
+      "p75": 2.304,
+      "p95": 2.842
+     },
+     "AUC_quantiles": {
+      "p5": 0.7632,
+      "p25": 0.8098,
+      "p50": 0.8263,
+      "p75": 0.8457,
+      "p95": 0.9011
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.727,
+     "median_RMSE": 0.0833
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.28,
+      "p25": 0.987,
+      "p50": 1.422,
+      "p75": 1.729,
+      "p95": 2.724
+     },
+     "AUC_quantiles": {
+      "p5": 0.6644,
+      "p25": 0.7405,
+      "p50": 0.7599,
+      "p75": 0.7775,
+      "p95": 0.8369
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.857,
+     "median_RMSE": 0.0944
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 565,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.002,
+      "p25": 0.59,
+      "p50": 1.058,
+      "p75": 1.716,
+      "p95": 2.975
+     },
+     "AUC_quantiles": {
+      "p5": 0.6429,
+      "p25": 0.7088,
+      "p50": 0.7529,
+      "p75": 0.7993,
+      "p95": 0.882
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.883,
+     "median_RMSE": 0.0858
+    }
+   }
+  },
+  "Navitoclax": {
+   "drug_class": "BCL2_family_inhibitor",
+   "drug_id": 1011,
+   "role": "requested",
+   "putative_target": "BCL2, BCL-XL, BCL-W",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.392,
+      "p25": 2.191,
+      "p50": 2.687,
+      "p75": 3.733,
+      "p95": 4.745
+     },
+     "AUC_quantiles": {
+      "p5": 0.8325,
+      "p25": 0.8976,
+      "p50": 0.9356,
+      "p75": 0.9624,
+      "p95": 0.979
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.15,
+     "median_RMSE": 0.0887
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.751,
+      "p25": 0.364,
+      "p50": 1.851,
+      "p75": 2.576,
+      "p95": 3.407
+     },
+     "AUC_quantiles": {
+      "p5": 0.6107,
+      "p25": 0.7395,
+      "p50": 0.8441,
+      "p75": 0.8995,
+      "p95": 0.9283
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.714,
+     "median_RMSE": 0.1361
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.102,
+      "p25": 0.753,
+      "p50": 1.665,
+      "p75": 2.141,
+      "p95": 3.629
+     },
+     "AUC_quantiles": {
+      "p5": 0.6927,
+      "p25": 0.7535,
+      "p50": 0.8382,
+      "p75": 0.8751,
+      "p95": 0.936
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.808,
+     "median_RMSE": 0.1286
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 61,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.113,
+      "p25": 2.069,
+      "p50": 2.426,
+      "p75": 3.136,
+      "p95": 4.158
+     },
+     "AUC_quantiles": {
+      "p5": 0.7045,
+      "p25": 0.8413,
+      "p50": 0.8792,
+      "p75": 0.9224,
+      "p95": 0.9776
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.328,
+     "median_RMSE": 0.1097
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.821,
+      "p25": 2.162,
+      "p50": 2.748,
+      "p75": 3.627,
+      "p95": 4.353
+     },
+     "AUC_quantiles": {
+      "p5": 0.7492,
+      "p25": 0.8689,
+      "p50": 0.9155,
+      "p75": 0.9428,
+      "p95": 0.9818
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.3,
+     "median_RMSE": 0.0834
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 28,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.154,
+      "p25": 2.028,
+      "p50": 2.39,
+      "p75": 3.054,
+      "p95": 3.846
+     },
+     "AUC_quantiles": {
+      "p5": 0.6683,
+      "p25": 0.8265,
+      "p50": 0.8717,
+      "p75": 0.8922,
+      "p95": 0.9454
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.321,
+     "median_RMSE": 0.1279
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 13,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.158,
+      "p25": 0.312,
+      "p50": 1.303,
+      "p75": 2.022,
+      "p95": 2.895
+     },
+     "AUC_quantiles": {
+      "p5": 0.6719,
+      "p25": 0.7243,
+      "p50": 0.7855,
+      "p75": 0.8901,
+      "p95": 0.9375
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.692,
+     "median_RMSE": 0.1221
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 44,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.131,
+      "p25": 1.27,
+      "p50": 1.851,
+      "p75": 2.495,
+      "p95": 3.688
+     },
+     "AUC_quantiles": {
+      "p5": 0.688,
+      "p25": 0.8103,
+      "p50": 0.8602,
+      "p75": 0.893,
+      "p95": 0.9459
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.682,
+     "median_RMSE": 0.1189
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.319,
+      "p25": 1.306,
+      "p50": 1.834,
+      "p75": 2.436,
+      "p95": 3.686
+     },
+     "AUC_quantiles": {
+      "p5": 0.7393,
+      "p25": 0.8221,
+      "p50": 0.86,
+      "p75": 0.8937,
+      "p95": 0.9588
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.68,
+     "median_RMSE": 0.1211
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 19,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.084,
+      "p25": 0.616,
+      "p50": 1.913,
+      "p75": 2.517,
+      "p95": 3.588
+     },
+     "AUC_quantiles": {
+      "p5": 0.6802,
+      "p25": 0.7729,
+      "p50": 0.8663,
+      "p75": 0.8914,
+      "p95": 0.9336
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.684,
+     "median_RMSE": 0.1164
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.87,
+      "p25": 0.039,
+      "p50": 1.803,
+      "p75": 2.474,
+      "p95": 4.071
+     },
+     "AUC_quantiles": {
+      "p5": 0.5092,
+      "p25": 0.6977,
+      "p50": 0.8517,
+      "p75": 0.8919,
+      "p95": 0.9739
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.741,
+     "median_RMSE": 0.1206
+    },
+    "g_all_solid": {
+     "n_lines": 799,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.487,
+      "p25": 1.124,
+      "p50": 2.318,
+      "p75": 3.272,
+      "p95": 4.709
+     },
+     "AUC_quantiles": {
+      "p5": 0.5879,
+      "p25": 0.8197,
+      "p50": 0.8928,
+      "p75": 0.9398,
+      "p95": 0.9772
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 3
+     },
+     "frac_IC50_below_max_conc": 0.429,
+     "median_RMSE": 0.0971
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.006,
+      "p25": 2.351,
+      "p50": 3.26,
+      "p75": 3.749,
+      "p95": 4.709
+     },
+     "AUC_quantiles": {
+      "p5": 0.8786,
+      "p25": 0.9183,
+      "p50": 0.9631,
+      "p75": 0.9747,
+      "p95": 0.9847
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0938
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.78,
+      "p25": 2.462,
+      "p50": 3.323,
+      "p75": 3.611,
+      "p95": 4.592
+     },
+     "AUC_quantiles": {
+      "p5": 0.8351,
+      "p25": 0.8704,
+      "p50": 0.9197,
+      "p75": 0.9281,
+      "p95": 0.9624
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.286,
+     "median_RMSE": 0.0788
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 571,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.757,
+      "p25": 0.885,
+      "p50": 2.232,
+      "p75": 3.228,
+      "p95": 4.669
+     },
+     "AUC_quantiles": {
+      "p5": 0.5452,
+      "p25": 0.806,
+      "p50": 0.892,
+      "p75": 0.9393,
+      "p95": 0.9763
+     },
+     "screened_conc_uM": {
+      "min": 0.002001,
+      "max": 10.0,
+      "n_distinct_max": 3
+     },
+     "frac_IC50_below_max_conc": 0.454,
+     "median_RMSE": 0.0955
+    }
+   }
+  },
+  "Venetoclax": {
+   "drug_class": "BCL2_family_inhibitor",
+   "drug_id": 1909,
+   "role": "requested",
+   "putative_target": "BCL2",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.176,
+      "p25": 2.191,
+      "p50": 2.492,
+      "p75": 2.91,
+      "p95": 3.294
+     },
+     "AUC_quantiles": {
+      "p5": 0.9167,
+      "p25": 0.9615,
+      "p50": 0.9673,
+      "p75": 0.9757,
+      "p95": 0.983
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0821
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.979,
+      "p25": 2.221,
+      "p50": 2.787,
+      "p75": 3.156,
+      "p95": 4.053
+     },
+     "AUC_quantiles": {
+      "p5": 0.9476,
+      "p25": 0.9539,
+      "p50": 0.9663,
+      "p75": 0.9706,
+      "p95": 0.9832
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.063
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.263,
+      "p25": 1.977,
+      "p50": 2.792,
+      "p75": 3.212,
+      "p95": 4.123
+     },
+     "AUC_quantiles": {
+      "p5": 0.9227,
+      "p25": 0.9492,
+      "p50": 0.9622,
+      "p75": 0.972,
+      "p95": 0.9803
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0641
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.613,
+      "p25": 2.49,
+      "p50": 3.503,
+      "p75": 4.806,
+      "p95": 7.156
+     },
+     "AUC_quantiles": {
+      "p5": 0.9223,
+      "p25": 0.9475,
+      "p50": 0.9645,
+      "p75": 0.9773,
+      "p95": 0.9881
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.016,
+     "median_RMSE": 0.0712
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.3,
+      "p25": 2.038,
+      "p50": 2.743,
+      "p75": 3.189,
+      "p95": 4.179
+     },
+     "AUC_quantiles": {
+      "p5": 0.9388,
+      "p25": 0.9469,
+      "p50": 0.9639,
+      "p75": 0.977,
+      "p95": 0.9869
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0595
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 3.045,
+      "p25": 3.761,
+      "p50": 5.1,
+      "p75": 5.974,
+      "p95": 8.603
+     },
+     "AUC_quantiles": {
+      "p5": 0.9168,
+      "p25": 0.9495,
+      "p50": 0.9656,
+      "p75": 0.9783,
+      "p95": 0.9921
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.034,
+     "median_RMSE": 0.0832
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.035,
+      "p25": 1.872,
+      "p50": 2.74,
+      "p75": 3.138,
+      "p95": 3.638
+     },
+     "AUC_quantiles": {
+      "p5": 0.9367,
+      "p25": 0.9482,
+      "p50": 0.9721,
+      "p75": 0.98,
+      "p95": 0.988
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0715
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.404,
+      "p25": 2.015,
+      "p50": 2.423,
+      "p75": 3.114,
+      "p95": 3.943
+     },
+     "AUC_quantiles": {
+      "p5": 0.9395,
+      "p25": 0.9641,
+      "p50": 0.9703,
+      "p75": 0.9797,
+      "p95": 0.9873
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.079
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.965,
+      "p25": 2.147,
+      "p50": 2.75,
+      "p75": 3.405,
+      "p95": 4.639
+     },
+     "AUC_quantiles": {
+      "p5": 0.9642,
+      "p25": 0.9682,
+      "p50": 0.9753,
+      "p75": 0.9804,
+      "p95": 0.9858
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0811
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.276,
+      "p25": 1.725,
+      "p50": 2.362,
+      "p75": 2.791,
+      "p95": 3.387
+     },
+     "AUC_quantiles": {
+      "p5": 0.9199,
+      "p25": 0.9525,
+      "p50": 0.9635,
+      "p75": 0.9717,
+      "p95": 0.9875
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0761
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.171,
+      "p25": 1.986,
+      "p50": 3.175,
+      "p75": 3.927,
+      "p95": 5.037
+     },
+     "AUC_quantiles": {
+      "p5": 0.7688,
+      "p25": 0.9663,
+      "p50": 0.9827,
+      "p75": 0.9846,
+      "p95": 0.9909
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.074,
+     "median_RMSE": 0.0699
+    },
+    "g_all_solid": {
+     "n_lines": 793,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.41,
+      "p25": 1.852,
+      "p50": 2.494,
+      "p75": 3.119,
+      "p95": 4.085
+     },
+     "AUC_quantiles": {
+      "p5": 0.8983,
+      "p25": 0.9499,
+      "p50": 0.9655,
+      "p75": 0.9752,
+      "p95": 0.9852
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 10.0,
+      "n_distinct_max": 2
+     },
+     "frac_IC50_below_max_conc": 0.043,
+     "median_RMSE": 0.0748
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.867,
+      "p25": 2.621,
+      "p50": 3.125,
+      "p75": 3.302,
+      "p95": 3.566
+     },
+     "AUC_quantiles": {
+      "p5": 0.9569,
+      "p25": 0.968,
+      "p50": 0.9797,
+      "p75": 0.9855,
+      "p95": 0.989
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0514
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.503,
+      "p25": 2.162,
+      "p50": 2.624,
+      "p75": 3.496,
+      "p95": 3.934
+     },
+     "AUC_quantiles": {
+      "p5": 0.9248,
+      "p25": 0.9399,
+      "p50": 0.957,
+      "p75": 0.9655,
+      "p95": 0.9772
+     },
+     "screened_conc_uM": {
+      "min": 0.001001,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0832
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 565,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.099,
+      "p25": 1.734,
+      "p50": 2.373,
+      "p75": 2.953,
+      "p95": 3.771
+     },
+     "AUC_quantiles": {
+      "p5": 0.8833,
+      "p25": 0.949,
+      "p50": 0.9652,
+      "p75": 0.9746,
+      "p95": 0.985
+     },
+     "screened_conc_uM": {
+      "min": 0.000977,
+      "max": 1.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.057,
+     "median_RMSE": 0.0771
+    }
+   }
+  },
+  "WEHI-539": {
+   "drug_class": "BCL2_family_inhibitor",
+   "drug_id": 1997,
+   "role": "requested_BCLxL_selective",
+   "putative_target": "BCL-XL",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.458,
+      "p25": 3.826,
+      "p50": 4.405,
+      "p75": 4.876,
+      "p95": 5.664
+     },
+     "AUC_quantiles": {
+      "p5": 0.8906,
+      "p25": 0.9485,
+      "p50": 0.9596,
+      "p75": 0.968,
+      "p95": 0.9802
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.025,
+     "median_RMSE": 0.0845
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.135,
+      "p25": 3.267,
+      "p50": 5.027,
+      "p75": 5.43,
+      "p95": 5.832
+     },
+     "AUC_quantiles": {
+      "p5": 0.6337,
+      "p25": 0.9062,
+      "p50": 0.971,
+      "p75": 0.9778,
+      "p95": 0.9838
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.286,
+     "median_RMSE": 0.0752
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.23,
+      "p25": 2.856,
+      "p50": 3.76,
+      "p75": 5.255,
+      "p95": 6.227
+     },
+     "AUC_quantiles": {
+      "p5": 0.7328,
+      "p25": 0.9014,
+      "p50": 0.9358,
+      "p75": 0.9688,
+      "p95": 0.9842
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.154,
+     "median_RMSE": 0.0793
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.581,
+      "p25": 3.856,
+      "p50": 4.896,
+      "p75": 5.481,
+      "p95": 7.188
+     },
+     "AUC_quantiles": {
+      "p5": 0.8599,
+      "p25": 0.9189,
+      "p50": 0.9562,
+      "p75": 0.9748,
+      "p95": 0.9903
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.016,
+     "median_RMSE": 0.077
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.667,
+      "p25": 3.856,
+      "p50": 4.353,
+      "p75": 4.977,
+      "p95": 5.584
+     },
+     "AUC_quantiles": {
+      "p5": 0.864,
+      "p25": 0.9111,
+      "p50": 0.9508,
+      "p75": 0.9722,
+      "p95": 0.9892
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0797
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.634,
+      "p25": 4.532,
+      "p50": 5.416,
+      "p75": 6.232,
+      "p95": 8.219
+     },
+     "AUC_quantiles": {
+      "p5": 0.8529,
+      "p25": 0.9234,
+      "p50": 0.9657,
+      "p75": 0.9823,
+      "p95": 0.9911
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.034,
+     "median_RMSE": 0.0755
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.738,
+      "p25": 3.175,
+      "p50": 4.216,
+      "p75": 4.911,
+      "p95": 5.354
+     },
+     "AUC_quantiles": {
+      "p5": 0.8555,
+      "p25": 0.9089,
+      "p50": 0.9543,
+      "p75": 0.9741,
+      "p95": 0.9857
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.083,
+     "median_RMSE": 0.0786
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.457,
+      "p25": 3.195,
+      "p50": 4.318,
+      "p75": 5.092,
+      "p95": 6.025
+     },
+     "AUC_quantiles": {
+      "p5": 0.802,
+      "p25": 0.9193,
+      "p50": 0.9512,
+      "p75": 0.9734,
+      "p95": 0.9829
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.095,
+     "median_RMSE": 0.0804
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.042,
+      "p25": 2.589,
+      "p50": 3.663,
+      "p75": 4.688,
+      "p95": 5.325
+     },
+     "AUC_quantiles": {
+      "p5": 0.7464,
+      "p25": 0.8821,
+      "p50": 0.9401,
+      "p75": 0.9653,
+      "p95": 0.9752
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.167,
+     "median_RMSE": 0.0859
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.8,
+      "p25": 3.952,
+      "p50": 4.889,
+      "p75": 5.404,
+      "p95": 6.072
+     },
+     "AUC_quantiles": {
+      "p5": 0.8995,
+      "p25": 0.9415,
+      "p50": 0.973,
+      "p75": 0.9796,
+      "p95": 0.9858
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0773
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 26,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.156,
+      "p25": 2.064,
+      "p50": 3.713,
+      "p75": 4.655,
+      "p95": 5.603
+     },
+     "AUC_quantiles": {
+      "p5": 0.6413,
+      "p25": 0.8638,
+      "p50": 0.9379,
+      "p75": 0.9649,
+      "p95": 0.9818
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.269,
+     "median_RMSE": 0.0875
+    },
+    "g_all_solid": {
+     "n_lines": 797,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.066,
+      "p25": 3.125,
+      "p50": 4.071,
+      "p75": 4.949,
+      "p95": 6.022
+     },
+     "AUC_quantiles": {
+      "p5": 0.7429,
+      "p25": 0.9062,
+      "p50": 0.9472,
+      "p75": 0.9682,
+      "p95": 0.983
+     },
+     "screened_conc_uM": {
+      "min": 0.009766,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.134,
+     "median_RMSE": 0.0818
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.259,
+      "p25": 3.842,
+      "p50": 4.349,
+      "p75": 5.06,
+      "p95": 5.554
+     },
+     "AUC_quantiles": {
+      "p5": 0.8484,
+      "p25": 0.9434,
+      "p50": 0.9629,
+      "p75": 0.9739,
+      "p95": 0.9861
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.091,
+     "median_RMSE": 0.0674
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.908,
+      "p25": 3.609,
+      "p50": 4.457,
+      "p75": 4.828,
+      "p95": 5.007
+     },
+     "AUC_quantiles": {
+      "p5": 0.8757,
+      "p25": 0.8942,
+      "p50": 0.9407,
+      "p75": 0.9484,
+      "p95": 0.9629
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.0,
+     "median_RMSE": 0.0822
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 569,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.673,
+      "p25": 2.895,
+      "p50": 3.908,
+      "p75": 4.803,
+      "p95": 5.885
+     },
+     "AUC_quantiles": {
+      "p5": 0.6919,
+      "p25": 0.8985,
+      "p50": 0.9442,
+      "p75": 0.9679,
+      "p95": 0.9824
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.163,
+     "median_RMSE": 0.0838
+    }
+   }
+  },
+  "ABT737": {
+   "drug_class": "BCL2_family_inhibitor",
+   "drug_id": 1910,
+   "role": "extra",
+   "putative_target": "BCL2, BCL-XL,  BCL-W, BCL-B, BFL1",
+   "groups": {
+    "a_BRAF_V600E_melanoma": {
+     "n_lines": 40,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.529,
+      "p25": 2.133,
+      "p50": 2.852,
+      "p75": 3.319,
+      "p95": 4.417
+     },
+     "AUC_quantiles": {
+      "p5": 0.7795,
+      "p25": 0.856,
+      "p50": 0.8966,
+      "p75": 0.9188,
+      "p95": 0.9592
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.275,
+     "median_RMSE": 0.0971
+    },
+    "b_BRAF_V600E_colorectal": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.491,
+      "p25": 0.692,
+      "p50": 1.525,
+      "p75": 3.011,
+      "p95": 4.255
+     },
+     "AUC_quantiles": {
+      "p5": 0.6695,
+      "p25": 0.7007,
+      "p50": 0.7829,
+      "p75": 0.889,
+      "p95": 0.9577
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.571,
+     "median_RMSE": 0.0867
+    },
+    "c_KRAS_mut_colorectal": {
+     "n_lines": 25,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.18,
+      "p25": 1.574,
+      "p50": 2.466,
+      "p75": 3.266,
+      "p95": 4.825
+     },
+     "AUC_quantiles": {
+      "p5": 0.6203,
+      "p25": 0.7652,
+      "p50": 0.8403,
+      "p75": 0.9053,
+      "p95": 0.9409
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.48,
+     "median_RMSE": 0.0819
+    },
+    "d_KRAS_mut_lung_or_pancreas": {
+     "n_lines": 62,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.713,
+      "p25": 2.337,
+      "p50": 3.117,
+      "p75": 4.053,
+      "p95": 5.172
+     },
+     "AUC_quantiles": {
+      "p5": 0.6994,
+      "p25": 0.815,
+      "p50": 0.8971,
+      "p75": 0.9286,
+      "p95": 0.9642
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.242,
+     "median_RMSE": 0.081
+    },
+    "d1_KRAS_mut_NSCLC": {
+     "n_lines": 30,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.375,
+      "p25": 2.114,
+      "p50": 3.089,
+      "p75": 4.081,
+      "p95": 4.534
+     },
+     "AUC_quantiles": {
+      "p5": 0.7651,
+      "p25": 0.8204,
+      "p50": 0.9021,
+      "p75": 0.9286,
+      "p95": 0.9578
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.267,
+     "median_RMSE": 0.0804
+    },
+    "d2_KRAS_mut_pancreas": {
+     "n_lines": 29,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.572,
+      "p25": 2.496,
+      "p50": 3.235,
+      "p75": 4.006,
+      "p95": 5.505
+     },
+     "AUC_quantiles": {
+      "p5": 0.7677,
+      "p25": 0.8601,
+      "p50": 0.8907,
+      "p75": 0.9305,
+      "p95": 0.9685
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.138,
+     "median_RMSE": 0.0805
+    },
+    "e_RAS_RAF_wt_colorectal": {
+     "n_lines": 12,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.413,
+      "p25": 1.373,
+      "p50": 1.765,
+      "p75": 2.558,
+      "p95": 3.78
+     },
+     "AUC_quantiles": {
+      "p5": 0.6945,
+      "p25": 0.7638,
+      "p50": 0.8219,
+      "p75": 0.8679,
+      "p95": 0.9537
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.75,
+     "median_RMSE": 0.0716
+    },
+    "f_PIK3CA_mut_or_PTEN_null_colorectal_or_breast": {
+     "n_lines": 42,
+     "ln_IC50_uM_quantiles": {
+      "p5": 0.136,
+      "p25": 1.676,
+      "p50": 2.594,
+      "p75": 3.24,
+      "p95": 4.776
+     },
+     "AUC_quantiles": {
+      "p5": 0.6482,
+      "p25": 0.809,
+      "p50": 0.8954,
+      "p75": 0.9127,
+      "p95": 0.965
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.405,
+     "median_RMSE": 0.0804
+    },
+    "f1_PIK3CA_mut_or_PTEN_null_breast": {
+     "n_lines": 24,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.249,
+      "p25": 2.128,
+      "p50": 2.672,
+      "p75": 3.196,
+      "p95": 4.727
+     },
+     "AUC_quantiles": {
+      "p5": 0.7862,
+      "p25": 0.8384,
+      "p50": 0.8966,
+      "p75": 0.908,
+      "p95": 0.9419
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.333,
+     "median_RMSE": 0.0804
+    },
+    "f2_PIK3CA_mut_or_PTEN_null_colorectal": {
+     "n_lines": 18,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.028,
+      "p25": 1.471,
+      "p50": 2.195,
+      "p75": 3.433,
+      "p95": 4.666
+     },
+     "AUC_quantiles": {
+      "p5": 0.6287,
+      "p25": 0.7851,
+      "p50": 0.8543,
+      "p75": 0.9127,
+      "p95": 0.9671
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.5,
+     "median_RMSE": 0.082
+    },
+    "f3_breast_PIK3CA_PTEN_wt": {
+     "n_lines": 27,
+     "ln_IC50_uM_quantiles": {
+      "p5": -2.591,
+      "p25": 0.275,
+      "p50": 2.338,
+      "p75": 3.653,
+      "p95": 4.484
+     },
+     "AUC_quantiles": {
+      "p5": 0.3193,
+      "p25": 0.661,
+      "p50": 0.8887,
+      "p75": 0.9408,
+      "p95": 0.9628
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.481,
+     "median_RMSE": 0.0627
+    },
+    "g_all_solid": {
+     "n_lines": 792,
+     "ln_IC50_uM_quantiles": {
+      "p5": -0.985,
+      "p25": 1.426,
+      "p50": 2.542,
+      "p75": 3.448,
+      "p95": 4.798
+     },
+     "AUC_quantiles": {
+      "p5": 0.5208,
+      "p25": 0.7827,
+      "p50": 0.8684,
+      "p75": 0.9195,
+      "p95": 0.9613
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.446,
+     "median_RMSE": 0.0789
+    },
+    "h_BRAF_wt_NRAS_mut_melanoma": {
+     "n_lines": 11,
+     "ln_IC50_uM_quantiles": {
+      "p5": 2.091,
+      "p25": 2.971,
+      "p50": 3.317,
+      "p75": 4.167,
+      "p95": 4.992
+     },
+     "AUC_quantiles": {
+      "p5": 0.8409,
+      "p25": 0.9036,
+      "p50": 0.9301,
+      "p75": 0.9565,
+      "p95": 0.9833
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.091,
+     "median_RMSE": 0.0472
+    },
+    "i_EGFR_mut_NSCLC": {
+     "n_lines": 7,
+     "ln_IC50_uM_quantiles": {
+      "p5": 1.423,
+      "p25": 1.715,
+      "p50": 2.342,
+      "p75": 2.595,
+      "p95": 3.865
+     },
+     "AUC_quantiles": {
+      "p5": 0.7652,
+      "p25": 0.8023,
+      "p50": 0.8335,
+      "p75": 0.8474,
+      "p95": 0.9075
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.429,
+     "median_RMSE": 0.0949
+    },
+    "j_RAS_RAF_wt_solid": {
+     "n_lines": 565,
+     "ln_IC50_uM_quantiles": {
+      "p5": -1.245,
+      "p25": 1.134,
+      "p50": 2.339,
+      "p75": 3.292,
+      "p95": 4.679
+     },
+     "AUC_quantiles": {
+      "p5": 0.4868,
+      "p25": 0.7608,
+      "p50": 0.8566,
+      "p75": 0.9182,
+      "p95": 0.959
+     },
+     "screened_conc_uM": {
+      "min": 0.010005,
+      "max": 10.0,
+      "n_distinct_max": 1
+     },
+     "frac_IC50_below_max_conc": 0.496,
+     "median_RMSE": 0.0789
+    }
+   }
+  }
+ }
+}

@@ -11,3 +11,5 @@ science/raw/
 science/.venv/
 *.local.sh
 .DS_Store
+.venv-harbor/
+science/gdsc_long.csv
