@@ -15,11 +15,11 @@ Every number below comes from `docs/validation.json` or from the code in `remiss
 
 ## 2. What is calibrated against what
 
-Three parameter changes were applied since the last write-up. Section 2 reflects them.
+Three parameters were moved towards the published data during this validation, before the benchmark patients were drawn. Nothing was changed after that, and nothing was tuned on agent results.
 
-- PI3Ki: K 0.20 → 1.0 µM and `css` 0.50 → 2.5 µM.
-- MCLi: K 0.030 → 0.18 µM and `css` 0.075 → 0.45 µM.
-- BRAF CRC tumour buffer × 1.3 (margin 1.69–2.60).
+- PI3Ki: K 0.20 → 1.0 µM and `css` 0.50 → 2.5 µM (the 72 h IC50 was 1.27 log10 below alpelisib's).
+- MCLi: K 0.030 → 0.18 µM and `css` 0.075 → 0.45 µM (0.78 log10 below AZD5991's).
+- BRAF CRC tumour buffer × 1.3, margin 1.69–2.60 (the confirmed response to the triplet was 57 %, against 21–27 % in BEACON).
 
 The first two scale K and `css` together, so occupancy in tissue is unchanged. Only the in-vitro IC50 moves.
 
@@ -41,12 +41,12 @@ Each virtual tumour gets a 9-point, 72 h viability curve over the GDSC range of 
 | EGFRi vs osimertinib | same | −1.76 | −1.13 | **−0.63** | 0 % / 29 % | 0.32 / 0.59 |
 | EGFRi vs erlotinib | BRAF CRC / BRAF V600E CRC (7) | 1.60 | 1.59 | +0.02 | 100 % / 100 % | 0.92 / 0.96 |
 | KRASi vs KRAS (G12C) Inhibitor-12 | KRAS / KRAS G12C, any solid (19) | 2.60 | 2.52 | +0.08 | 91 % / 95 % | 0.93 / 0.95 |
-| PI3Ki vs alpelisib | PIK3CA/PTEN-altered / same, any solid (164) | 0.96 | 1.37 | −0.41 (was −1.27) | 70 % / 85 % | 0.94 / 0.93 |
-| MCLi vs AZD5991 | all / mel + CRC + NSCLC (152) | 2.23 | 2.37 | −0.14 (was −0.78) | 72 % / 89 % | 0.91 / 0.97 |
-| BCLi vs navitoclax | all / mel + CRC + NSCLC (205) | 2.30 (cap) | 1.07 | **+1.23** (was +0.36) | 69 % / 54 % | 0.89 / 0.91 |
+| PI3Ki vs alpelisib | PIK3CA/PTEN-altered / same, any solid (164) | 0.96 | 1.37 | −0.41 | 70 % / 85 % | 0.94 / 0.93 |
+| MCLi vs AZD5991 | all / mel + CRC + NSCLC (152) | 2.23 | 2.37 | −0.14 | 72 % / 89 % | 0.91 / 0.97 |
+| BCLi vs navitoclax | all / mel + CRC + NSCLC (205) | 2.30 (cap) | 1.07 | **+1.23** | 69 % / 54 % | 0.89 / 0.91 |
 | METi vs crizotinib | all / mel + CRC + NSCLC (205) | 2.30 (cap) | 1.16 | +1.14 | 97 % / 60 % | 1.00 / 0.90 |
 
-Seven of 14 comparisons are within half a log10. The PI3Ki and MCLi changes worked: both are now within half a log10, with AUC within 0.07. The BRAF CRC buffer change moved MEKi in BRAF CRC from −0.10 to +0.26. It also pushed the median BCLi IC50 to the cap, so BCLi now reads +1.23. Its AUC still matches (0.89 vs 0.91); the 0.36 → 1.23 jump is mostly the median of a bimodal set crossing the range edge. The remaining misses are in section 5.
+Seven of 14 comparisons are within half a log10, PI3Ki and MCLi among them after their change (AUC within 0.07). The BRAF CRC buffer change moved MEKi in BRAF CRC from −0.10 to +0.26 and pushed the median BCLi IC50 from +0.36 to the cap (+1.23). Its AUC still matches (0.89 vs 0.91): the jump is the median of a bimodal set crossing the edge of the tested range. The misses are listed in section 6.
 
 ### b. Pharmacokinetics vs drug labels
 
@@ -63,7 +63,7 @@ Half-lives follow the labels. `css` is an effective concentration in well units.
 | BCLi | 17 | 17.1 (navitoclax) | 0.175 | 2.50 (day 1) / unverified | – |
 | MCLi | 12 | no approved drug | 0.45 | – | – |
 
-PI3Ki `css` is now 0.80 × total plasma Cavg and 7.3 × free; before the change it was close to free.
+PI3Ki `css` is 0.80 × total plasma Cavg and 7.3 × free.
 
 ### c. Standard regimens vs trial response rates
 
@@ -74,17 +74,17 @@ Each tumour type gets its first `cohort.GUIDELINES` regimen at label dose for 84
 | Type | Regimen | Sim −30 % | Sim confirmed | Trial ORR |
 |---|---|---|---|---|
 | BRAF mel | RAFi+MEKi | 90 % | 74 % | 64–67 % (COMBI-d/v) |
-| BRAF CRC | RAFi+MEKi+EGFRi | 42 % (was 81 %) | **29 %** (was 57 %) | 21–27 % (BEACON triplet; Corcoran 2018) |
+| BRAF CRC | RAFi+MEKi+EGFRi | 42 % | **29 %** | 21–27 % (BEACON triplet; Corcoran 2018) |
 | KRAS G12C CRC | KRASi+EGFRi | 56 % | 21 % | 26–46 % (CodeBreaK 300; KRYSTAL-1) |
 | EGFR lung | EGFRi | 99 % | 75 % | 76–80 % (FLAURA) |
 
-The confirmed rate is now within 10 points of the trials for all four types. BRAF CRC is 2 points above the top of its range.
+The confirmed rate is within 10 points of the trials for all four types. BRAF CRC is 2 points above the top of its range.
 
 ## 3. Mechanistic checks against the classic papers
 
 ![Mechanisms](img/val_mechanisms.png)
 
-Drugs are at label-dose `css`; values are medians over tumours of the type. The pass rules were written before the first run. None of these papers gives fold changes as numbers in the text, so the checks are qualitative. The three parameter changes do not touch signalling, and these results are identical to the previous run.
+Drugs are at label-dose `css`; values are medians over tumours of the type. The pass rules were written before the first run. None of these papers gives fold changes as numbers in the text, so the checks are qualitative. The three parameter changes of section 2 do not touch signalling.
 
 | Check | Result | Key numbers |
 |---|---|---|
@@ -122,11 +122,43 @@ No threshold fits both groups. At harm ≥ 0.8 the combinations come closer (28�
 
 What this means for the benchmark: reward subtracts harm, so full-dose combinations cost more in the model than in the clinic. An agent gains by lowering combination doses. Nothing was tuned.
 
-## The benchmark cohort
+## 5. The benchmark cohort
 
-TODO(cohort): filled in by the lead
+![Cohort funnel](img/val_cohort.png)
 
-## 5. Known mismatches and abstractions
+A generated patient enters the benchmark only if all six rules of `remission/cohort.py` hold:
+
+1. Refractory: each of the five guideline regimens for the tumour type scores below 0.10.
+2. Curable: at least one of 3112 constant-dose regimens scores 0.50 or more.
+3. Progressive: left untreated, the tumour takes the lesion.
+4. No simple answer: every single drug and every pair at label dose scores below 0.10.
+5. A hidden clone decides: a resistant clone is below the detection limit of sequencing (2 % of cells), and the best regimens for the visible tumour score below 0.10.
+6. Hedging fails: the regimen best on average over every clone that could be hiding scores below 0.10.
+
+Rules 1 to 5 are checked on the fast model, then on the lattice. Patients left after each step:
+
+| Step | Test salt | Development salt | Both |
+|---|---|---|---|
+| Generated | 14,000 | 6,000 | 20,000 |
+| Rule 1 | 10,568 | 4,554 | 15,122 |
+| Rule 2 | 1,066 | 451 | 1,517 |
+| Rule 3 | 1,060 | 446 | 1,506 |
+| Rule 4 | 570 | 223 | 793 |
+| Rule 5 | 257 | 106 | 363 |
+| Rules 1 to 5 on the lattice | 150 | 60 | 210 |
+| Rule 6: the cohort | 36 | 12 | 48 |
+
+About 1 generated patient in 400 passes (1 in 417). Of the 48, 27 are melanoma, 16 EGFR lung, 3 KRAS and 2 BRAF colorectal. The hidden clone is most often BCL-xL (20) or MCL-1 (17); 13 have two. The best constant regimen scores 0.50 to 0.72 (median 0.57). Rule 6's hedges expect a median of 0.49 and 0.43 (typical and strong clones) in their own worlds but score at most 0.02 on the real tumour.
+
+The cohort is hard on purpose. These are the patients functional precision oncology exists for: the tumour comes back from cells below the detection limit of sequencing. It is not a random sample and says nothing about how common they are. The selection uses the simulator itself, so the lab's brief tells the agent how the patients were chosen (`cohort` in `brief()`, `remission/server.py`).
+
+The test suite is the first 10 test-salt patients with at most 4 of one tumour type: 4 melanoma, 4 EGFR lung, 1 KRAS, 1 BRAF colorectal. The development set is all 12 of the development salt (`tasks/dev/`). Both are in `tasks/suites.json`.
+
+Per tumour type, the constant regimen with the best mean over the 12 development patients (`reference/fixed_regimens.json`, `hindsight`) scores 0.28 to 0.48 on 4 of the 36 test-salt cohort patients and about 0 on the rest, mean 0.04. Chosen with hindsight on those 36, the best constant regimen per type averages 0.14 for melanoma (n = 22) and 0.14 for EGFR lung (n = 12); the best single one for all 36 averages 0.09.
+
+`scripts/run_eval.sh --fresh N` draws N new patients from a random salt, roughly one core-hour per patient.
+
+## 6. Known mismatches and abstractions
 
 **Mismatches with published data**
 
@@ -149,10 +181,10 @@ TODO(cohort): filled in by the lead
 - **Response.** A lattice cell count is not a RECIST measurement. A virtual population is not a trial population.
 - **Toxicity.** One renewing normal tissue stands in for all organs. There are no dose reductions.
 
-## 6. How to regenerate
+## 7. How to regenerate
 
 ```
 nice -n 10 science/.venv/bin/python science/validation/validate_model.py      # --n 600 --lattice-reps 2 --procs 16; about 2 min
 ```
 
-It writes `docs/validation.json` and `docs/img/val_*.png`. Part e (cohort) reads `science/cohort_scan_summary.json`. The JSON and the cohort figure say "stale" when that file is older than the model code.
+It writes `docs/validation.json` and `docs/img/val_*.png`. Part e (cohort) reads `science/cohort_scan_summary.json`, which `science/validation/cohort_summary.py` writes from the cohort scan results. The JSON and the cohort figure say "stale" when the scan is older than the model code.

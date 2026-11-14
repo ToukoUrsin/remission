@@ -1,95 +1,543 @@
 {
- "source": "/tmp/cohort_dev.pkl (salt 'dev', i < 1600), /tmp/cohort_v2.json",
- "n_generated": 1600,
- "n_eligible_3_guidelines": 276,
- "why_3_guidelines": {
-  "no grid regimen cures": 1040,
-  "a guideline regimen works": 259,
-  "eligible": 276,
-  "the grid's best regimen fails on the lattice": 11,
-  "a guideline regimen works on the lattice": 14
+ "about": "Cohort scans with all six rules of remission/cohort.py on the current model. funnel: patients excluded at each step, in the order cohort.screen() checks them; the lattice re-check repeats rules 1 to 5 on the tissue lattice. rule6: the two hedge regimens' reward in their own hypothetical tumours (expected) and on the real tumour (real, the better of fast model and lattice), for cohort patients and for those rule 6 rejects. Per patient: tasks/suites.json.",
+ "thresholds": {
+  "refractory_below": 0.1,
+  "curable_from": 0.5,
+  "untreated_below": 0.02,
+  "seq_lod": 0.02
  },
- "n_eligible_5_guidelines_fast_model_approx": 157,
- "n_eligible_v2_keep_list": 135,
- "by_type": {
-  "BRAF_MEL": {
-   "n": 384,
-   "counts": {
-    "no grid regimen cures": 187,
-    "a guideline regimen works": 102,
-    "eligible only with 3 guidelines": 35,
-    "eligible (5 guidelines, approx.)": 56,
-    "fails lattice checks": 4
+ "remission-v3-test": {
+  "generated": 14000,
+  "rules_1_to_5": 150,
+  "cohort": 36,
+  "one_in": 389,
+  "funnel": [
+   {
+    "step": "generated",
+    "left": 14000
    },
-   "share": {
-    "no grid regimen cures": 0.487,
-    "a guideline regimen works": 0.2656,
-    "eligible only with 3 guidelines": 0.0911,
-    "eligible (5 guidelines, approx.)": 0.1458,
-    "fails lattice checks": 0.0104
+   {
+    "step": "rule 1",
+    "why": "a guideline regimen works",
+    "excluded": 3432,
+    "left": 10568
    },
-   "eligible_3_guidelines": 91,
-   "eligible_v2_keep_list": 58,
-   "grid_best_median_all": 0.49
+   {
+    "step": "rule 2",
+    "why": "no grid regimen cures",
+    "excluded": 9502,
+    "left": 1066
+   },
+   {
+    "step": "rule 3",
+    "why": "the untreated tumour does not take the lesion",
+    "excluded": 6,
+    "left": 1060
+   },
+   {
+    "step": "rule 4",
+    "why": "a label-dose drug or pair works",
+    "excluded": 490,
+    "left": 570
+   },
+   {
+    "step": "rule 5",
+    "why": "sequencing of the biopsy shows every clone",
+    "excluded": 191,
+    "left": 379
+   },
+   {
+    "step": "rule 5",
+    "why": "the answer for the visible clones also cures the hidden one",
+    "excluded": 122,
+    "left": 257
+   },
+   {
+    "step": "lattice re-check, rule 2",
+    "why": "the grid's best regimen fails on the lattice",
+    "excluded": 9,
+    "left": 248
+   },
+   {
+    "step": "lattice re-check, rule 1",
+    "why": "a guideline regimen works on the lattice",
+    "excluded": 52,
+    "left": 196
+   },
+   {
+    "step": "lattice re-check, rule 4 or 5",
+    "why": "a label-dose pair or the answer for the visible clones works on the lattice",
+    "excluded": 46,
+    "left": 150
+   },
+   {
+    "step": "lattice re-check, rule 3",
+    "why": "the untreated tumour does not take the lesion on the lattice",
+    "excluded": 0,
+    "left": 150
+   },
+   {
+    "step": "rule 6",
+    "why": "a regimen that hedges against every clone that could be hiding works",
+    "excluded": 114,
+    "left": 36
+   }
+  ],
+  "by_type": {
+   "BRAF_MEL": {
+    "generated": 3482,
+    "rules_1_to_5": 94,
+    "cohort": 22
+   },
+   "BRAF_CRC": {
+    "generated": 3852,
+    "rules_1_to_5": 4,
+    "cohort": 1
+   },
+   "KRAS": {
+    "generated": 3079,
+    "rules_1_to_5": 11,
+    "cohort": 1
+   },
+   "EGFR": {
+    "generated": 3587,
+    "rules_1_to_5": 41,
+    "cohort": 12
+   }
   },
-  "BRAF_CRC": {
-   "n": 443,
-   "counts": {
-    "no grid regimen cures": 357,
-    "eligible (5 guidelines, approx.)": 29,
-    "eligible only with 3 guidelines": 20,
-    "a guideline regimen works": 37
-   },
-   "share": {
-    "no grid regimen cures": 0.8059,
-    "eligible (5 guidelines, approx.)": 0.0655,
-    "eligible only with 3 guidelines": 0.0451,
-    "a guideline regimen works": 0.0835
-   },
-   "eligible_3_guidelines": 49,
-   "eligible_v2_keep_list": 23,
-   "grid_best_median_all": 0.002
+  "hidden_clone": {
+   "bclx": 16,
+   "mcl1": 11,
+   "alt": 9,
+   "pten": 4,
+   "t790m": 2,
+   "ras": 2,
+   "mek1": 1
   },
-  "KRAS": {
-   "n": 325,
-   "counts": {
-    "no grid regimen cures": 272,
-    "eligible only with 3 guidelines": 19,
-    "eligible (5 guidelines, approx.)": 25,
-    "a guideline regimen works": 8,
-    "fails lattice checks": 1
-   },
-   "share": {
-    "no grid regimen cures": 0.8369,
-    "eligible only with 3 guidelines": 0.0585,
-    "eligible (5 guidelines, approx.)": 0.0769,
-    "a guideline regimen works": 0.0246,
-    "fails lattice checks": 0.0031
-   },
-   "eligible_3_guidelines": 44,
-   "eligible_v2_keep_list": 18,
-   "grid_best_median_all": 0.005
+  "two_hidden_clones": 9,
+  "best_reward": {
+   "median": 0.577,
+   "min": 0.516,
+   "max": 0.724
   },
-  "EGFR": {
-   "n": 448,
-   "counts": {
-    "no grid regimen cures": 224,
-    "a guideline regimen works": 126,
-    "eligible (5 guidelines, approx.)": 47,
-    "fails lattice checks": 6,
-    "eligible only with 3 guidelines": 45
+  "rule6": {
+   "cohort": {
+    "n": 36,
+    "typical": {
+     "expected": {
+      "median": 0.497,
+      "min": 0.151,
+      "max": 0.726
+     },
+     "real": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.015
+     },
+     "real_at_least_0.10": 0
+    },
+    "strong": {
+     "expected": {
+      "median": 0.433,
+      "min": 0.137,
+      "max": 0.707
+     },
+     "real": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.015
+     },
+     "real_at_least_0.10": 0
+    }
    },
-   "share": {
-    "no grid regimen cures": 0.5,
-    "a guideline regimen works": 0.2812,
-    "eligible (5 guidelines, approx.)": 0.1049,
-    "fails lattice checks": 0.0134,
-    "eligible only with 3 guidelines": 0.1004
+   "rejected": {
+    "n": 114,
+    "typical": {
+     "expected": {
+      "median": 0.476,
+      "min": 0.125,
+      "max": 0.803
+     },
+     "real": {
+      "median": 0.562,
+      "min": 0.0,
+      "max": 0.816
+     },
+     "real_at_least_0.10": 107
+    },
+    "strong": {
+     "expected": {
+      "median": 0.399,
+      "min": 0.085,
+      "max": 0.781
+     },
+     "real": {
+      "median": 0.551,
+      "min": 0.0,
+      "max": 0.805
+     },
+     "real_at_least_0.10": 99
+    }
+   }
+  },
+  "source": "/tmp/v3/merged_scrT.pkl",
+  "filled_in": [
+   {
+    "i": 3713,
+    "how": "same seed as index 5884"
+   }
+  ]
+ },
+ "remission-v3-dev": {
+  "generated": 6000,
+  "rules_1_to_5": 60,
+  "cohort": 12,
+  "one_in": 500,
+  "funnel": [
+   {
+    "step": "generated",
+    "left": 6000
    },
-   "eligible_3_guidelines": 92,
-   "eligible_v2_keep_list": 36,
-   "grid_best_median_all": 0.468
+   {
+    "step": "rule 1",
+    "why": "a guideline regimen works",
+    "excluded": 1446,
+    "left": 4554
+   },
+   {
+    "step": "rule 2",
+    "why": "no grid regimen cures",
+    "excluded": 4103,
+    "left": 451
+   },
+   {
+    "step": "rule 3",
+    "why": "the untreated tumour does not take the lesion",
+    "excluded": 5,
+    "left": 446
+   },
+   {
+    "step": "rule 4",
+    "why": "a label-dose drug or pair works",
+    "excluded": 223,
+    "left": 223
+   },
+   {
+    "step": "rule 5",
+    "why": "sequencing of the biopsy shows every clone",
+    "excluded": 83,
+    "left": 140
+   },
+   {
+    "step": "rule 5",
+    "why": "the answer for the visible clones also cures the hidden one",
+    "excluded": 34,
+    "left": 106
+   },
+   {
+    "step": "lattice re-check, rule 2",
+    "why": "the grid's best regimen fails on the lattice",
+    "excluded": 3,
+    "left": 103
+   },
+   {
+    "step": "lattice re-check, rule 1",
+    "why": "a guideline regimen works on the lattice",
+    "excluded": 20,
+    "left": 83
+   },
+   {
+    "step": "lattice re-check, rule 4 or 5",
+    "why": "a label-dose pair or the answer for the visible clones works on the lattice",
+    "excluded": 22,
+    "left": 61
+   },
+   {
+    "step": "lattice re-check, rule 3",
+    "why": "the untreated tumour does not take the lesion on the lattice",
+    "excluded": 1,
+    "left": 60
+   },
+   {
+    "step": "rule 6",
+    "why": "a regimen that hedges against every clone that could be hiding works",
+    "excluded": 48,
+    "left": 12
+   }
+  ],
+  "by_type": {
+   "BRAF_MEL": {
+    "generated": 1443,
+    "rules_1_to_5": 40,
+    "cohort": 5
+   },
+   "BRAF_CRC": {
+    "generated": 1655,
+    "rules_1_to_5": 5,
+    "cohort": 1
+   },
+   "KRAS": {
+    "generated": 1341,
+    "rules_1_to_5": 4,
+    "cohort": 2
+   },
+   "EGFR": {
+    "generated": 1561,
+    "rules_1_to_5": 11,
+    "cohort": 4
+   }
+  },
+  "hidden_clone": {
+   "mcl1": 6,
+   "bclx": 4,
+   "alt": 3,
+   "ras": 2,
+   "mek1": 1
+  },
+  "two_hidden_clones": 4,
+  "best_reward": {
+   "median": 0.532,
+   "min": 0.501,
+   "max": 0.648
+  },
+  "rule6": {
+   "cohort": {
+    "n": 12,
+    "typical": {
+     "expected": {
+      "median": 0.306,
+      "min": 0.22,
+      "max": 0.703
+     },
+     "real": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.022
+     },
+     "real_at_least_0.10": 0
+    },
+    "strong": {
+     "expected": {
+      "median": 0.242,
+      "min": 0.151,
+      "max": 0.656
+     },
+     "real": {
+      "median": 0.001,
+      "min": 0.0,
+      "max": 0.021
+     },
+     "real_at_least_0.10": 0
+    }
+   },
+   "rejected": {
+    "n": 48,
+    "typical": {
+     "expected": {
+      "median": 0.49,
+      "min": 0.165,
+      "max": 0.716
+     },
+     "real": {
+      "median": 0.571,
+      "min": 0.0,
+      "max": 0.818
+     },
+     "real_at_least_0.10": 42
+    },
+    "strong": {
+     "expected": {
+      "median": 0.43,
+      "min": 0.146,
+      "max": 0.693
+     },
+     "real": {
+      "median": 0.542,
+      "min": 0.0,
+      "max": 0.789
+     },
+     "real_at_least_0.10": 42
+    }
+   }
+  },
+  "source": "/tmp/v3/merged_scrD.pkl",
+  "filled_in": []
+ },
+ "overall": {
+  "generated": 20000,
+  "rules_1_to_5": 210,
+  "cohort": 48,
+  "one_in": 417,
+  "funnel": [
+   {
+    "step": "generated",
+    "left": 20000
+   },
+   {
+    "step": "rule 1",
+    "why": "a guideline regimen works",
+    "excluded": 4878,
+    "left": 15122
+   },
+   {
+    "step": "rule 2",
+    "why": "no grid regimen cures",
+    "excluded": 13605,
+    "left": 1517
+   },
+   {
+    "step": "rule 3",
+    "why": "the untreated tumour does not take the lesion",
+    "excluded": 11,
+    "left": 1506
+   },
+   {
+    "step": "rule 4",
+    "why": "a label-dose drug or pair works",
+    "excluded": 713,
+    "left": 793
+   },
+   {
+    "step": "rule 5",
+    "why": "sequencing of the biopsy shows every clone",
+    "excluded": 274,
+    "left": 519
+   },
+   {
+    "step": "rule 5",
+    "why": "the answer for the visible clones also cures the hidden one",
+    "excluded": 156,
+    "left": 363
+   },
+   {
+    "step": "lattice re-check, rule 2",
+    "why": "the grid's best regimen fails on the lattice",
+    "excluded": 12,
+    "left": 351
+   },
+   {
+    "step": "lattice re-check, rule 1",
+    "why": "a guideline regimen works on the lattice",
+    "excluded": 72,
+    "left": 279
+   },
+   {
+    "step": "lattice re-check, rule 4 or 5",
+    "why": "a label-dose pair or the answer for the visible clones works on the lattice",
+    "excluded": 68,
+    "left": 211
+   },
+   {
+    "step": "lattice re-check, rule 3",
+    "why": "the untreated tumour does not take the lesion on the lattice",
+    "excluded": 1,
+    "left": 210
+   },
+   {
+    "step": "rule 6",
+    "why": "a regimen that hedges against every clone that could be hiding works",
+    "excluded": 162,
+    "left": 48
+   }
+  ],
+  "by_type": {
+   "BRAF_MEL": {
+    "generated": 4925,
+    "rules_1_to_5": 134,
+    "cohort": 27
+   },
+   "BRAF_CRC": {
+    "generated": 5507,
+    "rules_1_to_5": 9,
+    "cohort": 2
+   },
+   "KRAS": {
+    "generated": 4420,
+    "rules_1_to_5": 15,
+    "cohort": 3
+   },
+   "EGFR": {
+    "generated": 5148,
+    "rules_1_to_5": 52,
+    "cohort": 16
+   }
+  },
+  "hidden_clone": {
+   "bclx": 20,
+   "mcl1": 17,
+   "alt": 12,
+   "pten": 4,
+   "ras": 4,
+   "t790m": 2,
+   "mek1": 2
+  },
+  "two_hidden_clones": 13,
+  "best_reward": {
+   "median": 0.572,
+   "min": 0.501,
+   "max": 0.724
+  },
+  "rule6": {
+   "cohort": {
+    "n": 48,
+    "typical": {
+     "expected": {
+      "median": 0.486,
+      "min": 0.151,
+      "max": 0.726
+     },
+     "real": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.022
+     },
+     "real_at_least_0.10": 0
+    },
+    "strong": {
+     "expected": {
+      "median": 0.43,
+      "min": 0.137,
+      "max": 0.707
+     },
+     "real": {
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.021
+     },
+     "real_at_least_0.10": 0
+    }
+   },
+   "rejected": {
+    "n": 162,
+    "typical": {
+     "expected": {
+      "median": 0.477,
+      "min": 0.125,
+      "max": 0.803
+     },
+     "real": {
+      "median": 0.567,
+      "min": 0.0,
+      "max": 0.818
+     },
+     "real_at_least_0.10": 149
+    },
+    "strong": {
+     "expected": {
+      "median": 0.406,
+      "min": 0.085,
+      "max": 0.781
+     },
+     "real": {
+      "median": 0.548,
+      "min": 0.0,
+      "max": 0.805
+     },
+     "real_at_least_0.10": 141
+    }
+   }
   }
  },
- "note": "The 3-guideline numbers are exact cohort.screen results. The 5-guideline count only re-checks guidelines 3-5 on the fast model."
+ "scanned_utc": "2026-11-14 13:30",
+ "scanned_mtime": 1794663001.514
 }

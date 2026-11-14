@@ -10,7 +10,7 @@ Parts (see docs/MODEL.md):
   b  five mechanistic checks against classic papers
   c  label-dose guideline regimens in the unselected virtual population vs trial ORRs
   d  model PK constants vs label PK
-  e  benchmark cohort selection (summary of the development scan; flagged stale if older than the model)
+  e  benchmark cohort selection (summary of the cohort scans; flagged stale if older than the model)
   f  normal-tissue harm at label dose (single agents and standard combinations) vs grade >= 3 AE rates
 """
 from __future__ import annotations
@@ -521,9 +521,9 @@ def part_e():
         return {"note": "science/cohort_scan_summary.json missing; run science/validation/cohort_summary.py"}
     e = json.load(open(path))
     newest = max(os.path.getmtime(os.path.join(ROOT, "remission", f)) for f in ("model.py", "patients.py", "cohort.py"))
-    if os.path.getmtime(path) < newest:
-        e["stale"] = ("science/cohort_scan_summary.json is older than remission/model.py, patients.py or cohort.py: "
-                      "the development scan was run on an earlier model and must be redone")
+    if e.get("scanned_mtime", 0) < newest:   # when the scan finished (its pickles' time), not when it was summarised
+        e["stale"] = ("the cohort scan in science/cohort_scan_summary.json is older than remission/model.py, patients.py "
+                      "or cohort.py: it was run on an earlier model and must be redone")
     return e
 
 
@@ -733,33 +733,59 @@ def fig_c(c, plt, lattice_reps):
 
 
 def fig_e(e, plt):
-    if "by_type" not in e:
+    if "overall" not in e:
         return
-    order = ["BRAF_MEL", "BRAF_CRC", "KRAS", "EGFR"]
-    for a in order:   # use the owner's exact 5-guideline cohort list where present
-        bt = e["by_type"][a]
-        if bt.get("eligible_v2_keep_list") is not None:
-            sh = bt["share"]
-            sh["eligible (5 guidelines)"] = bt["eligible_v2_keep_list"] / bt["n"]
-            sh["eligible only with 3 guidelines"] = (bt["eligible_3_guidelines"] - bt["eligible_v2_keep_list"]) / bt["n"]
-    cats = [("eligible (5 guidelines)", "#2a78d6"), ("eligible only with 3 guidelines", "#9cc0ec"),
-            ("a guideline regimen works", ORANGE), ("no grid regimen cures", GREY), ("fails lattice checks", "#d8d7d2")]
-    fig, ax = plt.subplots(figsize=(12, 5.5))
-    left = np.zeros(len(order))
-    for (k, col) in cats:
-        vals = np.array([100 * e["by_type"][a]["share"].get(k, 0.0) for a in order])
-        ax.barh(np.arange(len(order)), vals, left=left, color=col, edgecolor="white", linewidth=2, label=k)
-        for yi, (l0, v) in enumerate(zip(left, vals)):
-            if v >= 6:
-                ax.text(l0 + v / 2, yi, f"{v:.0f}", ha="center", va="center", fontsize=11,
-                        color="white" if col in ("#2a78d6", GREY, ORANGE) else "black")
-        left += vals
-    ax.set_yticks(np.arange(len(order)))
-    ax.set_yticklabels([f"{a} (n={e['by_type'][a]['n']})" for a in order])
-    ax.set(xlabel="% of generated patients", xlim=(0, 100), title="Who enters the benchmark cohort (development scan, 1600 patients)"
-           + ("\nSTALE: scan predates the current model" if e.get("stale") else ""))
-    ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, fontsize=10)
+    o = e["overall"]
+    fig, axes = plt.subplots(1, 2, figsize=(17, 6.8), gridspec_kw={"width_ratios": [1.4, 1]})
+    # funnel: patients left after each rule (rule 5's two reasons together, the lattice re-check as one step)
+    left = {}
+    for f in o["funnel"]:
+        key = "lattice" if f["step"].startswith("lattice") else f["step"]
+        left[key] = f["left"]
+    steps = [("generated", "generated"), ("rule 1", "1  every guideline regimen fails"), ("rule 2", "2  some constant regimen cures"),
+             ("rule 3", "3  untreated, the tumour takes the lesion"), ("rule 4", "4  no label-dose drug or pair works"),
+             ("rule 5", "5  a hidden clone defeats the visible answer"), ("lattice", "rules 1-5 again on the lattice"),
+             ("rule 6", "6  hedging fails = cohort")]
+    ax = axes[0]
+    y = np.arange(len(steps))[::-1]
+    vals = [left[k] for k, _ in steps]
+    cols = [GREY] + [BLUE] * (len(steps) - 2) + [VIOLET]
+    ax.barh(y, vals, color=cols, height=0.7)
+    for yi, v in zip(y, vals):
+        ax.text(v * 1.12, yi, f"{v:,}", va="center", fontsize=12)
+    ax.set_yticks(y)
+    ax.set_yticklabels([lab for _, lab in steps], fontsize=12)
+    ax.set_xscale("log")
+    ax.set_xlim(10, 1e5)
     ax.grid(axis="y", visible=False)
+    parts = " + ".join(f"{e[k]['generated']:,}" for k in e if k.startswith("remission-"))
+    ax.set(xlabel="patients left (log scale)",
+           title=f"Who enters the cohort: {o['generated']:,} generated patients ({parts}), 1 in {o['one_in']} passes"
+                 + ("\nSTALE: scan predates the current model" if e.get("stale") else ""))
+    # rule 6: what each hedge regimen expects in its own hypothetical tumours vs what it scores on the real one
+    ax = axes[1]
+    k = 0
+    ticks, labels = [], []
+    for group, gl in (("cohort", "cohort"), ("rejected", "rejected")):
+        g = o["rule6"][group]
+        for hedge in ("typical", "strong"):
+            for dx, key, col in ((-0.17, "expected", GREY), (0.17, "real", VIOLET if group == "cohort" else ORANGE)):
+                st = g[hedge][key]
+                ax.plot([k + dx, k + dx], [st["min"], st["max"]], color=col, lw=2)
+                ax.plot(k + dx, st["median"], "o", color=col, ms=10)
+            ticks.append(k)
+            labels.append(f"{hedge}\n{gl}\n(n={g['n']})")
+            k += 1
+    ax.axhline(C.REFRACTORY_BELOW, color="black", ls="--", lw=1.2)
+    from matplotlib.lines import Line2D
+    ax.legend(handles=[Line2D([], [], color=GREY, marker="o", label="expected, in its own hypothetical tumours"),
+                       Line2D([], [], color=VIOLET, marker="o", label="on the real tumour (cohort)"),
+                       Line2D([], [], color=ORANGE, marker="o", label="on the real tumour (rejected by rule 6)"),
+                       Line2D([], [], color="black", ls="--", label=f"rule 6 limit ({C.REFRACTORY_BELOW:.2f})")],
+              frameon=False, loc="upper left", fontsize=10)
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(labels, fontsize=11)
+    ax.set(ylabel="reward (median, min-max)", ylim=(-0.03, 1.05), xlim=(-0.6, 3.6), title="Rule 6: the hedge regimens")
     fig.tight_layout()
     fig.savefig(os.path.join(IMG, "val_cohort.png"))
     plt.close(fig)

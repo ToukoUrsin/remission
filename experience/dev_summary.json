@@ -1,0 +1,26 @@
+{
+ "reference": "Reference scientist",
+ "labels": {
+  "Claude Haiku 5.5": {
+   "runs": 12,
+   "tasks": 12,
+   "reward_mean": 0.088,
+   "reward_ci95": [
+    0.032,
+    0.155
+   ],
+   "cured_runs": 7,
+   "solved_runs": 0,
+   "classes": {
+    "too_toxic": 7,
+    "missed_clone": 5
+   },
+   "mistakes": {
+    "too_toxic": 10,
+    "missed_clone": 5
+   },
+   "wall_minutes_median": 5.6,
+   "tool_calls_median": 34.5
+  }
+ }
+}

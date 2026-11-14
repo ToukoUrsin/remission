@@ -1,0 +1,16 @@
+- Harm decided most scores. Reward = healed − harm, and healing was usually 0.9+ when the tumour was controlled. Winners kept harm near 0.3; most losers had harm 0.6–0.99.
+- Before submitting, test the exact final regimen on healthy cells in a well. Five episodes saw harm of 0.6–0.99 on healthy cells and submitted anyway. Dev-12 never tested its regimen on healthy cells and scored 0.32 with harm 0.64. If healthy-cell harm is above about 0.3, lower doses before submitting.
+- Find the drug driving harm. Use the harm-if-left-out numbers: when one drug accounted for most of the loss (EGFRi, MEKi, PI3Ki, MCLi), dropping or halving it cut harm sharply (e.g. dev-02 PI3Ki removal cut harm from 0.79 to 0.34).
+- Low dose held long beat high dose short. Dev-01 (x0.25, 84 d) scored 0.63 against 0.05 at full dose for 21 d. Dev-03 (x0.5) scored 0.41 against 0.01. Dev-05 (x0.5, 84 d) scored 0.31 against 0. Test a held-to-day-84 low-dose schedule in the wells before committing to it.
+- Doses that are too low lose the tumour. Dev-11 (EGFRi 0.1 + BCLi 0.25, 84 d) gave harm 0.19 but healed 0. Dev-06 at x0.25 also healed 0. Check that the tumour stays suppressed in the wells, not just that harm is low.
+- Cover every resistant clone. Each failure left one clone uncovered. The clones that recurred across 12 patients:
+  - MCL1 amplification → MCLi (6 patients; missing it caused dev-06, dev-08 risk, dev-10, dev-11 failures)
+  - BCL2L1 amplification → BCLi (4 patients; missing it caused dev-01, dev-04, dev-07 failures)
+  - MET amplification → METi (4 patients)
+  - KRAS G12C → KRASi (3 patients)
+  - MAP2K1 K57N → MEKi
+- Clones down to about 0.4% of the tumour were missed. The biopsy sequencing limit is about 2%, so a biopsy read shows nothing for small clones. Only grown survivors reveal them.
+- Grow survivors and sequence them. Use derive_line on drug-well survivors and sequence the result. Four episodes derived lines and never sequenced them (dev-04, dev-06, dev-11) or never grew survivors at all (dev-07, dev-10), and all four relapsed. Sequencing a derived line found the clone in dev-02 and dev-09.
+- Plan the calendar. Derived lines and long cultures took 6–14 days. Dev-02 used 25.25 of 28 days. Start sequencing and line derivation early, and leave at least 3–4 days for the final healthy-cell check.
+- Avoid short courses. Regimens of 10–21 days regrew the tumour in several episodes (dev-04, dev-06). A tumour clone that is not driven extinct regrows and takes the tissue over.
+- Check the submission against the same list: all known clones covered, a healthy-cell well run on the final regimen, harm estimated below about 0.3, and a dose schedule that holds to about day 84.
