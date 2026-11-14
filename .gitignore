@@ -1,0 +1,13 @@
+# internal notes and third-party challenge material (not part of the entry)
+BRIEF.md
+challenge/
+# local
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+jobs/
+science/raw/
+science/.venv/
+*.local.sh
+.DS_Store
