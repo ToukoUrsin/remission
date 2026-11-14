@@ -521,7 +521,7 @@
       (run.calls || []).forEach(function (c) { if (c[1] <= day + 0.4 && (bestD == null || c[1] > bestD)) bestD = c[1]; });
       if (bestD == null) return hideTip();
       var list = run.calls.filter(function (c) { return c[1] === bestD; });
-      var html = '<b>Tool calls on lab day ' + esc(g(bestD)) + '</b><table>' + list.slice(0, 12).map(function (c) {
+      var html = '<b>Tool calls on lab day ' + esc(g(bestD)) + '</b><table class="calls">' + list.slice(0, 12).map(function (c) {
         return '<tr><td>' + esc(c[0]) + (c[3] ? '' : ' (refused)') + '</td><td>' + esc(c[4] || '') + '</td></tr>';
       }).join('') + '</table>' + (list.length > 12 ? '… ' + (list.length - 12) + ' more' : '');
       showTip(html, evn.clientX, r.bottom + 8);
