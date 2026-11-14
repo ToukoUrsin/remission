@@ -11,10 +11,11 @@ lesion (not from what the agent said):
 
     solved             within 0.08 of the best regimen known for the patient, or better
     no_regimen         nothing was submitted: the patient went untreated
-    too_toxic          the tumour is gone but the normal tissue paid for it
+    too_toxic          the tumour is gone, but the drugs cost so much normal tissue that less than half of the
+                       best known reward is left
     missed_clone       the tumour came back from a minor resistant clone
     tumour_survived    the main clone was never cleared (too short, too little, wrong drugs)
-    suboptimal         cured, but clearly below the best known regimen
+    suboptimal         cured with avoidable damage: at least half of the best known reward, more than 0.08 below it
 
 Runs that say nothing about the agent are left out and listed under `excluded` in the summary: trials that
 never reached the verifier (a harness failure) and sessions that ended on a model API error before a regimen
@@ -167,6 +168,8 @@ def diagnose(ep: dict, score: dict) -> dict:
     truth = ep["truth"]
     bk = ep.get("best_known") or {}
     facts = lab_facts(ep)
+    if score.get("wells_used") is not None:
+        facts["wells_used"] = int(score["wells_used"])          # the lab's own count, which includes derived lines
     read = facts.pop("read")
     seen = facts["seen_alterations"]
     regimen = ep.get("regimen")
@@ -286,7 +289,7 @@ def diagnose(ep: dict, score: dict) -> dict:
             if not tested_t:
                 mistakes[-1]["detail"] += " The submitted combination was never cultured on tumour cells."
     else:
-        out["class"] = "too_toxic" if harm - float(bk.get("harm") or 0.0) >= 0.5 * (best - reward) else "suboptimal"
+        out["class"] = "too_toxic" if reward < 0.5 * best else "suboptimal"
 
     # ---- harm, for every unsolved run that hurt the patient
     if harm >= 0.25 and (not relapse or harm >= 0.4):
@@ -302,7 +305,7 @@ def diagnose(ep: dict, score: dict) -> dict:
         better = ""
         if best_var["reward"] >= reward + 0.1:
             better = f" {names[j].capitalize()} would have scored {best_var['reward']:.2f}."
-        add("too_toxic", f"Normal tissue fell to {pct(max(0.0, 1 - harm))}",
+        add("avoidable_harm" if out.get("class") == "suboptimal" else "too_toxic", f"Normal tissue fell to {pct(max(0.0, 1 - harm))}",
             f"{'The tumour was gone, but the' if not relapse else 'The'} regimen ({show(regimen)}) cost {pct(harm)} of the normal "
             f"tissue at its lowest point.{worst or ''} {check}.{better}")
     if out["class"] == "suboptimal" and not mistakes:

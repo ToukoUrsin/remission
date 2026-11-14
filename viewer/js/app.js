@@ -79,7 +79,7 @@
   }
   function kindText(r) {
     return r.kind === 'agent' ? 'AI agent' + (r.model ? ' · ' + r.model.split('/').pop() : '')
-      : r.kind === 'reference' ? 'reference run: a scripted scientist using the same tools'
+      : r.kind === 'reference' ? 'reference: a script with the same tools'
       : r.kind === 'best' ? 'searched with the hidden parameters' : 'baseline policy';
   }
 
@@ -96,6 +96,10 @@
         if (!best || score > best.score) best = { score: score, p: p, r: r, ref: ref };
       });
     });
+    var op = IDX.open && patient(IDX.open.patient);
+    if (op && entry(op, IDX.open.left)) {              // chosen when the data was built
+      return { patient: op.id, left: IDX.open.left, right: (reference(op) || options(op)[0]).id, day: IDX.open.day };
+    }
     if (!best) {
       var p0 = IDX.patients[0], o = options(p0);
       return { patient: p0.id, left: o[0].id, right: (reference(p0) || o[o.length - 1]).id };
@@ -273,7 +277,7 @@
     item('sw-h', 'healthy cell');
     item('sw-c0', 'tumour: dominant clone');
     if (S.view === 'overview' || S.view === 'treat') item('sw-c1', 'tumour: hidden resistant clone');
-    else p.clones.slice(1).forEach(function (c, i) { item('sw-c' + (i + 1), 'tumour: ' + c.label); });
+    else p.clones.slice(1).forEach(function (c, i) { item('sw-c' + (i + 1), (p.clones.length > 2 ? '' : 'tumour: ') + c.label); });   // two hidden clones: keep the header on one line
     item('sw-e', 'empty site');
   }
 
@@ -357,6 +361,7 @@
     eq.innerHTML = 'healed <b>' + sc.healed.toFixed(2) + '</b> − harm <b>' + sc.harm.toFixed(2) + '</b>'
       + (reps && sc.cured != null ? ' · tumour-free in <b>' + Math.round(sc.cured * reps) + '</b> of ' + reps + ' lesions' : '');
     right.appendChild(eq);
+    right.appendChild(el('div', 'eq-def', 'harm = the worst loss of normal tissue at any point of the year'));
     out.appendChild(right);
     cap.appendChild(out);
   }
@@ -400,7 +405,8 @@
     var diag = el('div', 'diag');
     var dh = el('h2', null, run.kind === 'best' ? 'What it is' : run.diag.success ? 'What made it work' : 'Where it went wrong');
     diag.appendChild(dh);
-    if (run.diag.source === 'analysis' && run.diag.summary && (run.diag.callouts || []).length) diag.appendChild(el('p', 'nolab', run.diag.summary));
+    var said = (run.diag.callouts || []).some(function (c) { return c.detail === run.diag.summary; });   // do not say it twice
+    if (run.diag.source === 'analysis' && run.diag.summary && (run.diag.callouts || []).length && !said) diag.appendChild(el('p', 'nolab', run.diag.summary));
     (run.diag.callouts || []).forEach(function (c) {
       var jump = c.day != null;
       var b = el(jump ? 'button' : 'div', 'callout');
@@ -817,6 +823,35 @@
   }
 
   // ---------------------------------------------------------------- overview
+  // One bar per policy: its mean reward over every run of every patient.
+  function renderLadder(labels) {
+    var box = $('ov-ladder'), seen = {}, groups = [];
+    if (!box) return;
+    labels.forEach(function (l) {
+      if (seen[l.base]) return;
+      var g = seen[l.base] = { label: l.base, kind: l.kind, sum: 0, n: 0 };
+      groups.push(g);
+    });
+    IDX.patients.forEach(function (p) {
+      p.runs.forEach(function (r) {
+        var g = seen[r.label.replace(/ · run \d+$/, '')];
+        if (g && !r.missing) { g.sum += r.reward; g.n++; }
+      });
+    });
+    function col(title, rows) {
+      return '<div class="lad"><h3>' + esc(title) + '</h3>' + rows.map(function (g) {
+        var m = g.n ? g.sum / g.n : 0;
+        return '<div class="lad-row k-' + g.kind + '"><span class="lad-name">' + esc(g.label.replace(/^.* with its /, '↳ with its ')) + '</span>' +
+          '<span class="lad-track"><i style="width:' + (100 * clamp(m, 0, 1)).toFixed(1) + '%"></i></span>' +
+          '<b>' + m.toFixed(2) + '</b><small>' + g.n + ' runs</small></div>';
+      }).join('') + '</div>';
+    }
+    var main = groups.filter(function (g) { return g.kind !== 'baseline'; });
+    var base = groups.filter(function (g) { return g.kind === 'baseline'; });
+    box.innerHTML = col('Mean reward on ' + IDX.patients.length + ' patients the agent never saw', main) +
+      (base.length ? col('Shortcuts that skip the lab work', base) : '');
+  }
+
   function renderOverview() {
     var t = $('ov-table'), labels = [];
     IDX.patients.forEach(function (p) {
@@ -829,7 +864,7 @@
     labels.sort(function (a, b) { return rank[a.kind] - rank[b.kind] || a.order - b.order || (a.label < b.label ? -1 : 1); });
     var html = '<thead><tr><th></th>' + IDX.patients.map(function (p) {
       var minors = p.clones.slice(1).map(function (c) { return shortClone(c.label) + ' ' + pct(c.share); }).join(', ');
-      return '<th><b>Patient ' + esc(p.id) + '</b><span>' + esc(p.chart.tissue) + ' · hidden: ' + esc(minors || 'no minor clone') + '</span></th>';
+      return '<th><b>' + esc(p.id) + '</b><span>' + esc(p.chart.tissue) + ' · hidden: ' + esc(minors || 'no minor clone') + '</span></th>';
     }).join('') + '<th>mean</th></tr></thead><tbody>';
     var prevKind = null;
     function rowHtml(label, kindLabel, get, sep) {
@@ -839,11 +874,12 @@
         if (!r) return '<td><div class="cell">not run</div></td>';
         if (r.missing) return '<td><div class="cell" title="' + esc(r.reason) + '">' + (r.running ? 'still running' : 'run failed: no episode') + '</div></td>';
         sum += r.reward; n++;
-        return '<td><button type="button" data-p="' + esc(p.id) + '" data-r="' + esc(r.id) + '" style="--r:' + clamp(r.reward, 0, 1).toFixed(3) + '"><b>' + r.reward.toFixed(2) + '</b><span>' + esc(r.tag || '') + '</span></button></td>';
+        return '<td><button type="button" data-p="' + esc(p.id) + '" data-r="' + esc(r.id) + '" style="--r:' + clamp(r.reward, 0, 1).toFixed(3) + '"><b>' + r.reward.toFixed(2) + '</b><span title="' + esc(r.tag || '') + '">' + esc(r.tag || '') + '</span></button></td>';
       }).join('');
       return '<tr' + (sep ? ' class="sep"' : '') + '><th>' + esc(label) + '<small>' + esc(kindLabel) + '</small></th>' + tds + '<td class="mean">' + (n ? (sum / n).toFixed(2) : '') + '</td></tr>';
     }
     var kn = { reference: 'reference run', agent: 'AI agent', baseline: 'baseline' };
+    renderLadder(labels);
     labels.forEach(function (l) {
       html += rowHtml(l.label, kn[l.kind], function (p) { return p.runs.filter(function (r) { return r.label === l.label; })[0]; }, prevKind && prevKind !== l.kind);
       prevKind = l.kind;
@@ -954,6 +990,7 @@
     S.view = h.view === 'overview' ? 'overview' : h.view === 'treat' && TREAT ? 'treat' : 'replay';
     S.treatPatient = h.view === 'treat' ? h.patient : null;
     var hasDay = h.day != null && !isNaN(+h.day);
+    if (!hasDay && !h.patient && def.day != null && S.view === 'replay') { h.day = def.day; hasDay = true; }
     S.day = hasDay ? clamp(+h.day, 0, DAYS) : 0;
     show();
     return loadSides(!hasDay && first && S.view === 'replay').then(function () { if (hasDay) { pause(); setDay(S.day, true); } });

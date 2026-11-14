@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import statistics
 from collections import defaultdict
 from pathlib import Path
 
@@ -29,12 +30,17 @@ WHAT = {  # what each scripted policy does
 }
 CLASS = {  # how a run ended, in the README's words
     "solved": "healed",
-    "suboptimal": "healed with clearly more harm than needed",
+    "suboptimal": "healed with avoidable harm",
     "too_toxic": "tumour gone, normal tissue destroyed",
-    "missed_clone": "relapse from a resistant minor clone",
+    "missed_clone": "relapse from a hidden clone",
     "tumour_survived": "main tumour never cleared",
     "no_regimen": "no regimen",
 }
+
+
+def experience_arm(label: str) -> bool:
+    """The runs with the model's own notes: reported in the README's experience section, not in the main tables."""
+    return " with its " in label
 ALTERATION = {"BCL2L1 (BCL-xL) amplification": "BCL-xL amplified", "MCL1 amplification": "MCL-1 amplified",
               "MET amplification": "MET amplified"}
 TUMOUR = {"BRAF_MEL": "melanoma, BRAF V600E", "EGFR": "lung, EGFR L858R", "KRAS": "colorectal, KRAS G12C",
@@ -45,6 +51,8 @@ def results(summary: dict) -> str:
     out = ["| | Runs | Reward (95 % CI) | Below the reference by (95 % CI) | Runs that healed the patient | How the other runs ended |",
            "|---|---|---|---|---|---|"]
     for lab, s in summary["labels"].items():
+        if experience_arm(lab):
+            continue
         lo, hi = s["reward_ci95"]
         name = f"**{lab}**" if lab not in SHORTCUTS else lab
         if lab in WHAT:
@@ -71,15 +79,17 @@ def patients(rows: list[dict], summary: dict) -> str:
         if taken[q["archetype"]] < 4 and sum(taken.values()) < 10:
             taken[q["archetype"]] += 1
             kinds[f"test-{sum(taken.values()):02d}"] = q["archetype"]
-    labels = [lab for lab in summary["labels"] if lab not in SHORTCUTS]
+    labels = [lab for lab in summary["labels"] if lab not in SHORTCUTS and not experience_arm(lab)]
     by = defaultdict(lambda: defaultdict(list))
     clones, best_shortcut = {}, defaultdict(float)
     for r in rows:
         if r["label"] in SHORTCUTS:
             best_shortcut[r["task"]] = max(best_shortcut[r["task"]], r["reward"])
             continue
+        if experience_arm(r["label"]):
+            continue
         by[r["task"]][r["label"]].append(r["reward"])
-        clones[r["task"]] = ", ".join(f"{ALTERATION.get(c['alteration'], c['alteration'])} {100 * c['share']:.1f} %"
+        clones[r["task"]] = ", ".join(f"{ALTERATION.get(c['alteration'], c['alteration'])} {100 * c['share'] + 1e-6:.1f} %"
                                       for c in r.get("minor_clones", []) if c.get("below_sequencing_limit", True))
     head = ["Patient", "Tumour", "Clone below the sequencing limit"] + labels + ["Best shortcut"]
     out = ["| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
@@ -96,18 +106,24 @@ def patients(rows: list[dict], summary: dict) -> str:
     return "\n".join(out)
 
 
-def failure_counts(rows: list[dict], summary: dict) -> dict:
-    """Per agent: how the lost runs tie to what was done in the lab."""
+def failure_counts(rows: list[dict], summary: dict, experience: bool = False) -> dict:
+    """Per agent: how the lost runs tie to what was done in the lab. experience=True adds the runs with notes."""
     out = {}
     for lab in summary["labels"]:
-        if lab in SHORTCUTS or lab == summary["reference"]:
+        if lab in SHORTCUTS or lab == summary["reference"] or (experience_arm(lab) and not experience):
             continue
         mine = [r for r in rows if r["label"] == lab]
         toxic = [r for r in mine if r["class"] == "too_toxic"]
+        sub = [r for r in mine if r["class"] == "suboptimal"]
+        med = lambda k: statistics.median(r["facts"].get(k) or 0 for r in mine) if mine else 0  # noqa: E731
         missed = [r for r in mine if r["class"] == "missed_clone"]
         out[lab] = {
             "runs": len(mine),
             "healed": sum(r["class"] in ("solved", "suboptimal") for r in mine),
+            "suboptimal": len(sub),
+            "suboptimal_untested": sum(not r["facts"].get("final_regimen_cultured_on_healthy_cells") for r in sub),
+            "harm_mean": round(sum(r["harm"] for r in mine) / len(mine), 2) if mine else 0,
+            "lab_days_median": med("lab_days_used"), "wall_minutes_median": med("wall_minutes"),
             "too_toxic": len(toxic),
             "too_toxic_untested": sum(not r["facts"].get("final_regimen_cultured_on_healthy_cells") for r in toxic),
             "missed_clone": len(missed),
@@ -116,18 +132,48 @@ def failure_counts(rows: list[dict], summary: dict) -> dict:
             "tumour_survived": sum(r["class"] == "tumour_survived" for r in mine),
             "no_regimen": sum(r["class"] == "no_regimen" for r in mine),
             "no_line_sequenced": sum(not r["facts"].get("lines_sequenced") for r in mine),
-            "wells_used_median": sorted(r["facts"].get("wells_used", 0) for r in mine)[len(mine) // 2] if mine else 0,
+            "wells_used_median": med("wells_used"),
         }
     return out
 
 
 def failures(rows: list[dict], summary: dict) -> str:
-    out = ["| | Runs | Healed | Tumour gone, normal tissue destroyed | of those: the submitted combination never met healthy cells in a well "
-           "| Relapse from a hidden clone | of those: the clone was never named in the lab | Main tumour not cleared |",
-           "|---|---|---|---|---|---|---|---|"]
-    for lab, c in failure_counts(rows, summary).items():
-        out.append(f"| {lab} | {c['runs']} | {c['healed']} | {c['too_toxic']} | {c['too_toxic_untested']} | {c['missed_clone']} | "
-                   f"{c['missed_clone_never_named']} | {c['tumour_survived']} |")
+    fc = failure_counts(rows, summary)
+    a = ["| | Runs | Healed | of those: with avoidable harm | Tumour gone, normal tissue destroyed "
+         "| Relapse from a hidden clone | of those: the clone was never named in the lab | Main tumour not cleared |",
+         "|---|---|---|---|---|---|---|---|"]
+    for lab, c in fc.items():
+        a.append(f"| {lab} | {c['runs']} | {c['healed']} | {c['suboptimal']} | {c['too_toxic']} | {c['missed_clone']} | "
+                 f"{c['missed_clone_never_named']} | {c['tumour_survived']} |")
+    b = ["| | Mean harm | Runs that lost reward to harm: final combination never on healthy cells in a well "
+         "| Median lab day at submission (of 28) | Median wells used (of 384) | Median minutes (of 60) |",
+         "|---|---|---|---|---|---|"]
+    ref = [r for r in rows if r["label"] == summary["reference"]]
+    if ref:
+        med = lambda k: statistics.median(r["facts"].get(k) or 0 for r in ref)  # noqa: E731
+        b.append(f"| {summary['reference']} | {sum(r['harm'] for r in ref) / len(ref):.2f} | – | {med('lab_days_used'):g} | "
+                 f"{med('wells_used'):g} | {med('wall_minutes'):.0f} |")
+    for lab, c in fc.items():
+        lost = c["too_toxic"] + c["suboptimal"]
+        b.append(f"| {lab} | {c['harm_mean']:.2f} | {c['too_toxic_untested'] + c['suboptimal_untested']} of {lost} | "
+                 f"{c['lab_days_median']:g} | {c['wells_used_median']:g} | {c['wall_minutes_median']:.0f} |")
+    return "\n".join(a) + "\n\nHarm and how much of the budget was used:\n\n" + "\n".join(b)
+
+
+def experience(rows: list[dict], summary: dict) -> str:
+    """The same small model on the test patients: first time, and with the notes it wrote from its own runs."""
+    fc = failure_counts(rows, summary, experience=True)
+    arms = [lab for lab in fc if experience_arm(lab)]
+    base = [lab for lab in fc if any(a.startswith(lab + " with its ") for a in arms)]
+    out = ["| | Runs | Reward (95 % CI) | Healed | Tumour gone, normal tissue destroyed | Relapse from a hidden clone | Mean harm "
+           "| Median lab day at submission | Median wells used |",
+           "|---|---|---|---|---|---|---|---|---|"]
+    for lab in base + arms:
+        s, c = summary["labels"][lab], fc[lab]
+        lo, hi = s["reward_ci95"]
+        name = lab if lab in base else lab.split(" with its ")[1].join(["with its ", ""])
+        out.append(f"| {name} | {c['runs']} | **{s['reward_mean']:.2f}** ({lo:.2f} to {hi:.2f}) | {c['healed']} | {c['too_toxic']} | "
+                   f"{c['missed_clone']} | {c['harm_mean']:.2f} | {c['lab_days_median']:g} | {c['wells_used_median']:g} |")
     return "\n".join(out)
 
 
@@ -140,15 +186,16 @@ def main() -> None:
     a = p.parse_args()
     rows = [json.loads(x) for x in Path(a.analysis).read_text().splitlines() if x.strip()]
     summary = json.loads(Path(a.summary).read_text())
-    blocks = {"results": results(summary), "patients": patients(rows, summary), "failures": failures(rows, summary)}
+    blocks = {"results": results(summary), "patients": patients(rows, summary), "failures": failures(rows, summary),
+              "experience": experience(rows, summary)}
     if a.print:
         print("\n\n".join(blocks.values()))
         return
     text = Path(a.readme).read_text()
     for key, table in blocks.items():
-        text, n = re.subn(rf"(<!-- {key}:start -->\n).*?(\n<!-- {key}:end -->)", lambda m: m.group(1) + table + m.group(2),
+        text, n = re.subn(rf"(<!-- {key}:start -->\n).*?(<!-- {key}:end -->)", lambda m: m.group(1) + table + "\n" + m.group(2),
                           text, flags=re.S)
-        if n != 1:
+        if n != 1 and key != "experience":
             raise SystemExit(f"README has no <!-- {key}:start --> ... <!-- {key}:end --> block")
     Path(a.readme).write_text(text)
     print("README tables written")

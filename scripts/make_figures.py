@@ -28,9 +28,9 @@ REFERENCE, AGENT, SHORTCUT = "#1baf7a", "#2a78d6", "#8a8984"
 SHORTCUTS = ("Hedge", "Blind guess", "Guideline regimen", "Three-day screen", "Stop early", "Do nothing")
 CLASSES = [  # key, label, colour
     ("solved", "healed, near the best regimen known", "#1baf7a"),
-    ("suboptimal", "healed, clearly more harm than needed", "#2a78d6"),
+    ("suboptimal", "healed, with avoidable harm", "#2a78d6"),
     ("too_toxic", "tumour gone, normal tissue destroyed", "#eb6834"),
-    ("missed_clone", "relapse from a resistant minor clone", "#6250d6"),
+    ("missed_clone", "relapse from a hidden clone", "#6250d6"),
     ("tumour_survived", "main tumour never cleared", "#e34948"),
     ("no_regimen", "no regimen submitted", "#8a8984"),
 ]
@@ -54,7 +54,7 @@ def style(ax) -> None:
 
 
 def ladder(rows: list[dict], summary: dict, out: Path) -> None:
-    labels = list(summary["labels"])
+    labels = [lab for lab in summary["labels"] if " with its " not in lab]      # the experience arms have their own section
     per_task = defaultdict(lambda: defaultdict(list))
     for r in rows:
         per_task[r["label"]][r["task"]].append(r["reward"])
@@ -89,7 +89,7 @@ def ladder(rows: list[dict], summary: dict, out: Path) -> None:
 
 
 def outcomes(summary: dict, out: Path) -> None:
-    labels = [lab for lab in summary["labels"] if lab not in SHORTCUTS]
+    labels = [lab for lab in summary["labels"] if lab not in SHORTCUTS and " with its " not in lab]
     fig, ax = plt.subplots(figsize=(9.2, 0.5 * len(labels) + 1.9), dpi=200)
     fig.patch.set_facecolor(SURFACE)
     style(ax)

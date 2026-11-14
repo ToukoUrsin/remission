@@ -1,0 +1,148 @@
+{
+ "_about": "scripts/experience.py compare: the same model on the same test patients, without and with the notes it wrote from its own development runs",
+ "before": {
+  "label": "Claude Haiku 5.5",
+  "runs": 20,
+  "patients": 10,
+  "reward_mean": 0.285,
+  "healed_runs": 8,
+  "classes": {
+   "too_toxic": 10,
+   "suboptimal": 5,
+   "solved": 3,
+   "tumour_survived": 1,
+   "missed_clone": 1
+  }
+ },
+ "after": {
+  "label": "Claude Haiku 5.5 with its notes",
+  "runs": 20,
+  "patients": 10,
+  "reward_mean": 0.297,
+  "healed_runs": 10,
+  "classes": {
+   "missed_clone": 4,
+   "suboptimal": 5,
+   "solved": 5,
+   "too_toxic": 6
+  }
+ },
+ "difference": 0.013,
+ "difference_ci95": [
+  -0.141,
+  0.162
+ ],
+ "patients_better": 5,
+ "patients_worse": 5,
+ "per_patient": {
+  "test-01": {
+   "before": [
+    0.26,
+    0.578
+   ],
+   "after": [
+    0.0,
+    0.466
+   ]
+  },
+  "test-02": {
+   "before": [
+    0.345,
+    0.206
+   ],
+   "after": [
+    0.574,
+    0.494
+   ]
+  },
+  "test-03": {
+   "before": [
+    0.721,
+    0.459
+   ],
+   "after": [
+    0.46,
+    0.708
+   ]
+  },
+  "test-04": {
+   "before": [
+    0.188,
+    0.14
+   ],
+   "after": [
+    0.0,
+    0.573
+   ]
+  },
+  "test-05": {
+   "before": [
+    0.0,
+    0.26
+   ],
+   "after": [
+    0.445,
+    0.0
+   ]
+  },
+  "test-06": {
+   "before": [
+    0.556,
+    0.604
+   ],
+   "after": [
+    0.66,
+    0.159
+   ]
+  },
+  "test-07": {
+   "before": [
+    0.15,
+    0.651
+   ],
+   "after": [
+    0.292,
+    0.0
+   ]
+  },
+  "test-08": {
+   "before": [
+    0.075,
+    0.0
+   ],
+   "after": [
+    0.539,
+    0.059
+   ]
+  },
+  "test-09": {
+   "before": [
+    0.005,
+    0.418
+   ],
+   "after": [
+    0.192,
+    0.0
+   ]
+  },
+  "test-10": {
+   "before": [
+    0.0,
+    0.079
+   ],
+   "after": [
+    0.325,
+    0.0
+   ]
+  }
+ },
+ "development": {
+  "runs": 12,
+  "patients": 12,
+  "reward_mean": 0.088,
+  "classes": {
+   "too_toxic": 7,
+   "missed_clone": 5
+  }
+ }
+}

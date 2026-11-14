@@ -1,0 +1,21 @@
+- Calendar: sequence the biopsy on days 0-2. Start drug-well survivor cultures by day 2, held to day 84 at 0.5-0.7 doses. Grow survivors and derive lines by day 11-19 (derivation took 6-14 days), then sequence them. Small clones (0.4-0.9%) were found this way in dev-05, dev-06, dev-08, dev-11.
+- Stop new experiments by about day 20. Leave 3-4 days for a final healthy-cell well and a tumour-cell culture of the exact regimen. Dev-02 used 26 of 28 days.
+- Clones that recurred. Cover each one:
+  - MCL1 amplification (dev-02, 06, 08, 10, 11) → MCLi. Dev-10 missed it (0.7%) and still healed 0.95 with MCLi 0.25.
+  - BCL2L1 amplification (dev-01, 03, 04, 07) → BCLi. Missing it at 1.5% (dev-01) regrew the tumour.
+  - MET amplification (dev-01, 05, 09, 12) → METi.
+  - KRAS G12C (dev-05, 06, 10) → KRASi. Dev-10 found it at 5.5% from the biopsy.
+  - MAP2K1 K57N (dev-03) → MEKi. Dev-03 BCLi 2 alone left it alive.
+- Harm is what decides scores. Submissions with healthy-cell harm of 0.55-0.99 (dev-02, 04, 07, 09, 12) scored 0-0.42. Winners had harm 0.21-0.30.
+- Before submitting, run the exact final regimen on healthy cells. If harm is above 0.3, reduce doses and retest. Dev-02 submitted untested with harm 0.995. Dev-04, 07, 09 and 12 saw high healthy-cell harm and submitted anyway.
+- Find the driver with harm_if_left_out and halve or remove it. MCLi drove dev-09 (0.93 to 0.37 without it) and dev-07 (0.78 to 0.29). MEKi drove dev-04. PI3Ki drove dev-02.
+- Hold low doses to day 84. Dev-01 at x0.5 held to day 84 scored 0.63 against 0.23 for 10 days at full dose.
+- Check the tumour stays suppressed. Doses too low lose the tumour: dev-02 at x0.25 healed 0. Dev-07 at x0.7 healed only 0.72.
+- Winning submissions: dev-11 EGFRi 0.1 + MCLi 0.53 for 84 d (0.64; x0.7 gave 0.73, harm 0.21). Dev-05 RAFi 1 + MEKi 0.55 + METi 0.3 + KRASi 0.25 + MCLi 0.1 for 84 d (0.64, harm 0.29).
+
+Corrections to the earlier notes:
+- Dev-01 was x0.5, not x0.25. Dev-03 was x0.7 and healed 0. Dev-05 at full dose held to day 84 scored 0.64, not 0.31.
+- Dev-11's winner was EGFRi 0.1 + MCLi 0.53, not BCLi, and it healed 0.95.
+- Dev-12 did test on healthy cells (harm 0.55); its failure was harm, not untested doses.
+- Dev-04 and dev-06 did sequence their lines. Dev-06 lost on harm 0.37, not tumour regrowth.
+- Dev-07 failed on harm from MCLi, not a missed BCL2L1 clone.

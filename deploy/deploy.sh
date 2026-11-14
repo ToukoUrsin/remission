@@ -17,7 +17,8 @@ tar -C "$repo" --exclude=__pycache__ --exclude='*.pyc' -cf - viewer remission | 
 cp "$repo/reference/fixed_regimens.json" "$ctx/reference/"
 cp "$repo/tasks/suites.json" "$ctx/tasks/"
 cp "$here/Dockerfile" "$here/fly.toml" "$ctx/"
-fly apps list 2>/dev/null | grep -q "^ *$app " || fly apps create "$app" --org "${FLY_ORG:-helios-one}"
+apps="$(fly apps list 2>/dev/null || true)"   # into a variable: grep -q on a pipe can end fly early and look like "no app"
+grep -q "^ *$app " <<<"$apps" || fly apps create "$app" --org "${FLY_ORG:-helios-one}"
 cd "$ctx"
 fly deploy --config fly.toml --app "$app" --remote-only --ha=false --yes "$@"
 fly scale count 1 --app "$app" --yes >/dev/null 2>&1 || true

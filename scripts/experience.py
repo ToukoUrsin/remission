@@ -48,7 +48,7 @@ and what the same drugs would have scored at other doses. Here are your {n} epis
 <episodes>
 {episodes}
 </episodes>
-
+{previous}
 You will now treat new patients of the same kind, with the same tools, budget and reward. You will not see these
 episodes again; only the notes you write now. Write the notes for yourself: what to do, in which order, what to
 check before submitting, and which of your own mistakes to avoid, with the numbers that matter (doses, days,
@@ -96,7 +96,12 @@ def notes(a) -> None:
         sys.exit("no runs in " + a.analysis)
     eps = [episode(r) for r in rows]
     task = (Path(__file__).resolve().parent.parent / "tasks" / "_template" / "instruction.md").read_text()
-    prompt = ASK.format(n=len(eps), task=task.strip(), episodes="\n".join(json.dumps(e) for e in eps))
+    previous = ""
+    if a.previous:      # a later round: the model had notes while it treated these patients
+        previous = ("\nWhile treating them you had these notes, written by you after an earlier round with the same "
+                    "patients:\n\n<earlier_notes>\n" + Path(a.previous).read_text().strip() + "\n</earlier_notes>\n\nKeep what "
+                    "the episodes confirm, correct what they contradict, and add what was missing.\n")
+    prompt = ASK.format(n=len(eps), task=task.strip(), episodes="\n".join(json.dumps(e) for e in eps), previous=previous)
     text = ask(a.model, prompt)
     if not text:
         sys.exit("the model returned no text")
@@ -179,6 +184,7 @@ def main() -> None:
     n.add_argument("--label", help="only the runs with this label")
     n.add_argument("--model", default="claude-haiku-5-5")
     n.add_argument("--out", default="experience/notes.md")
+    n.add_argument("--previous", help="notes the model had while playing these runs (a second round of experience)")
     n.set_defaults(fn=notes)
     t = sub.add_parser("tasks", help="copies of task directories with the notes appended to the instruction")
     t.add_argument("notes")

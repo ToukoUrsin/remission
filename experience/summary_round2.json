@@ -1,0 +1,151 @@
+{
+ "_about": "scripts/experience.py compare: the same model on the same test patients, without and with the notes it wrote from its own development runs",
+ "before": {
+  "label": "Claude Haiku 5.5",
+  "runs": 20,
+  "patients": 10,
+  "reward_mean": 0.285,
+  "healed_runs": 8,
+  "classes": {
+   "too_toxic": 10,
+   "suboptimal": 5,
+   "solved": 3,
+   "tumour_survived": 1,
+   "missed_clone": 1
+  }
+ },
+ "after": {
+  "label": "Claude Haiku 5.5 with its second notes",
+  "runs": 20,
+  "patients": 10,
+  "reward_mean": 0.207,
+  "healed_runs": 8,
+  "classes": {
+   "too_toxic": 6,
+   "solved": 2,
+   "suboptimal": 6,
+   "missed_clone": 6
+  }
+ },
+ "difference": -0.078,
+ "difference_ci95": [
+  -0.271,
+  0.102
+ ],
+ "patients_better": 6,
+ "patients_worse": 4,
+ "per_patient": {
+  "test-01": {
+   "before": [
+    0.26,
+    0.578
+   ],
+   "after": [
+    0.325,
+    0.682
+   ]
+  },
+  "test-02": {
+   "before": [
+    0.345,
+    0.206
+   ],
+   "after": [
+    0.371,
+    0.563
+   ]
+  },
+  "test-03": {
+   "before": [
+    0.721,
+    0.459
+   ],
+   "after": [
+    0.0,
+    0.416
+   ]
+  },
+  "test-04": {
+   "before": [
+    0.188,
+    0.14
+   ],
+   "after": [
+    0.314,
+    0.187
+   ]
+  },
+  "test-05": {
+   "before": [
+    0.0,
+    0.26
+   ],
+   "after": [
+    0.054,
+    0.448
+   ]
+  },
+  "test-06": {
+   "before": [
+    0.556,
+    0.604
+   ],
+   "after": [
+    0.0,
+    0.0
+   ]
+  },
+  "test-07": {
+   "before": [
+    0.15,
+    0.651
+   ],
+   "after": [
+    0.0,
+    0.0
+   ]
+  },
+  "test-08": {
+   "before": [
+    0.075,
+    0.0
+   ],
+   "after": [
+    0.155,
+    0.0
+   ]
+  },
+  "test-09": {
+   "before": [
+    0.005,
+    0.418
+   ],
+   "after": [
+    0.0,
+    0.0
+   ]
+  },
+  "test-10": {
+   "before": [
+    0.0,
+    0.079
+   ],
+   "after": [
+    0.316,
+    0.305
+   ]
+  }
+ },
+ "development": {
+  "runs": 12,
+  "patients": 12,
+  "reward_mean": 0.339,
+  "classes": {
+   "solved": 5,
+   "too_toxic": 3,
+   "suboptimal": 2,
+   "missed_clone": 1,
+   "tumour_survived": 1
+  }
+ }
+}

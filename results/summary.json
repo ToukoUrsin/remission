@@ -1,39 +1,370 @@
 {
  "reference": "Reference scientist",
  "labels": {
-  "fable": {
-   "runs": 4,
-   "tasks": 4,
-   "reward_mean": 0.562,
+  "Reference scientist": {
+   "runs": 30,
+   "tasks": 10,
+   "reward_mean": 0.644,
    "reward_ci95": [
-    0.469,
-    0.655
+    0.595,
+    0.693
+   ],
+   "cured_runs": 30,
+   "solved_runs": 30,
+   "classes": {
+    "solved": 30
+   },
+   "mistakes": {},
+   "wall_minutes_median": 3.7,
+   "tool_calls_median": 49.0
+  },
+  "Claude Fable 5.2": {
+   "runs": 30,
+   "tasks": 10,
+   "reward_mean": 0.586,
+   "reward_ci95": [
+    0.515,
+    0.658
+   ],
+   "cured_runs": 30,
+   "solved_runs": 21,
+   "classes": {
+    "solved": 21,
+    "suboptimal": 9
+   },
+   "mistakes": {
+    "avoidable_harm": 9
+   },
+   "wall_minutes_median": 11.8,
+   "tool_calls_median": 56.5,
+   "gap_to_reference": 0.058,
+   "gap_ci95": [
+    0.006,
+    0.109
+   ],
+   "runs_at_reference_level": 13
+  },
+  "Claude Opus 5.5": {
+   "runs": 30,
+   "tasks": 10,
+   "reward_mean": 0.563,
+   "reward_ci95": [
+    0.48,
+    0.63
+   ],
+   "cured_runs": 30,
+   "solved_runs": 24,
+   "classes": {
+    "solved": 24,
+    "suboptimal": 4,
+    "too_toxic": 2
+   },
+   "mistakes": {
+    "avoidable_harm": 4,
+    "too_toxic": 2
+   },
+   "wall_minutes_median": 10.4,
+   "tool_calls_median": 41.5,
+   "gap_to_reference": 0.082,
+   "gap_ci95": [
+    0.026,
+    0.161
+   ],
+   "runs_at_reference_level": 14
+  },
+  "GPT-6.1 Sol": {
+   "runs": 30,
+   "tasks": 10,
+   "reward_mean": 0.152,
+   "reward_ci95": [
+    0.052,
+    0.266
+   ],
+   "cured_runs": 24,
+   "solved_runs": 3,
+   "classes": {
+    "too_toxic": 16,
+    "suboptimal": 5,
+    "missed_clone": 4,
+    "solved": 3,
+    "tumour_survived": 2
+   },
+   "mistakes": {
+    "too_toxic": 18,
+    "avoidable_harm": 5,
+    "clone_not_covered": 3,
+    "wrong_drugs": 2,
+    "missed_clone": 1
+   },
+   "wall_minutes_median": 10.8,
+   "tool_calls_median": 29.5,
+   "gap_to_reference": 0.493,
+   "gap_ci95": [
+    0.39,
+    0.588
+   ],
+   "runs_at_reference_level": 2
+  },
+  "Claude Haiku 5.5": {
+   "runs": 20,
+   "tasks": 10,
+   "reward_mean": 0.285,
+   "reward_ci95": [
+    0.156,
+    0.421
+   ],
+   "cured_runs": 18,
+   "solved_runs": 3,
+   "classes": {
+    "too_toxic": 10,
+    "suboptimal": 5,
+    "solved": 3,
+    "tumour_survived": 1,
+    "missed_clone": 1
+   },
+   "mistakes": {
+    "too_toxic": 11,
+    "avoidable_harm": 5,
+    "wrong_drugs": 1,
+    "missed_clone": 1
+   },
+   "wall_minutes_median": 5.2,
+   "tool_calls_median": 35.5,
+   "gap_to_reference": 0.36,
+   "gap_ci95": [
+    0.245,
+    0.468
+   ],
+   "runs_at_reference_level": 1
+  },
+  "Claude Haiku 5.5 with its notes": {
+   "runs": 20,
+   "tasks": 10,
+   "reward_mean": 0.297,
+   "reward_ci95": [
+    0.171,
+    0.428
+   ],
+   "cured_runs": 16,
+   "solved_runs": 5,
+   "classes": {
+    "too_toxic": 6,
+    "suboptimal": 5,
+    "solved": 5,
+    "missed_clone": 4
+   },
+   "mistakes": {
+    "too_toxic": 7,
+    "avoidable_harm": 4,
+    "missed_clone": 2,
+    "clone_not_covered": 2,
+    "suboptimal": 1
+   },
+   "wall_minutes_median": 5.8,
+   "tool_calls_median": 40.5,
+   "gap_to_reference": 0.347,
+   "gap_ci95": [
+    0.23,
+    0.463
+   ],
+   "runs_at_reference_level": 2
+  },
+  "Claude Haiku 5.5 with its second notes": {
+   "runs": 20,
+   "tasks": 10,
+   "reward_mean": 0.207,
+   "reward_ci95": [
+    0.092,
+    0.333
+   ],
+   "cured_runs": 14,
+   "solved_runs": 2,
+   "classes": {
+    "too_toxic": 6,
+    "suboptimal": 6,
+    "missed_clone": 6,
+    "solved": 2
+   },
+   "mistakes": {
+    "too_toxic": 6,
+    "avoidable_harm": 6,
+    "clone_not_covered": 5,
+    "missed_clone": 1
+   },
+   "wall_minutes_median": 6.0,
+   "tool_calls_median": 38.0,
+   "gap_to_reference": 0.438,
+   "gap_ci95": [
+    0.312,
+    0.556
+   ],
+   "runs_at_reference_level": 1
+  },
+  "Hedge": {
+   "runs": 10,
+   "tasks": 10,
+   "reward_mean": 0.05,
+   "reward_ci95": [
+    0.0,
+    0.122
    ],
    "cured_runs": 4,
-   "solved_runs": 4,
+   "solved_runs": 0,
    "classes": {
-    "solved": 4
+    "missed_clone": 5,
+    "too_toxic": 3,
+    "suboptimal": 1,
+    "tumour_survived": 1
    },
-   "mistakes": {},
-   "wall_minutes_median": 10.9,
-   "tool_calls_median": 53.0
-  },
-  "opus": {
-   "runs": 4,
-   "tasks": 4,
-   "reward_mean": 0.513,
-   "reward_ci95": [
-    0.214,
-    0.692
+   "mistakes": {
+    "missed_clone": 5,
+    "too_toxic": 5,
+    "avoidable_harm": 1,
+    "wrong_drugs": 1
+   },
+   "wall_minutes_median": 1.4,
+   "tool_calls_median": 5.0,
+   "gap_to_reference": 0.595,
+   "gap_ci95": [
+    0.516,
+    0.658
    ],
-   "cured_runs": 3,
-   "solved_runs": 4,
+   "runs_at_reference_level": 0
+  },
+  "Blind guess": {
+   "runs": 10,
+   "tasks": 10,
+   "reward_mean": 0.039,
+   "reward_ci95": [
+    0.0,
+    0.115
+   ],
+   "cured_runs": 4,
+   "solved_runs": 0,
    "classes": {
-    "solved": 4
+    "missed_clone": 6,
+    "too_toxic": 3,
+    "suboptimal": 1
    },
-   "mistakes": {},
-   "wall_minutes_median": 10.5,
-   "tool_calls_median": 33.5
+   "mistakes": {
+    "too_toxic": 8,
+    "missed_clone": 6,
+    "avoidable_harm": 1
+   },
+   "wall_minutes_median": 0.2,
+   "tool_calls_median": 2.0,
+   "gap_to_reference": 0.606,
+   "gap_ci95": [
+    0.525,
+    0.676
+   ],
+   "runs_at_reference_level": 0
+  },
+  "Guideline regimen": {
+   "runs": 10,
+   "tasks": 10,
+   "reward_mean": 0.004,
+   "reward_ci95": [
+    0.0,
+    0.011
+   ],
+   "cured_runs": 0,
+   "solved_runs": 0,
+   "classes": {
+    "missed_clone": 10
+   },
+   "mistakes": {
+    "missed_clone": 10,
+    "too_toxic": 3
+   },
+   "wall_minutes_median": 0.2,
+   "tool_calls_median": 2.0,
+   "gap_to_reference": 0.641,
+   "gap_ci95": [
+    0.591,
+    0.691
+   ],
+   "runs_at_reference_level": 0
+  },
+  "Three-day screen": {
+   "runs": 10,
+   "tasks": 10,
+   "reward_mean": 0.004,
+   "reward_ci95": [
+    0.0,
+    0.011
+   ],
+   "cured_runs": 1,
+   "solved_runs": 0,
+   "classes": {
+    "missed_clone": 8,
+    "too_toxic": 1,
+    "tumour_survived": 1
+   },
+   "mistakes": {
+    "missed_clone": 8,
+    "too_toxic": 2,
+    "wrong_drugs": 1
+   },
+   "wall_minutes_median": 0.2,
+   "tool_calls_median": 6.0,
+   "gap_to_reference": 0.641,
+   "gap_ci95": [
+    0.591,
+    0.691
+   ],
+   "runs_at_reference_level": 0
+  },
+  "Stop early": {
+   "runs": 10,
+   "tasks": 10,
+   "reward_mean": 0.0,
+   "reward_ci95": [
+    0.0,
+    0.0
+   ],
+   "cured_runs": 0,
+   "solved_runs": 0,
+   "classes": {
+    "no_regimen": 10
+   },
+   "mistakes": {
+    "no_regimen": 10
+   },
+   "wall_minutes_median": 0.2,
+   "tool_calls_median": 1.0,
+   "gap_to_reference": 0.644,
+   "gap_ci95": [
+    0.595,
+    0.694
+   ],
+   "runs_at_reference_level": 0
+  },
+  "Do nothing": {
+   "runs": 10,
+   "tasks": 10,
+   "reward_mean": 0.0,
+   "reward_ci95": [
+    0.0,
+    0.0
+   ],
+   "cured_runs": 0,
+   "solved_runs": 0,
+   "classes": {
+    "no_regimen": 10
+   },
+   "mistakes": {
+    "no_regimen": 10
+   },
+   "wall_minutes_median": 0.2,
+   "tool_calls_median": 0.0,
+   "gap_to_reference": 0.644,
+   "gap_ci95": [
+    0.595,
+    0.694
+   ],
+   "runs_at_reference_level": 0
   }
- }
+ },
+ "excluded": []
 }

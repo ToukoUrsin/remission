@@ -56,7 +56,7 @@ img { display: block; max-width: 100%; }
 .stat .l { color: var(--ink-2); font-size: 26px; line-height: 1.3; max-width: 420px; }
 .stats { display: flex; gap: 72px; margin-top: 48px; }
 .good { color: var(--good); } .bad { color: var(--bad); } .clone { color: var(--clone); } .dim { color: var(--ink-3); }
-ul.points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 30px; }
+ul.points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 26px; }
 ul.points li { padding-left: 34px; position: relative; font-size: 30px; line-height: 1.34; color: var(--ink-2); }
 ul.points li::before { content: ""; position: absolute; left: 0; top: 15px; width: 14px; height: 14px; border-radius: 3px; background: var(--ink-3); }
 ul.points li.t::before { background: #eb6834; } ul.points li.c::before { background: #6250d6; } ul.points li.g::before { background: var(--good); }
@@ -100,7 +100,8 @@ def build(url: str) -> str:
     exp = json.loads(exp_path.read_text()) if exp_path.exists() else None
     L = summary["labels"]
     ref = L[summary["reference"]]
-    agents = [(lab, s) for lab, s in L.items() if lab != summary["reference"] and lab not in RT.SHORTCUTS]
+    agents = [(lab, s) for lab, s in L.items()
+              if lab != summary["reference"] and lab not in RT.SHORTCUTS and not RT.experience_arm(lab)]
     shortcuts = [(lab, L[lab]) for lab in RT.SHORTCUTS if lab in L]
     fc = RT.failure_counts(rows, summary)
     tot = {k: sum(c[k] for c in fc.values()) for k in next(iter(fc.values()))} if fc else {}
@@ -118,7 +119,10 @@ def build(url: str) -> str:
     <p class="lead" style="margin-top:28px;font-size:29px">28 lab days, 384 wells, one treatment. Scored on tissue the agent never sees.</p>
     <p class="mono" style="margin-top:56px;font-size:24px;color:var(--ink-2)">{url}</p>
   </div>
-  <div class="shot" style="flex:1">{img("deck/img/hero.png")}</div>
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="shot">{img("deck/img/hero.png", style="height:auto;object-fit:contain")}</div>
+    <p class="lead" style="font-size:24px;margin-top:18px">The same patient on day 24. Left: GPT-6.1 Sol's treatment. Right: the reference scientist's, with the same lab.</p>
+  </div>
 </div>""")
     # 2 the task
     s.append(f"""
@@ -135,10 +139,13 @@ def build(url: str) -> str:
     s.append(f"""
 <h2>The scan goes clean. Then a clone nobody sequenced takes the tissue back.</h2>
 <div class="cols">
-  <div class="shot" style="flex:1.55">{img("deck/img/relapse.png")}</div>
+  <div style="flex:1.55;display:flex;flex-direction:column;justify-content:center">
+    <div class="shot">{img("deck/img/relapse.png", style="height:auto;object-fit:contain")}</div>
+    <p class="lead" style="font-size:24px;margin-top:18px">Patient test-05 on day 150. Left: the guideline regimen. Right: the reference scientist.</p>
+  </div>
   <div class="col" style="justify-content:center;gap:44px;flex:1">
     <div class="stat"><span class="v clone">2 %</span><span class="l">of cells is the detection limit of sequencing. The resistant clone starts at 0.5 to 1.3 %.</span></div>
-    <div class="stat"><span class="v bad">{f2(L["Guideline regimen"]["reward_mean"])}</span><span class="l">is what the standard-of-care regimen scores, on every one of the 10 patients.</span></div>
+    <div class="stat"><span class="v bad">{f2(L["Guideline regimen"]["reward_mean"])}</span><span class="l">is what the standard-of-care regimen scores on the 10 patients. Its best patient: {f2(max(r["reward"] for r in rows if r["label"] == "Guideline regimen"))}.</span></div>
     <div class="stat"><span class="v">1 in 400</span><span class="l">generated patients enters the benchmark. Six rules, written down, told to the agent.</span></div>
   </div>
 </div>""")
@@ -147,9 +154,9 @@ def build(url: str) -> str:
         f'<div class="stat"><span class="v{" good" if lab == summary["reference"] else ""}">{f2(x["reward_mean"])}</span>'
         f'<span class="l">{lab}</span></div>' for lab, x in [(summary["reference"], ref)] + agents)
     s.append(f"""
-<h2>The reference heals every patient. Agents lose reward on the same ten.</h2>
+<h2>A scripted scientist scores {f2(ref["reward_mean"])}. {worst_frontier[0]} scores {f2(worst_frontier[1]["reward_mean"])}. {best[0]} gets to {f2(best[1]["reward_mean"])}.</h2>
 <div class="fig" style="flex:1;min-height:0;display:flex;align-items:center">{img("docs/img/results_ladder_dark.png", style="max-height:640px;width:auto;margin:0 auto")}</div>
-<p class="lead" style="font-size:26px;margin-top:20px">10 held-out patients, 3 runs each, OpenCode in Harbor with a sealed network. The reference gave the same reward in all three runs. Best shortcut: {top_shortcut[0].lower()}, {f2(top_shortcut[1]["reward_mean"])}.</p>""")
+<p class="lead" style="font-size:26px;margin-top:20px">10 held-out patients, 3 runs each (Haiku 2), OpenCode in Harbor with a sealed network. The reference gave the same reward in all three runs. Best shortcut: {top_shortcut[0].lower()}, {f2(top_shortcut[1]["reward_mean"])}.</p>""")
     # 5 where agents lose
     s.append(f"""
 <h2>Each lost run traces back to a decision in the lab.</h2>
@@ -157,8 +164,9 @@ def build(url: str) -> str:
   <div class="col" style="flex:1.15;justify-content:center"><div class="fig">{img("docs/img/results_outcomes_dark.png")}</div></div>
   <div class="col" style="justify-content:center">
     <ul class="points">
-      <li class="t"><b>{tot.get("too_toxic", 0)} runs cleared the tumour and destroyed the normal tissue.</b> In {tot.get("too_toxic_untested", 0)} of them the submitted combination had never met the patient's healthy cells in a well. In the other {tot.get("too_toxic", 0) - tot.get("too_toxic_untested", 0)} the agent saw the damage and submitted anyway.</li>
+      <li class="t"><b>{tot.get("too_toxic", 0)} runs cleared the tumour and destroyed the normal tissue.</b> In {tot.get("too_toxic_untested", 0)} of them the submitted combination had never met the patient's healthy cells in a well. In the other {tot.get("too_toxic", 0) - tot.get("too_toxic_untested", 0)} it had been on healthy cells and was submitted anyway.</li>
       <li class="c"><b>{tot.get("missed_clone", 0)} runs relapsed from the hidden clone.</b> {tot.get("missed_clone_never_named", 0)} never named it. The others named it and still gave a course too short or too weak to kill it.</li>
+      <li><b>{best[0]} heals all {best[1]["runs"]} runs</b> and still ends {f2(best[1]["gap_to_reference"])} under the reference: {fc[best[0]]["suboptimal"]} runs carry harm it could have measured and dosed away.</li>
       <li class="g"><b>The tools were there.</b> Healthy cells, long cultures, growing out survivors, sequencing them. The reference uses nothing else.</li>
     </ul>
   </div>
@@ -201,22 +209,35 @@ def build(url: str) -> str:
     # 9 experience
     if exp:
         b, a = exp["before"], exp["after"]
+        fx = RT.failure_counts(rows, summary, experience=True)
+        lo, hi = exp["difference_ci95"]
+        better = lo > 0
+        exp2_path = ROOT / "experience" / "summary_round2.json"
+        exp2 = json.loads(exp2_path.read_text()) if exp2_path.exists() else None
+        dev2_path = ROOT / "experience" / "dev_summary_round2.json"
+        dev2 = next(iter(json.loads(dev2_path.read_text())["labels"].values())) if dev2_path.exists() else None
+        head = ("A smaller model gets better from its own experience here." if better else
+                "A smaller model learns its old patients. On new patients its reward does not move yet.")
+        second = (f' A second round of notes: {f2(exp2["after"]["reward_mean"])}.' if exp2 else "")
+        seen = (f'<li><b>The patients it had seen:</b> with the notes, the same 12 development patients go from '
+                f'{f2(exp["development"]["reward_mean"])} to {f2(dev2["reward_mean"])}.</li>' if dev2 else "")
         s.append(f"""
-<h2>A smaller model gets better from its own experience here.</h2>
+<h2>{head}</h2>
 <div class="cols">
   <div class="col" style="justify-content:center;gap:40px;flex:.9">
     <div style="display:flex;align-items:baseline;gap:40px">
       <div class="stat"><span class="big dim">{f2(b["reward_mean"])}</span><span class="l">Claude Haiku 5.5, first time</span></div>
       <div class="big dim" style="font-size:90px">→</div>
-      <div class="stat"><span class="big good">{f2(a["reward_mean"])}</span><span class="l">with the notes it wrote itself</span></div>
+      <div class="stat"><span class="big{" good" if better else ""}">{f2(a["reward_mean"])}</span><span class="l">with the notes it wrote itself</span></div>
     </div>
-    <p class="lead" style="font-size:27px">Same 10 test patients, {b["runs"]} and {a["runs"]} runs. Difference {exp["difference"]:+.2f} (95 % interval {exp["difference_ci95"][0]:+.2f} to {exp["difference_ci95"][1]:+.2f}).</p>
+    <p class="lead" style="font-size:27px">The 10 test patients, {b["runs"]} and {a["runs"]} runs. Difference {exp["difference"]:+.2f} (95 % interval {lo:+.2f} to {hi:+.2f}).{second}</p>
   </div>
   <div class="col" style="justify-content:center">
     <ul class="points">
       <li><b>12 development patients.</b> Haiku treats each once. Mean reward {f2(exp["development"]["reward_mean"])}.</li>
-      <li><b>It reads its own post-mortems</b> and writes 450 words of notes: test the final combination on healthy cells, grow out survivors and sequence them, hold a low dose long.</li>
-      <li><b>No weights change.</b> The notes are appended to the task text. No test patient is in the experience.</li>
+      <li><b>It reads its own post-mortems</b> and writes 462 words of notes: test the final combination on healthy cells, grow out survivors and sequence them, hold a low dose long.</li>
+      {seen}
+      <li><b>New patients:</b> it destroys the normal tissue in {fx[a["label"]]["too_toxic"]} of {a["runs"]} runs, down from {fx[b["label"]]["too_toxic"]}, and relapses in {fx[a["label"]]["missed_clone"]}, up from {fx[b["label"]]["missed_clone"]}. No weights change; the notes are appended to the task text.</li>
     </ul>
   </div>
 </div>""")

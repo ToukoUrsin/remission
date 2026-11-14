@@ -1,0 +1,32 @@
+{
+ "reference": "Reference scientist",
+ "labels": {
+  "Haiku 5.5, round 2": {
+   "runs": 12,
+   "tasks": 12,
+   "reward_mean": 0.339,
+   "reward_ci95": [
+    0.203,
+    0.474
+   ],
+   "cured_runs": 10,
+   "solved_runs": 5,
+   "classes": {
+    "solved": 5,
+    "too_toxic": 3,
+    "suboptimal": 2,
+    "missed_clone": 1,
+    "tumour_survived": 1
+   },
+   "mistakes": {
+    "too_toxic": 5,
+    "avoidable_harm": 2,
+    "missed_clone": 1,
+    "wrong_drugs": 1
+   },
+   "wall_minutes_median": 7.8,
+   "tool_calls_median": 40.0
+  }
+ },
+ "excluded": []
+}

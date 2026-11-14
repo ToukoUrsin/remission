@@ -1,0 +1,10 @@
+{"task": "test-01", "seed": 1019416027, "reward": 0.7188, "healed": 0.9408, "harm": 0.222, "regimen": {"phases": [{"days": 11, "doses": {"RAFi": 1.94, "MEKi": 1.15, "BCLi": 1.17}}, {"days": 73, "doses": {"RAFi": 1.59, "MEKi": 0.77, "BCLi": 0.91}}]}}
+{"task": "test-02", "seed": 1551177275, "reward": 0.7655, "healed": 0.9599, "harm": 0.1944, "regimen": {"phases": [{"days": 3, "doses": {"EGFRi": 0.28, "METi": 1.18, "PI3Ki": 0.19}}, {"days": 77, "doses": {"EGFRi": 0.1, "METi": 0.48}}]}}
+{"task": "test-03", "seed": 1586187126, "reward": 0.8016, "healed": 0.9575, "harm": 0.1559, "regimen": {"phases": [{"days": 84, "doses": {"RAFi": 0.1, "MEKi": 0.1, "MCLi": 1.43}}]}}
+{"task": "test-04", "seed": 1059807690, "reward": 0.659, "healed": 0.9577, "harm": 0.2987, "regimen": {"phases": [{"days": 84, "doses": {"RAFi": 0.19, "MEKi": 0.85, "BCLi": 1.45}}]}}
+{"task": "test-05", "seed": 1451944932, "reward": 0.845, "healed": 0.9594, "harm": 0.1144, "regimen": {"phases": [{"days": 24, "doses": {"BCLi": 0.1}}, {"days": 53, "doses": {"RAFi": 1.09, "MEKi": 0.17, "MCLi": 0.12}}]}}
+{"task": "test-06", "seed": 2014354864, "reward": 0.737, "healed": 0.9473, "harm": 0.2103, "regimen": {"phases": [{"days": 19, "doses": {"EGFRi": 0.94, "BCLi": 1.65}}, {"days": 65, "doses": {"EGFRi": 0.92, "BCLi": 1.38}}]}}
+{"task": "test-07", "seed": 1762563845, "reward": 0.6313, "healed": 0.8742, "harm": 0.2591, "regimen": {"phases": [{"days": 37, "doses": {"EGFRi": 0.29, "METi": 0.11}}, {"days": 47, "doses": {"EGFRi": 0.23, "METi": 0.14}}]}}
+{"task": "test-08", "seed": 322991120, "reward": 0.5361, "healed": 0.8793, "harm": 0.3661, "regimen": {"phases": [{"days": 20, "doses": {"EGFRi": 2.0, "PI3Ki": 0.12, "MCLi": 1.51}}, {"days": 64, "doses": {"EGFRi": 1.94, "MCLi": 0.65}}]}}
+{"task": "test-09", "seed": 2140662377, "reward": 0.5563, "healed": 0.9589, "harm": 0.4026, "regimen": {"phases": [{"days": 84, "doses": {"EGFRi": 0.69, "KRASi": 1.94, "BCLi": 2.0}}]}}
+{"task": "test-10", "seed": 2129256489, "reward": 0.5447, "healed": 0.8676, "harm": 0.3384, "regimen": {"phases": [{"days": 84, "doses": {"RAFi": 0.31, "EGFRi": 0.29, "BCLi": 0.56}}]}}

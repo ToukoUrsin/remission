@@ -13,3 +13,7 @@ science/.venv/
 .DS_Store
 .venv-harbor/
 science/gdsc_long.csv
+
+# internal notes for filing and filming (not part of the entry)
+FILM_PLAN.md
+SUBMISSION.md

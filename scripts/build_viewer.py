@@ -26,6 +26,7 @@ from pathlib import Path
 
 DRUGS = ("RAFi", "MEKi", "EGFRi", "METi", "KRASi", "PI3Ki", "BCLi", "MCLi")
 TREAT_DAYS = 84
+CLASS_TAG = {"solved": "healed", "suboptimal": "healed, extra harm", "too_toxic": "normal tissue lost"}   # by analysis class
 LAB_DAYS = 28
 WELL_BUDGET = 384
 MAX_FRAMES = 72
@@ -445,7 +446,7 @@ def diagnose(score: dict, ep: dict, best: dict | None) -> dict:
     elif main is not None and cured < 0.5:
         tag = "regrew: " + labels[main].replace(" clone", "") + (", toxic" if toxic else "")
     elif main is not None:
-        tag = f"cured {reps - relapsed} of {reps} lesions" + (", toxic" if toxic else "")
+        tag = f"cured {reps - relapsed} of {reps}" + (", toxic" if toxic else "")
     elif toxic:
         tag = "tumour gone, too toxic"
     else:
@@ -505,6 +506,8 @@ def main() -> int:
     ap.add_argument("runs", nargs="+", metavar="LABEL=JOB_DIR")
     ap.add_argument("--out", default=str(Path(__file__).resolve().parent.parent / "viewer" / "data"))
     ap.add_argument("--mistakes", default=None, help="JSONL with one object per run (job, trial, label, task, mistakes, summary)")
+    ap.add_argument("--open", default=None, metavar="PATIENT:RUN_ID:DAY",
+                    help="what the viewer opens with, e.g. test-07:gpt-6-1-sol:24 (default: the largest agent failure)")
     args = ap.parse_args()
 
     out = Path(args.out)
@@ -607,6 +610,8 @@ def main() -> int:
                 diag["source"] = "analysis"
             if row and row.get("summary"):
                 diag["summary"] = row["summary"]
+            if row and row.get("class") in CLASS_TAG and not diag["tag"].startswith(("cured", "regrew")):
+                diag["tag"] = CLASS_TAG[row["class"]]          # the same words as the README's tables
 
             lines = {k: {"kind": v["kind"], "ready": v["ready_day"], "note": v["note"], "frac": v.get("frac")}
                      for k, v in (ep.get("lines") or {}).items()}
@@ -642,6 +647,12 @@ def main() -> int:
         return 1
     index = {"patients": list(patients.values()), "labels": labels, "files": sorted(set(written)),
              "lab": {"days": LAB_DAYS, "wells": WELL_BUDGET, "treat_days": TREAT_DAYS}, "drugs": list(DRUGS)}
+    if args.open:
+        pid, rid, day = (args.open.split(":") + ["", ""])[:3]
+        if any(p["id"] == pid and any(r.get("id") == rid for r in p["runs"]) for p in patients.values()):
+            index["open"] = {"patient": pid, "left": rid, **({"day": int(day)} if day.isdigit() else {})}
+        else:
+            print(f"--open {args.open}: no such run, ignored", file=sys.stderr)
     old = out / "index.js"
     stale = []
     if old.exists():                                   # drop data files of an earlier build that this one did not write
