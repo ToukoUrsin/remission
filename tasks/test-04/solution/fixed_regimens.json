@@ -1,0 +1,41 @@
+{
+ "BRAF_CRC": {
+  "guideline": {
+   "RAFi": 1.0,
+   "MEKi": 1.0,
+   "EGFRi": 1.0
+  },
+  "hindsight": {
+   "BCLi": 0.25
+  }
+ },
+ "BRAF_MEL": {
+  "guideline": {
+   "RAFi": 1.0,
+   "MEKi": 1.0
+  },
+  "hindsight": {
+   "MEKi": 0.25,
+   "MCLi": 1.0
+  }
+ },
+ "KRAS": {
+  "guideline": {
+   "KRASi": 1.0,
+   "EGFRi": 1.0
+  },
+  "hindsight": {
+   "KRASi": 0.5,
+   "BCLi": 0.5
+  }
+ },
+ "EGFR": {
+  "guideline": {
+   "EGFRi": 1.0
+  },
+  "hindsight": {
+   "EGFRi": 0.25,
+   "METi": 0.25
+  }
+ }
+}

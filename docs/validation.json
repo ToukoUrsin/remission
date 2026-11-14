@@ -1,0 +1,873 @@
+{
+ "command": "science/.venv/bin/python science/validation/validate_model.py",
+ "population": {
+  "salt": "validation",
+  "n": 48,
+  "by_type": {
+   "EGFR": 13,
+   "KRAS": 10,
+   "BRAF_CRC": 14,
+   "BRAF_MEL": 11
+  },
+  "lattice_reps": 1,
+  "selection": "none (unselected generator output)"
+ },
+ "a_gdsc": {
+  "RAFi": [
+   {
+    "sim_group": "BRAF mel",
+    "gdsc_group": "BRAF V600E melanoma",
+    "gdsc_drug": "Dabrafenib",
+    "range_uM": [
+     0.01,
+     10.0
+    ],
+    "sim_ln_ic50": {
+     "n": 11,
+     "median": 1.475,
+     "q25": -0.247,
+     "q75": 2.516
+    },
+    "gdsc_ln_ic50": {
+     "n": 38,
+     "median": -0.875,
+     "q25": -2.965,
+     "q75": 1.778
+    },
+    "sim_auc": {
+     "n": 11,
+     "median": 0.733,
+     "q25": 0.593,
+     "q75": 0.806
+    },
+    "gdsc_auc": {
+     "n": 38,
+     "median": 0.532,
+     "q25": 0.288,
+     "q75": 0.82
+    },
+    "sim_share_ic50_above_max": 0.273,
+    "gdsc_share_ic50_above_max": 0.211,
+    "delta_log10_ic50_median": 1.02,
+    "delta_auc_median": 0.201
+   },
+   {
+    "sim_group": "BRAF CRC",
+    "gdsc_group": "BRAF V600E colorectal",
+    "gdsc_drug": "Dabrafenib",
+    "range_uM": [
+     0.01,
+     10.0
+    ],
+    "sim_ln_ic50": {
+     "n": 14,
+     "median": 5.303,
+     "q25": 5.303,
+     "q75": 5.303
+    },
+    "gdsc_ln_ic50": {
+     "n": 7,
+     "median": 1.441,
+     "q25": 0.557,
+     "q75": 2.043
+    },
+    "sim_auc": {
+     "n": 14,
+     "median": 0.993,
+     "q25": 0.966,
+     "q75": 0.998
+    },
+    "gdsc_auc": {
+     "n": 7,
+     "median": 0.753,
+     "q25": 0.701,
+     "q75": 0.82
+    },
+    "sim_share_ic50_above_max": 1.0,
+    "gdsc_share_ic50_above_max": 0.143,
+    "delta_log10_ic50_median": 1.68,
+    "delta_auc_median": 0.24
+   }
+  ],
+  "MEKi": [
+   {
+    "sim_group": "BRAF mel",
+    "gdsc_group": "BRAF V600E melanoma",
+    "gdsc_drug": "Trametinib",
+    "range_uM": [
+     0.001,
+     1.0
+    ],
+    "sim_ln_ic50": {
+     "n": 11,
+     "median": -4.044,
+     "q25": -4.667,
+     "q75": -3.721
+    },
+    "gdsc_ln_ic50": {
+     "n": 40,
+     "median": -3.704,
+     "q25": -5.113,
+     "q75": -1.768
+    },
+    "sim_auc": {
+     "n": 11,
+     "median": 0.415,
+     "q25": 0.327,
+     "q75": 0.461
+    },
+    "gdsc_auc": {
+     "n": 40,
+     "median": 0.469,
+     "q25": 0.299,
+     "q75": 0.694
+    },
+    "sim_share_ic50_above_max": 0.0,
+    "gdsc_share_ic50_above_max": 0.025,
+    "delta_log10_ic50_median": -0.15,
+    "delta_auc_median": -0.054
+   },
+   {
+    "sim_group": "BRAF CRC",
+    "gdsc_group": "BRAF V600E colorectal",
+    "gdsc_drug": "Trametinib",
+    "range_uM": [
+     0.001,
+     1.0
+    ],
+    "sim_ln_ic50": {
+     "n": 14,
+     "median": -3.592,
+     "q25": -4.554,
+     "q75": -3.197
+    },
+    "gdsc_ln_ic50": {
+     "n": 7,
+     "median": -3.515,
+     "q25": -4.969,
+     "q75": -2.177
+    },
+    "sim_auc": {
+     "n": 14,
+     "median": 0.48,
+     "q25": 0.342,
+     "q75": 0.537
+    },
+    "gdsc_auc": {
+     "n": 7,
+     "median": 0.494,
+     "q25": 0.321,
+     "q75": 0.64
+    },
+    "sim_share_ic50_above_max": 0.0,
+    "gdsc_share_ic50_above_max": 0.0,
+    "delta_log10_ic50_median": -0.03,
+    "delta_auc_median": -0.014
+   },
+   {
+    "sim_group": "KRAS G12C CRC",
+    "gdsc_group": "KRAS G12C (any solid)",
+    "gdsc_drug": "Trametinib",
+    "range_uM": [
+     0.001,
+     1.0
+    ],
+    "sim_ln_ic50": {
+     "n": 10,
+     "median": -4.055,
+     "q25": -4.654,
+     "q75": -3.519
+    },
+    "gdsc_ln_ic50": {
+     "n": 20,
+     "median": -1.2,
+     "q25": -2.495,
+     "q75": 0.633
+    },
+    "sim_auc": {
+     "n": 10,
+     "median": 0.413,
+     "q25": 0.328,
+     "q75": 0.491
+    },
+    "gdsc_auc": {
+     "n": 20,
+     "median": 0.727,
+     "q25": 0.612,
+     "q75": 0.884
+    },
+    "sim_share_ic50_above_max": 0.0,
+    "gdsc_share_ic50_above_max": 0.4,
+    "delta_log10_ic50_median": -1.24,
+    "delta_auc_median": -0.313
+   }
+  ],
+  "EGFRi": [
+   {
+    "sim_group": "EGFR lung",
+    "gdsc_group": "EGFR-mutant NSCLC",
+    "gdsc_drug": "Erlotinib",
+    "range_uM": [
+     0.002,
+     2.0
+    ],
+    "sim_ln_ic50": {
+     "n": 13,
+     "median": -4.052,
+     "q25": -4.275,
+     "q75": -3.568
+    },
+    "gdsc_ln_ic50": {
+     "n": 7,
+     "median": 0.325,
+     "q25": -1.857,
+     "q75": 0.776
+    },
+    "sim_auc": {
+     "n": 13,
+     "median": 0.316,
+     "q25": 0.283,
+     "q75": 0.386
+    },
+    "gdsc_auc": {
+     "n": 7,
+     "median": 0.647,
+     "q25": 0.567,
+     "q75": 0.838
+    },
+    "sim_share_ic50_above_max": 0.0,
+    "gdsc_share_ic50_above_max": 0.286,
+    "delta_log10_ic50_median": -1.9,
+    "delta_auc_median": -0.331
+   },
+   {
+    "sim_group": "BRAF CRC",
+    "gdsc_group": "BRAF V600E colorectal",
+    "gdsc_drug": "Erlotinib",
+    "range_uM": [
+     0.002,
+     2.0
+    ],
+    "sim_ln_ic50": {
+     "n": 14,
+     "median": 3.693,
+     "q25": 2.175,
+     "q75": 3.693
+    },
+    "gdsc_ln_ic50": {
+     "n": 7,
+     "median": 3.651,
+     "q25": 3.114,
+     "q75": 4.429
+    },
+    "sim_auc": {
+     "n": 14,
+     "median": 0.915,
+     "q25": 0.853,
+     "q75": 0.95
+    },
+    "gdsc_auc": {
+     "n": 7,
+     "median": 0.963,
+     "q25": 0.952,
+     "q75": 0.978
+    },
+    "sim_share_ic50_above_max": 0.929,
+    "gdsc_share_ic50_above_max": 1.0,
+    "delta_log10_ic50_median": 0.02,
+    "delta_auc_median": -0.047
+   }
+  ],
+  "METi": [
+   {
+    "sim_group": "all",
+    "gdsc_group": "melanoma + colorectal + NSCLC (all)",
+    "gdsc_drug": "Crizotinib",
+    "range_uM": [
+     0.001,
+     10.0
+    ],
+    "sim_ln_ic50": {
+     "n": 48,
+     "median": 5.303,
+     "q25": 5.303,
+     "q75": 5.303
+    },
+    "gdsc_ln_ic50": {
+     "n": 205,
+     "median": 2.672,
+     "q25": 1.909,
+     "q75": 3.558
+    },
+    "sim_auc": {
+     "n": 48,
+     "median": 0.992,
+     "q25": 0.951,
+     "q75": 0.999
+    },
+    "gdsc_auc": {
+     "n": 205,
+     "median": 0.901,
+     "q25": 0.866,
+     "q75": 0.935
+    },
+    "sim_share_ic50_above_max": 0.958,
+    "gdsc_share_ic50_above_max": 0.605,
+    "delta_log10_ic50_median": 1.14,
+    "delta_auc_median": 0.091
+   }
+  ],
+  "KRASi": [
+   {
+    "sim_group": "KRAS G12C CRC",
+    "gdsc_group": "KRAS G12C (any solid)",
+    "gdsc_drug": "KRAS (G12C) Inhibitor-12",
+    "range_uM": [
+     0.02,
+     20.0
+    ],
+    "sim_ln_ic50": {
+     "n": 10,
+     "median": 5.996,
+     "q25": 5.439,
+     "q75": 5.996
+    },
+    "gdsc_ln_ic50": {
+     "n": 19,
+     "median": 5.813,
+     "q25": 4.209,
+     "q75": 6.48
+    },
+    "sim_auc": {
+     "n": 10,
+     "median": 0.953,
+     "q25": 0.889,
+     "q75": 0.985
+    },
+    "gdsc_auc": {
+     "n": 19,
+     "median": 0.946,
+     "q25": 0.92,
+     "q75": 0.977
+    },
+    "sim_share_ic50_above_max": 1.0,
+    "gdsc_share_ic50_above_max": 0.947,
+    "delta_log10_ic50_median": 0.08,
+    "delta_auc_median": 0.007
+   }
+  ],
+  "PI3Ki": [
+   {
+    "sim_group": "PIK3CA/PTEN",
+    "gdsc_group": "PIK3CA-mut or PTEN-null (any solid)",
+    "gdsc_drug": "Alpelisib",
+    "range_uM": [
+     0.005,
+     5.0
+    ],
+    "sim_ln_ic50": {
+     "n": 14,
+     "median": 0.589,
+     "q25": 0.001,
+     "q75": 1.228
+    },
+    "gdsc_ln_ic50": {
+     "n": 164,
+     "median": 3.151,
+     "q25": 2.188,
+     "q75": 4.272
+    },
+    "sim_auc": {
+     "n": 14,
+     "median": 0.82,
+     "q25": 0.756,
+     "q75": 0.905
+    },
+    "gdsc_auc": {
+     "n": 164,
+     "median": 0.931,
+     "q25": 0.873,
+     "q75": 0.967
+    },
+    "sim_share_ic50_above_max": 0.143,
+    "gdsc_share_ic50_above_max": 0.848,
+    "delta_log10_ic50_median": -1.11,
+    "delta_auc_median": -0.111
+   }
+  ],
+  "BCLi": [
+   {
+    "sim_group": "all",
+    "gdsc_group": "melanoma + colorectal + NSCLC (all)",
+    "gdsc_drug": "Navitoclax",
+    "range_uM": [
+     0.002,
+     10.0
+    ],
+    "sim_ln_ic50": {
+     "n": 48,
+     "median": 3.721,
+     "q25": -0.155,
+     "q75": 5.303
+    },
+    "gdsc_ln_ic50": {
+     "n": 205,
+     "median": 2.462,
+     "q25": 1.477,
+     "q75": 3.468
+    },
+    "sim_auc": {
+     "n": 48,
+     "median": 0.834,
+     "q25": 0.645,
+     "q75": 0.919
+    },
+    "gdsc_auc": {
+     "n": 205,
+     "median": 0.907,
+     "q25": 0.836,
+     "q75": 0.943
+    },
+    "sim_share_ic50_above_max": 0.583,
+    "gdsc_share_ic50_above_max": 0.537,
+    "delta_log10_ic50_median": 0.55,
+    "delta_auc_median": -0.072
+   }
+  ],
+  "MCLi": [
+   {
+    "sim_group": "all",
+    "gdsc_group": "melanoma + colorectal + NSCLC (all)",
+    "gdsc_drug": "AZD5991",
+    "range_uM": [
+     0.01,
+     10.0
+    ],
+    "sim_ln_ic50": {
+     "n": 48,
+     "median": 3.012,
+     "q25": -0.77,
+     "q75": 5.303
+    },
+    "gdsc_ln_ic50": {
+     "n": 152,
+     "median": 5.453,
+     "q25": 4.325,
+     "q75": 6.241
+    },
+    "sim_auc": {
+     "n": 48,
+     "median": 0.765,
+     "q25": 0.528,
+     "q75": 0.917
+    },
+    "gdsc_auc": {
+     "n": 152,
+     "median": 0.973,
+     "q25": 0.953,
+     "q75": 0.981
+    },
+    "sim_share_ic50_above_max": 0.542,
+    "gdsc_share_ic50_above_max": 0.888,
+    "delta_log10_ic50_median": -1.06,
+    "delta_auc_median": -0.208
+   }
+  ]
+ },
+ "b_mechanisms": {
+  "i_erk_rebound": {
+   "crc_nadir": 0.6917,
+   "crc_24h": 0.7955,
+   "mel_nadir": 0.3219,
+   "mel_24h": 0.4993,
+   "crc_rafi_egfri_24h": 0.5043,
+   "literature": "Corcoran 2012: CRC pERK recovers to ~25-50 % of baseline by 24 h; melanoma suppression sustained over 24 h",
+   "pass": false,
+   "crc_24h_in_25_50pct": false
+  },
+  "ii_paradox": {
+   "kras_max_erk_fold": 1.1831,
+   "healthy_max_erk_fold": 1.7186,
+   "braf_mel_erk_at_css": 0.393,
+   "kras_viability72_rafi_css": 0.9998,
+   "literature": "Poulikakos 2010, Hatzivassiliou 2010: RAF inhibitors raise pMEK/pERK in BRAF-wt cells with active RAS; fold not stated in text (unverified)",
+   "pass": false
+  },
+  "iii_feedback_relief": {
+   "mel_meki_erk_nadir": 0.3736,
+   "mel_meki_erk_24h": 0.391,
+   "mel_meki_erk_48h": 0.4027,
+   "mel_ras_gtp_fold_12h": 1.6263,
+   "mel_ras_gtp_fold_24h": 1.9375,
+   "mel_ras_gtp_fold_48h": 2.1691,
+   "mel_akt_fold_24h": 1.5824,
+   "crc_meki_erk_24h": 0.5625,
+   "crc_akt_fold_24h": 1.4069,
+   "mel_rafi_erk_24h": 0.4993,
+   "mel_rafi_meki_erk_24h": 0.1529,
+   "literature": "Lito 2012: pERK partly rebounds by 24-48 h; Ras-GTP not raised at 12 h, induced by 24-48 h; RAF+MEK near-complete. Turke 2012: MEK inhibition raises pAKT.",
+   "pass": false,
+   "ras_gtp_already_up_at_12h": true
+  },
+  "iv_met_bypass": {
+   "median_log10_ic50_uM": {
+    "parental": -1.76,
+    "MET-amp": 0.49,
+    "MET-amp + METi": -1.61
+   },
+   "fold_shift_met_amp": 177.8,
+   "fold_shift_with_meti": 1.4,
+   "literature": "Engelman 2007: MET amplification causes gefitinib resistance, MET inhibition restores sensitivity; Turke 2010: pre-existing MET-amplified subpopulations",
+   "pass": true
+  },
+  "v_kras_outgrowth": {
+   "shares": [
+    0.0001,
+    0.0003,
+    0.001,
+    0.003,
+    0.01,
+    0.03,
+    0.1
+   ],
+   "median_days_to_regrowth": [
+    134.0,
+    128.0,
+    120.0,
+    114.0,
+    107.0,
+    101.0,
+    95.0
+   ],
+   "share_regrowing_on_treatment": [
+    0.3077,
+    0.3077,
+    0.3846,
+    0.3846,
+    0.3846,
+    0.3846,
+    0.3846
+   ],
+   "median_kras_share_at_regrowth": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "days_per_10x_share": -13.143,
+   "n_patients": 13,
+   "literature": "Misale 2012: KRAS-mutant cells pre-exist (~0.2 % in Lim1215), 60 % of relapses gain KRAS mutations; Diaz 2012: KRAS mutants in serum 5-6 months into panitumumab",
+   "pass": true
+  }
+ },
+ "c_clinical": {
+  "BRAF_CRC": {
+   "n": 14,
+   "regimen": {
+    "RAFi": 1.0,
+    "MEKi": 1.0,
+    "EGFRi": 1.0
+   },
+   "trial": "encorafenib + binimetinib + cetuximab, BEACON (triplet); D+T+panitumumab",
+   "trial_orr_pct": 26,
+   "trial_orr_range_pct": [
+    21,
+    26.8
+   ],
+   "mean_model": {
+    "orr_like_30pct_burden": 0.571,
+    "orr_like_51pct_area": 0.5,
+    "median_best_change": -0.551,
+    "share_reward_ge_0.4": 0.0,
+    "mean_cure_probability": 0.072,
+    "share_progressing_on_treatment": 0.929,
+    "median_days_to_regrowth": 12.0
+   },
+   "lattice": {
+    "reps_per_patient": 1,
+    "orr_like_30pct_burden": 0.857,
+    "orr_like_51pct_area": 0.714,
+    "median_best_change": -0.743,
+    "share_reward_ge_0.4": 0.0,
+    "share_eliminated_day364": 0.143,
+    "share_progressing_on_treatment": 0.786,
+    "median_days_to_regrowth": 25.5
+   }
+  },
+  "BRAF_MEL": {
+   "n": 11,
+   "regimen": {
+    "RAFi": 1.0,
+    "MEKi": 1.0
+   },
+   "trial": "dabrafenib + trametinib, COMBI-d / COMBI-v",
+   "trial_orr_pct": 67,
+   "trial_orr_range_pct": [
+    64,
+    67
+   ],
+   "mean_model": {
+    "orr_like_30pct_burden": 0.545,
+    "orr_like_51pct_area": 0.545,
+    "median_best_change": -0.745,
+    "share_reward_ge_0.4": 0.091,
+    "mean_cure_probability": 0.182,
+    "share_progressing_on_treatment": 0.818,
+    "median_days_to_regrowth": 9.0
+   },
+   "lattice": {
+    "reps_per_patient": 1,
+    "orr_like_30pct_burden": 0.909,
+    "orr_like_51pct_area": 0.727,
+    "median_best_change": -0.751,
+    "share_reward_ge_0.4": 0.091,
+    "share_eliminated_day364": 0.182,
+    "share_progressing_on_treatment": 0.818,
+    "median_days_to_regrowth": 37.0
+   }
+  },
+  "KRAS": {
+   "n": 10,
+   "regimen": {
+    "KRASi": 1.0,
+    "EGFRi": 1.0
+   },
+   "trial": "adagrasib + cetuximab (KRYSTAL-1) / sotorasib + panitumumab (CodeBreaK 300)",
+   "trial_orr_pct": 36,
+   "trial_orr_range_pct": [
+    26.4,
+    46
+   ],
+   "mean_model": {
+    "orr_like_30pct_burden": 0.2,
+    "orr_like_51pct_area": 0.0,
+    "median_best_change": -0.055,
+    "share_reward_ge_0.4": 0.0,
+    "mean_cure_probability": 0.005,
+    "share_progressing_on_treatment": 1.0,
+    "median_days_to_regrowth": 11.0
+   },
+   "lattice": {
+    "reps_per_patient": 1,
+    "orr_like_30pct_burden": 0.8,
+    "orr_like_51pct_area": 0.4,
+    "median_best_change": -0.448,
+    "share_reward_ge_0.4": 0.0,
+    "share_eliminated_day364": 0.0,
+    "share_progressing_on_treatment": 1.0,
+    "median_days_to_regrowth": 20.5
+   }
+  },
+  "EGFR": {
+   "n": 13,
+   "regimen": {
+    "EGFRi": 1.0
+   },
+   "trial": "osimertinib (FLAURA); first-generation EGFR-TKI arm",
+   "trial_orr_pct": 80,
+   "trial_orr_range_pct": [
+    76,
+    80
+   ],
+   "mean_model": {
+    "orr_like_30pct_burden": 1.0,
+    "orr_like_51pct_area": 1.0,
+    "median_best_change": -0.992,
+    "share_reward_ge_0.4": 0.385,
+    "mean_cure_probability": 0.388,
+    "share_progressing_on_treatment": 0.615,
+    "median_days_to_regrowth": 35.0
+   },
+   "lattice": {
+    "reps_per_patient": 1,
+    "orr_like_30pct_burden": 1.0,
+    "orr_like_51pct_area": 1.0,
+    "median_best_change": -0.991,
+    "share_reward_ge_0.4": 0.462,
+    "share_eliminated_day364": 0.462,
+    "share_progressing_on_treatment": 0.538,
+    "median_days_to_regrowth": 32.0
+   }
+  }
+ },
+ "d_pk": [
+  {
+   "class": "RAFi",
+   "model_t_half_h": 8.0,
+   "model_css_uM": 0.3,
+   "drug": "dabrafenib",
+   "label_t_half_h": 8,
+   "label_cavg_total_uM": 0.6963,
+   "fraction_unbound": 0.003,
+   "label_cavg_free_uM": 0.0021,
+   "model_css_over_free_cavg": 143.62,
+   "model_css_over_total_cavg": 0.431
+  },
+  {
+   "class": "MEKi",
+   "model_t_half_h": 96.0,
+   "model_css_uM": 0.012,
+   "drug": "trametinib",
+   "label_t_half_h": 127,
+   "label_cavg_total_uM": 0.0251,
+   "fraction_unbound": 0.026,
+   "label_cavg_free_uM": 0.0007,
+   "model_css_over_free_cavg": 18.39,
+   "model_css_over_total_cavg": 0.478
+  },
+  {
+   "class": "EGFRi",
+   "model_t_half_h": 36.0,
+   "model_css_uM": 0.24,
+   "drug": "erlotinib",
+   "label_t_half_h": 36.2,
+   "label_cavg_total_uM": 3.5538,
+   "fraction_unbound": 0.07,
+   "label_cavg_free_uM": 0.2488,
+   "model_css_over_free_cavg": 0.96,
+   "model_css_over_total_cavg": 0.068
+  },
+  {
+   "class": "METi",
+   "model_t_half_h": 6.5,
+   "model_css_uM": 0.06,
+   "drug": "capmatinib (label t1/2 6.5 h: unverified, not in science/pk_table.json)"
+  },
+  {
+   "class": "KRASi",
+   "model_t_half_h": 24.0,
+   "model_css_uM": 0.5,
+   "drug": "adagrasib (t1/2 ~23-24 h: unverified, not in science/pk_table.json)"
+  },
+  {
+   "class": "PI3Ki",
+   "model_t_half_h": 9.0,
+   "model_css_uM": 0.5,
+   "drug": "alpelisib",
+   "label_t_half_h": "8-9",
+   "label_cavg_total_uM": 3.1357,
+   "fraction_unbound": 0.11,
+   "label_cavg_free_uM": 0.3449,
+   "model_css_over_free_cavg": 1.45,
+   "model_css_over_total_cavg": 0.159
+  },
+  {
+   "class": "BCLi",
+   "model_t_half_h": 17.0,
+   "model_css_uM": 0.175,
+   "drug": "navitoclax (ABT-263; not approved)",
+   "label_t_half_h": 17.1,
+   "label_cavg_total_uM": 2.501,
+   "fraction_unbound": null,
+   "model_css_over_total_cavg": 0.07
+  },
+  {
+   "class": "MCLi",
+   "model_t_half_h": 12.0,
+   "model_css_uM": 0.075,
+   "drug": "no approved MCL-1 inhibitor; 12 h is a modelling choice"
+  }
+ ],
+ "e_cohort": {
+  "source": "/tmp/cohort_dev.pkl (salt 'dev', i < 1600), /tmp/cohort_v2.json",
+  "n_generated": 1600,
+  "n_eligible_3_guidelines": 276,
+  "why_3_guidelines": {
+   "no grid regimen cures": 1040,
+   "a guideline regimen works": 259,
+   "eligible": 276,
+   "the grid's best regimen fails on the lattice": 11,
+   "a guideline regimen works on the lattice": 14
+  },
+  "n_eligible_5_guidelines_fast_model_approx": 157,
+  "n_eligible_v2_keep_list": 135,
+  "by_type": {
+   "BRAF_MEL": {
+    "n": 384,
+    "counts": {
+     "no grid regimen cures": 187,
+     "a guideline regimen works": 102,
+     "eligible only with 3 guidelines": 35,
+     "eligible (5 guidelines, approx.)": 56,
+     "fails lattice checks": 4
+    },
+    "share": {
+     "no grid regimen cures": 0.487,
+     "a guideline regimen works": 0.2656,
+     "eligible only with 3 guidelines": 0.0911,
+     "eligible (5 guidelines, approx.)": 0.1458,
+     "fails lattice checks": 0.0104
+    },
+    "eligible_3_guidelines": 91,
+    "eligible_v2_keep_list": 58,
+    "grid_best_median_all": 0.49
+   },
+   "BRAF_CRC": {
+    "n": 443,
+    "counts": {
+     "no grid regimen cures": 357,
+     "eligible (5 guidelines, approx.)": 29,
+     "eligible only with 3 guidelines": 20,
+     "a guideline regimen works": 37
+    },
+    "share": {
+     "no grid regimen cures": 0.8059,
+     "eligible (5 guidelines, approx.)": 0.0655,
+     "eligible only with 3 guidelines": 0.0451,
+     "a guideline regimen works": 0.0835
+    },
+    "eligible_3_guidelines": 49,
+    "eligible_v2_keep_list": 23,
+    "grid_best_median_all": 0.002
+   },
+   "KRAS": {
+    "n": 325,
+    "counts": {
+     "no grid regimen cures": 272,
+     "eligible only with 3 guidelines": 19,
+     "eligible (5 guidelines, approx.)": 25,
+     "a guideline regimen works": 8,
+     "fails lattice checks": 1
+    },
+    "share": {
+     "no grid regimen cures": 0.8369,
+     "eligible only with 3 guidelines": 0.0585,
+     "eligible (5 guidelines, approx.)": 0.0769,
+     "a guideline regimen works": 0.0246,
+     "fails lattice checks": 0.0031
+    },
+    "eligible_3_guidelines": 44,
+    "eligible_v2_keep_list": 18,
+    "grid_best_median_all": 0.005
+   },
+   "EGFR": {
+    "n": 448,
+    "counts": {
+     "no grid regimen cures": 224,
+     "a guideline regimen works": 126,
+     "eligible (5 guidelines, approx.)": 47,
+     "fails lattice checks": 6,
+     "eligible only with 3 guidelines": 45
+    },
+    "share": {
+     "no grid regimen cures": 0.5,
+     "a guideline regimen works": 0.2812,
+     "eligible (5 guidelines, approx.)": 0.1049,
+     "fails lattice checks": 0.0134,
+     "eligible only with 3 guidelines": 0.1004
+    },
+    "eligible_3_guidelines": 92,
+    "eligible_v2_keep_list": 36,
+    "grid_best_median_all": 0.468
+   }
+  },
+  "note": "The 3-guideline numbers are exact cohort.screen results. The 5-guideline count only re-checks guidelines 3-5 on the fast model."
+ },
+ "runtime_s": {
+  "population": 10,
+  "total": 26
+ }
+}

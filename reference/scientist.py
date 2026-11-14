@@ -36,7 +36,8 @@ except ImportError:                     # in the repository
 CSS = M.CSS_LABEL
 PATHWAY = ("RAFi", "MEKi", "EGFRi", "METi", "KRASi", "PI3Ki")
 PRIMARY = {"BRAF V600E": "RAFi", "KRAS G12C": "KRASi", "EGFR L858R": "EGFRi"}
-SOFT = 30.0                             # cells; counts are compared as ln(count + SOFT)
+SOFT = 10.0                             # cells; counts are compared as ln(count + SOFT)
+HIDDEN_GAIN = 8.0                       # a hidden clone is accepted when it lowers the fit's cost by this much
 LINE_COST = 8 + 16 + 16                 # wells to expand a line, sequence it and test the drugs on it
 
 
@@ -334,7 +335,7 @@ class Scientist:
                 continue
             if e["kind"] == "viability":
                 obs = e["counts"].T[:, None, :]                                    # [R, 1, W]
-                sig = np.sqrt(0.10 ** 2 + 0.06 ** 2 + 1.0 / (obs + SOFT))
+                sig = np.sqrt(0.10 ** 2 + 0.06 ** 2 + (obs + 1.0) / (obs + SOFT) ** 2)
                 r = (np.log(pred + SOFT) - np.log(obs + SOFT)) / sig
                 parts.append(np.moveaxis(r, 1, 0).reshape(Z.shape[0], -1))
             else:
@@ -352,6 +353,73 @@ class Scientist:
         Z = np.vstack([z[None], z[None] + np.diag(h)])
         R = self.residuals(Z)
         return ((R[1:] - R[0]) / h[:, None]).T
+
+    def fit_subset(self, z0: np.ndarray, free: np.ndarray, max_nfev: int = 12):
+        """Least-squares fit of the parameters `free` only (indices), the others held at z0. Returns (z, cost)."""
+        st = self.st
+        h = np.where(st.is_log, 0.02, 0.01 * (st.hi - st.lo))[free]
+
+        def full(x):
+            Z = np.repeat(z0[None], np.atleast_2d(x).shape[0], axis=0)
+            Z[:, free] = x
+            return Z
+
+        def res(x):
+            return self.residuals(full(x[None]))[0]
+
+        def jac(x):
+            hh = np.where(x + h > st.hi[free], -h, h)
+            R = self.residuals(full(np.vstack([x[None], x[None] + np.diag(hh)])))
+            return ((R[1:] - R[0]) / hh[:, None]).T
+
+        x0 = np.clip(z0[free], st.lo[free] + 1e-6, st.hi[free] - 1e-6)
+        r = least_squares(res, x0, jac=jac, bounds=(st.lo[free], st.hi[free]), loss="soft_l1", f_scale=2.0, max_nfev=max_nfev)
+        return full(r.x[None])[0], float(r.cost)
+
+    def cost(self, z: np.ndarray) -> float:
+        f = self.residuals(z[None])[0] / 2.0
+        return float(0.5 * 4.0 * np.sum(2.0 * (np.sqrt(1.0 + f * f) - 1.0)))
+
+    def scan_hidden(self, rounds: int = 2):
+        """Is there a clone nobody has seen? Try every known resistance alteration as a small hidden clone.
+
+        Each hypothesis adds one minor clone (share under 3 %) to the fitted model and fits only that clone's
+        share and parameters. The best one is kept when it explains the data much better: survivors that
+        neither die nor grow in wells that should be empty are the usual trace.
+        """
+        for _ in range(rounds):
+            base = self.cost(self.z)
+            warm = self.warm()
+            trials = []
+            for lab in M.ALTERATIONS:
+                if lab in self.major or lab in self.minors or lab in PRIMARY:
+                    continue
+                st = Structure(self.major, self.minors + [lab], self.share_obs)
+                z0 = st.centre()
+                for name, val in warm.items():
+                    if name in st.ix:
+                        z0[st.ix[name]] = val
+                free = np.array([i for i, n in enumerate(st.names) if n.startswith(f"m{len(self.minors)}:")])
+                keep, self.st = self.st, st
+                try:
+                    best = None
+                    for share in (np.log(0.004), np.log(0.015)):
+                        z1 = z0.copy()
+                        z1[st.ix[f"m{len(self.minors)}:share"]] = share
+                        z, c = self.fit_subset(z1, free)
+                        if best is None or c < best[1]:
+                            best = (z, c)
+                finally:
+                    self.st = keep
+                trials.append((base - best[1], lab))
+            trials.sort(reverse=True)
+            self.say("hidden-clone scan (cost gain): " + ", ".join(f"{lab} {g:.1f}" for g, lab in trials[:4]))
+            if not trials or trials[0][0] < HIDDEN_GAIN:
+                return
+            self.minors.append(trials[0][1])
+            self.hidden.append(trials[0][1])
+            self.say(f"a hidden clone with {trials[0][1]} explains the data better; added to the model")
+            self.refit(starts=1, scan=False)
 
     def fit(self, starts: int = 3, warm: dict | None = None, max_nfev: int = 40):
         """Least-squares fit of every free parameter to all filed data. Keeps the best of a few starts."""
@@ -478,7 +546,7 @@ class Scientist:
         pred = self.predict(self.z[None], only=exp)[0][-1, 0]            # [W] at the last read
         obs = exp["counts"][:, -1]
         prev = exp["counts"][:, -2] if exp["counts"].shape[1] > 1 else obs
-        excess = np.log((obs + SOFT) / (pred + SOFT))
+        excess = np.log((obs + 30.0) / (pred + 30.0))
         found = [(float(excess[i]), int(i)) for i in range(len(obs))
                  if excess[i] > 1.0 and obs[i] >= 80 and obs[i] > 1.15 * prev[i]]
         return sorted(found, reverse=True)
@@ -499,7 +567,7 @@ class Scientist:
         chart = self.lab("patient_chart")
         major = list(chart["bulk_sequencing"]["alterations"])
         primary = next((PRIMARY[a] for a in major if a in PRIMARY), "MEKi")
-        self.major, self.minors, self.share_obs = major, [], {}
+        self.major, self.minors, self.share_obs, self.hidden = major, [], {}, []
         self.say(f"chart: {chart['tissue']}; {', '.join(major)}; driver drug {primary}")
 
         # ---- day 0: everything that needs time starts now
@@ -578,13 +646,15 @@ class Scientist:
         self.say(f"submitting {regimen} (expected reward {best['expected']:.2f})")
         r = self.lab("submit_regimen", regimen=regimen)
         return {"regimen": regimen, "expected": best["expected"], "explained": best["explained"],
-                "accepted": bool(r.get("accepted", False)), "minors": self.minors, "notes": self.notes}
+                "accepted": bool(r.get("accepted", False)), "minors": self.minors, "inferred": self.hidden, "notes": self.notes}
 
     # ------------------------------------------------------------------ steps
-    def refit(self, starts: int = 2, max_nfev: int = 40):
+    def refit(self, starts: int = 2, max_nfev: int = 40, scan: bool = True):
         warm = self.warm()
         self.st = Structure(self.major, self.minors, self.share_obs)
         self.fit(starts=starts, warm=warm, max_nfev=max_nfev)
+        if scan:
+            self.scan_hidden()
 
     def wells_left(self) -> int:
         return int(self.lab("lab_status").get("wells_left", 0))
@@ -625,6 +695,8 @@ class Scientist:
                 for a in s["alterations"]:
                     if a not in self.major and a in M.ALTERATIONS and a not in self.minors:
                         self.minors.append(a)
+                    if a in self.hidden:
+                        self.hidden.remove(a)
                 self.say(f"line {name} (survivors of {self.lines[name]['sel']}): {s['alterations']}")
         for name, (_, v) in pending.items():
             self.collect(v)

@@ -152,6 +152,8 @@ class Episode:
                     result, ok = fn(), True
                 except L.LabError as exc:
                     result, ok = {"error": str(exc)}, False
+                except Exception as exc:  # noqa: BLE001 - a malformed request must not take the lab down
+                    result, ok = {"error": f"the lab could not read that request ({type(exc).__name__})"}, False
             self.calls.append({"i": len(self.calls), "tool": tool, "args": self._summarise(args), "ok": ok,
                                "day_before": day_before, "day": self.lab.day, "t_wall": t_wall,
                                "wells_left": self.lab.wells_left, "result": self._summarise(result)})

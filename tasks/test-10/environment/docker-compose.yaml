@@ -1,0 +1,33 @@
+# Merged on top of Harbor's base compose file. Harbor configures `main` (build
+# context = this directory, command, log mounts, resource limits); we only add
+# the sidecar and make `main` wait for it.
+services:
+  main:
+    depends_on:
+      remission:
+        condition: service_healthy
+
+  remission:
+    build:
+      # Assembled by scripts/new_task.py: Dockerfile + requirements.txt + the
+      # `remission` package (cell model, hidden patient generator, lab, server).
+      # The agent's container never sees it.
+      context: ./sidecar
+    environment:
+      # Sidecar-only. Never move these to task.toml [environment.env]: that
+      # table is injected into `main`, where the agent can read it.
+      REMISSION_SEED: "509523418"
+      REMISSION_ADMIN_TOKEN: "05ce2cc1d68cd16828a90351dac6fd35fbfdcc0b2f2fba34"
+      # A regimen known to cure this patient (found with the hidden parameters); only for the replay viewer.
+      REMISSION_BEST_KNOWN: "{\"regimen\": {\"phases\": [{\"days\": 84, \"doses\": {\"MEKi\": 0.5, \"MCLi\": 0.25}}]}, \"reward\": 0.64}"
+    # Explicit networking, and no `expose:`. With a restricted network_mode
+    # Harbor moves every service without explicit networking into its
+    # egress-control namespace; the service name then stops resolving.
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=2)"]
+      interval: 2s
+      timeout: 5s
+      retries: 90
+      start_period: 5s

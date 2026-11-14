@@ -48,7 +48,16 @@ asyncio.run(main(sys.argv[1], json.loads(sys.argv[2])))
 """
 
 
+try:                                    # Harbor 0.25+: an agent has to declare that it can use MCP servers
+    from harbor.agents.capabilities import AgentCapabilities
+    _CAPABILITIES = {"capabilities": AgentCapabilities(mcp_servers=True)}
+except ImportError:                     # older Harbor
+    _CAPABILITIES = {}
+
+
 class StopEarlyAgent(BaseAgent):
+    locals().update(_CAPABILITIES)
+
     def __init__(self, *args, calls: list | str | None = None, **kwargs):
         super().__init__(*args, **kwargs)
         if isinstance(calls, str):

@@ -1,0 +1,95 @@
+{
+ "source": "/tmp/cohort_dev.pkl (salt 'dev', i < 1600), /tmp/cohort_v2.json",
+ "n_generated": 1600,
+ "n_eligible_3_guidelines": 276,
+ "why_3_guidelines": {
+  "no grid regimen cures": 1040,
+  "a guideline regimen works": 259,
+  "eligible": 276,
+  "the grid's best regimen fails on the lattice": 11,
+  "a guideline regimen works on the lattice": 14
+ },
+ "n_eligible_5_guidelines_fast_model_approx": 157,
+ "n_eligible_v2_keep_list": 135,
+ "by_type": {
+  "BRAF_MEL": {
+   "n": 384,
+   "counts": {
+    "no grid regimen cures": 187,
+    "a guideline regimen works": 102,
+    "eligible only with 3 guidelines": 35,
+    "eligible (5 guidelines, approx.)": 56,
+    "fails lattice checks": 4
+   },
+   "share": {
+    "no grid regimen cures": 0.487,
+    "a guideline regimen works": 0.2656,
+    "eligible only with 3 guidelines": 0.0911,
+    "eligible (5 guidelines, approx.)": 0.1458,
+    "fails lattice checks": 0.0104
+   },
+   "eligible_3_guidelines": 91,
+   "eligible_v2_keep_list": 58,
+   "grid_best_median_all": 0.49
+  },
+  "BRAF_CRC": {
+   "n": 443,
+   "counts": {
+    "no grid regimen cures": 357,
+    "eligible (5 guidelines, approx.)": 29,
+    "eligible only with 3 guidelines": 20,
+    "a guideline regimen works": 37
+   },
+   "share": {
+    "no grid regimen cures": 0.8059,
+    "eligible (5 guidelines, approx.)": 0.0655,
+    "eligible only with 3 guidelines": 0.0451,
+    "a guideline regimen works": 0.0835
+   },
+   "eligible_3_guidelines": 49,
+   "eligible_v2_keep_list": 23,
+   "grid_best_median_all": 0.002
+  },
+  "KRAS": {
+   "n": 325,
+   "counts": {
+    "no grid regimen cures": 272,
+    "eligible only with 3 guidelines": 19,
+    "eligible (5 guidelines, approx.)": 25,
+    "a guideline regimen works": 8,
+    "fails lattice checks": 1
+   },
+   "share": {
+    "no grid regimen cures": 0.8369,
+    "eligible only with 3 guidelines": 0.0585,
+    "eligible (5 guidelines, approx.)": 0.0769,
+    "a guideline regimen works": 0.0246,
+    "fails lattice checks": 0.0031
+   },
+   "eligible_3_guidelines": 44,
+   "eligible_v2_keep_list": 18,
+   "grid_best_median_all": 0.005
+  },
+  "EGFR": {
+   "n": 448,
+   "counts": {
+    "no grid regimen cures": 224,
+    "a guideline regimen works": 126,
+    "eligible (5 guidelines, approx.)": 47,
+    "fails lattice checks": 6,
+    "eligible only with 3 guidelines": 45
+   },
+   "share": {
+    "no grid regimen cures": 0.5,
+    "a guideline regimen works": 0.2812,
+    "eligible (5 guidelines, approx.)": 0.1049,
+    "fails lattice checks": 0.0134,
+    "eligible only with 3 guidelines": 0.1004
+   },
+   "eligible_3_guidelines": 92,
+   "eligible_v2_keep_list": 36,
+   "grid_best_median_all": 0.468
+  }
+ },
+ "note": "The 3-guideline numbers are exact cohort.screen results. The 5-guideline count only re-checks guidelines 3-5 on the fast model."
+}

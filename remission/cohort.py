@@ -2,10 +2,12 @@
 
 Hidden side. A generated patient joins the cohort when
 
-  1. refractory: each of the three guideline regimens for the tumour type
+  1. refractory: each of the five guideline regimens for the tumour type
      scores below REFRACTORY_BELOW. Two of them are the label-dose standards of
-     care, the third is the constant regimen that cures the largest share of
-     unselected patients of that tumour type (found by exhaustive search);
+     care. The other three are the constant regimens that cure the largest
+     share of the patients the earlier ones leave uncured, picked one after
+     the other by exhaustive search over the grid in a development population
+     of 1600 generated patients;
   2. curable: at least one constant-dose regimen out of a grid of 3112 scores
      CURABLE_FROM or more, on the fast model and again on the tissue lattice.
 
@@ -22,18 +24,30 @@ import numpy as np
 from . import model as M
 from . import patients as P
 
-REFRACTORY_BELOW = 0.20
+REFRACTORY_BELOW = 0.10
 CURABLE_FROM = 0.50
 
 GUIDELINES = {
-    "BRAF_CRC": [{"RAFi": 1.0, "MEKi": 1.0, "EGFRi": 1.0}, {"RAFi": 1.0, "EGFRi": 1.0},
-                 {"RAFi": 0.5, "MEKi": 0.5, "BCLi": 0.5}],
-    "BRAF_MEL": [{"RAFi": 1.0, "MEKi": 1.0}, {"RAFi": 1.0},
-                 {"RAFi": 0.5, "MEKi": 0.5, "METi": 0.5, "BCLi": 0.5}],
-    "KRAS": [{"KRASi": 1.0, "EGFRi": 1.0}, {"KRASi": 1.0, "MEKi": 1.0},
-             {"KRASi": 0.5, "PI3Ki": 0.5, "BCLi": 1.0}],
-    "EGFR": [{"EGFRi": 1.0}, {"EGFRi": 1.0, "METi": 1.0},
-             {"EGFRi": 0.5, "PI3Ki": 0.5, "MCLi": 0.5}],
+    "BRAF_CRC": [{"RAFi": 1.0, "MEKi": 1.0, "EGFRi": 1.0},
+                 {"RAFi": 1.0, "EGFRi": 1.0},
+                 {"RAFi": 0.5, "MEKi": 0.5, "KRASi": 0.5, "MCLi": 0.5},
+                 {"RAFi": 0.5, "MEKi": 0.5, "BCLi": 1.0},
+                 {"RAFi": 0.5, "MEKi": 1.0, "MCLi": 2.0}],
+    "BRAF_MEL": [{"RAFi": 1.0, "MEKi": 1.0},
+                 {"RAFi": 1.0},
+                 {"RAFi": 0.5, "MEKi": 0.5, "METi": 0.5, "BCLi": 0.5},
+                 {"RAFi": 1.5, "MEKi": 0.5, "KRASi": 0.5, "MCLi": 0.5},
+                 {"RAFi": 2.0, "MEKi": 1.0, "METi": 0.5}],
+    "KRAS": [{"KRASi": 1.0, "EGFRi": 1.0},
+             {"KRASi": 1.0, "MEKi": 1.0},
+             {"MEKi": 0.5, "KRASi": 0.5, "MCLi": 1.0},
+             {"MEKi": 0.5, "KRASi": 0.5, "BCLi": 2.0},
+             {"KRASi": 0.5, "BCLi": 1.0, "MCLi": 2.0}],
+    "EGFR": [{"EGFRi": 1.0},
+             {"EGFRi": 1.0, "METi": 1.0},
+             {"EGFRi": 0.25, "BCLi": 0.5},
+             {"EGFRi": 0.5, "KRASi": 0.5, "MCLi": 0.5},
+             {"EGFRi": 1.0, "KRASi": 0.5, "BCLi": 0.5}],
 }
 
 
@@ -102,7 +116,7 @@ def screen(patient: dict, lattice_reps: int = 6, keep_rewards: bool = False) -> 
     out["best"], out["best_reward"] = best, round(best_r, 3)
     # the guidelines must fail on the lattice too
     gl_lat = [float(M.simulate_tissue(patient["K"], patient["healthy"], patient["tumour"], patient["frac"], constant(g),
-                                      seed=P.seed_from("cohort-g", patient["seed"]), reps=4)["reward"].mean())
+                                      seed=P.seed_from("cohort-g", patient["seed"]), reps=8)["reward"].mean())
               for g in GUIDELINES[patient["archetype"]]]
     out["guideline_lattice"] = [round(v, 3) for v in gl_lat]
     if best_r < CURABLE_FROM:

@@ -260,10 +260,10 @@ def validate_regimen(regimen) -> str | None:
     for ph in regimen["phases"]:
         if not isinstance(ph, dict):
             return "each phase is an object"
-        try:
-            n = int(ph.get("days", 0))
-        except (TypeError, ValueError):
-            return "days must be an integer"
+        n = ph.get("days", 0)
+        if isinstance(n, bool) or not isinstance(n, (int, float)) or n != n or abs(n) > 1e6 or int(n) != n:
+            return "days must be a whole number"
+        n = int(n)
         if n < 1:
             return "each phase lasts at least 1 day"
         total += n
@@ -273,10 +273,9 @@ def validate_regimen(regimen) -> str | None:
         for name, v in doses.items():
             if name not in IDX:
                 return f"unknown drug {name!r}; drugs are {', '.join(DRUGS)}"
-            try:
-                v = float(v)
-            except (TypeError, ValueError):
+            if isinstance(v, bool) or not isinstance(v, (int, float)):
                 return f"dose of {name} must be a number"
+            v = float(v)
             if not (0.0 <= v <= DOSE_MAX) or v != v:
                 return f"dose of {name} must be between 0 and {DOSE_MAX}"
     if total > TREAT_DAYS:

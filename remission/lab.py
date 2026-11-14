@@ -102,7 +102,7 @@ class Lab:
     def _duration(self, days) -> float:
         try:
             d = _q(days)
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, OverflowError):
             raise LabError("days must be a number")
         if d < 0.25:
             raise LabError("an experiment lasts at least 0.25 days")
@@ -125,7 +125,10 @@ class Lab:
         else:
             if not isinstance(read_days, list) or not read_days:
                 raise LabError("read_days must be a list of days after the start, e.g. [1, 3, 7]")
-            reads = sorted({_q(r) for r in read_days})
+            try:
+                reads = sorted({_q(r) for r in read_days})
+            except (TypeError, ValueError, OverflowError):
+                raise LabError("read_days must be numbers (days after the start)")
             if len(reads) > MAX_READS:
                 raise LabError(f"at most {MAX_READS} read days per experiment")
             if reads[0] < 0 or reads[-1] > d + 1e-9:
@@ -244,7 +247,7 @@ class Lab:
         self._check_open()
         try:
             d = _q(days)
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, OverflowError):
             raise LabError("days must be a number")
         if d <= 0:
             raise LabError("days must be positive (the clock moves in quarter days)")

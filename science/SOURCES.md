@@ -86,6 +86,7 @@ Licence column: Sanger (GDSC / Cell Model Passports / GDSC Combinations) licence
 | raw/pubmed/esum1.json | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&retmode=json&id=<PMIDs> | 2026-11-14 | 48,506 | NLM PubMed metadata (public) |
 | raw/pubmed/lit.txt | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&id=<PMIDs> | 2026-11-14 | 60,361 | PubMed abstracts (publisher copyright; quoted for research) |
 | raw/pubmed/pk.txt | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&id=<PMIDs> | 2026-11-14 | 21,223 | PubMed abstracts (publisher copyright; quoted for research) |
+| raw/pubmed/validation_abstracts.txt | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=29151359,22285168,36546659,37870968,17463250,20129249 | 2026-11-14 | 24,780 | PubMed abstracts (publisher copyright; quoted for research) |
 | raw/pubmed/pmc_navito.xml | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=4668282,3025495 | 2026-11-14 | 133,956 | PMC copy; publisher / author-manuscript terms (research use) |
 
 Deleted after download (not used): NCI DTP doubling-time HTML (page redirected), Tarceva openFDA query (404), EMA Iressa PDF (HTTP 429).
