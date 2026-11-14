@@ -16,10 +16,12 @@ services:
     environment:
       # Sidecar-only. Never move these to task.toml [environment.env]: that
       # table is injected into `main`, where the agent can read it.
-      REMISSION_SEED: "407174012"
-      REMISSION_ADMIN_TOKEN: "c938455007e7805257a213f870820ab45b6f9f8eb1262d9c"
+      REMISSION_SEED: "1059807690"
+      REMISSION_WELLS: "384"
+      REMISSION_LAB_DAYS: "28"
+      REMISSION_ADMIN_TOKEN: "c297576462dfcfd19cc54a5e432d7725d2decae8112216f2"
       # A regimen known to cure this patient (found with the hidden parameters); only for the replay viewer.
-      REMISSION_BEST_KNOWN: "{\"regimen\": {\"phases\": [{\"days\": 84, \"doses\": {\"RAFi\": 2.0, \"EGFRi\": 1.0, \"MCLi\": 0.5}}]}, \"reward\": 0.516}"
+      REMISSION_BEST_KNOWN: "{\"regimen\": {\"phases\": [{\"days\": 84, \"doses\": {\"RAFi\": 0.5, \"MEKi\": 0.5, \"BCLi\": 1.5, \"MCLi\": 0.5}}]}, \"reward\": 0.563}"
     # Explicit networking, and no `expose:`. With a restricted network_mode
     # Harbor moves every service without explicit networking into its
     # egress-control namespace; the service name then stops resolving.

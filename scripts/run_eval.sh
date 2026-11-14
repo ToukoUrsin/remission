@@ -7,6 +7,8 @@
 #   guideline    submits the standard-of-care regimen for the tumour type, no experiment
 #   blind        submits the constant regimen that is best on average for the tumour type, no experiment
 #   screen       a three-day drug screen, then the best-looking pair at label doses
+#   hedge        sequencing only, then the regimen the public model rates best on average over every
+#                clone that could be hiding (regimen_search.py on the public typical values)
 #   agent        k attempts of a real agent
 #
 #   scripts/run_eval.sh [options] [TASK_DIR ...]
@@ -61,7 +63,7 @@ while [ $# -gt 0 ]; do
     --fresh) FRESH="$2"; shift 2 ;;
     --open) SEALED=0; shift ;;
     --model-host) MODEL_HOSTS+=("$2"); shift 2 ;;
-    -h|--help) sed -n '2,41p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,43p' "$0"; exit 0 ;;
     -*) echo "unknown option $1" >&2; exit 2 ;;
     *) TASKS+=("$1"); shift ;;
   esac
@@ -171,10 +173,12 @@ if [ "$RUN_BASE" = 1 ]; then
   run_phase guideline 1 "$HARBOR" run -a oracle --ae REMISSION_POLICY=guideline
   run_phase blind 1 "$HARBOR" run -a oracle --ae REMISSION_POLICY=blind
   run_phase screen 1 "$HARBOR" run -a oracle --ae REMISSION_POLICY=screen
+  run_phase hedge 1 "$HARBOR" run -a oracle --ae REMISSION_POLICY=hedge
 fi
 
 COLUMNS=("reference=$JOBS_DIR/$TAG-oracle" "do-nothing=$JOBS_DIR/$TAG-nop" "stop-early=$JOBS_DIR/$TAG-stop-early"
-         "guideline=$JOBS_DIR/$TAG-guideline" "blind=$JOBS_DIR/$TAG-blind" "screen=$JOBS_DIR/$TAG-screen")
+         "guideline=$JOBS_DIR/$TAG-guideline" "blind=$JOBS_DIR/$TAG-blind" "screen=$JOBS_DIR/$TAG-screen"
+         "hedge=$JOBS_DIR/$TAG-hedge")
 AGENT_COL=()
 
 if [ "$RUN_AGENT" = 1 ]; then

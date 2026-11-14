@@ -39,6 +39,10 @@ PRIMARY = {"BRAF V600E": "RAFi", "KRAS G12C": "KRASi", "EGFR L858R": "EGFRi"}
 SOFT = 10.0                             # cells; counts are compared as ln(count + SOFT)
 HIDDEN_GAIN = 8.0                       # a hidden clone is accepted when it lowers the fit's cost by this much
 LINE_COST = 8 + 16 + 16                 # wells to expand a line, sequence it and test the drugs on it
+PROBE_DAYS = 8                          # length of the cultures that look for clones nobody has seen
+SEL_SHARE0 = 0.005                      # share a clone nobody has seen is assumed to start from
+SEL_MIN = 0.10                          # share among a well's survivors from which sequencing their line would show it
+HYP_PRIOR = 0.12                        # weight of "a clone with this alteration is there" while no line has ruled it out
 
 
 def conc(**mult) -> dict:
@@ -392,7 +396,7 @@ class Scientist:
             warm = self.warm()
             trials = []
             for lab in M.ALTERATIONS:
-                if lab in self.major or lab in self.minors or lab in PRIMARY:
+                if lab not in self.unseen():
                     continue
                 st = Structure(self.major, self.minors + [lab], self.share_obs)
                 z0 = st.centre()
@@ -420,6 +424,94 @@ class Scientist:
             self.hidden.append(trials[0][1])
             self.say(f"a hidden clone with {trials[0][1]} explains the data better; added to the model")
             self.refit(starts=1, scan=False)
+
+    def hypothesis(self, lab: str, share: float):
+        """The fitted tumour plus one more minor clone carrying `lab` at `share`: (structure, fit vector)."""
+        st = Structure(self.major, self.minors + [lab], self.share_obs)
+        z = st.centre()
+        for name, val in self.warm().items():
+            if name in st.ix:
+                z[st.ix[name]] = val
+        z[st.ix[f"m{len(self.minors)}:share"]] = np.log(share)
+        return st, z
+
+    def untested(self) -> list[str]:
+        """Alterations a clone nobody has seen could carry and no sequenced line of survivors has ruled out."""
+        return [a for a in self.unseen() if a not in self.tested]
+
+    def selection(self, exp: dict) -> dict:
+        """What would the survivors of each well of a finished tumour culture hold, if a rare clone were there?
+
+        For every untested alteration: the share a clone carrying it (0.5 % of the biopsy) would have among the
+        cells alive at the end of each well, by the fitted model. -> {alteration: share [W]}
+        """
+        out = {}
+        for lab in self.untested():
+            st, z = self.hypothesis(lab, SEL_SHARE0)
+            K, P, ksh, tox, frac = st.build(z[None])
+            N = sim_wells(K, P, ksh, tox, list(range(1, st.C)), frac, exp["conc"], exp["nstep"], exp["reads"],
+                          M.SEED_CELLS * M.CAP_TUMOUR)[0][-1, 0]            # [W, clones] at the last read
+            out[lab] = N[:, -1] / np.maximum(N.sum(axis=1), 1e-9)
+        return out
+
+    def unseen(self) -> list[str]:
+        """Alterations a clone nobody has seen could carry: every known one the tumour is not known to have."""
+        return [a for a in M.ALTERATIONS if a not in self.major and a not in self.minors and a not in self.rejected
+                and not (a in ("BRAF V600E", "EGFR L858R") or (a == "EGFR T790M" and "EGFR L858R" not in self.major))]
+
+    def probe_wells(self, regimens: list[np.ndarray], per: int = 2, most: int = 18) -> list[dict]:
+        """Cultures whose survivors would be rich in a clone nobody has seen.
+
+        For every untested alteration the fitted tumour gets a 0.5 % clone carrying it, and a pool of a few
+        hundred drug conditions is simulated. Kept: the conditions that kill the known clones but leave that
+        clone alive, so that a line grown from the survivors and sequenced would show it.
+        """
+        labels = self.untested()
+        if not labels or most <= 0:
+            return []
+        rng = np.random.default_rng(23)
+        pool = []
+        for _ in range(480):
+            ds = rng.choice(M.ND, size=int(rng.integers(1, 5)), replace=False)
+            pool.append(conc(**{M.DRUGS[j]: float(rng.choice([0.5, 1.0, 2.0, 4.0])) for j in ds}))
+        for x in regimens:
+            pool += [self.well_of(x, 1.0), self.well_of(x, 2.0)]
+        cw = np.array([conc_vec(w) for w in pool])
+        nstep = int(round(PROBE_DAYS / M.DT))
+        score = {}
+        for lab in labels:
+            st, z = self.hypothesis(lab, SEL_SHARE0)
+            K, P, ksh, tox, frac = st.build(z[None])
+            N = sim_wells(K, P, ksh, tox, list(range(1, st.C)), frac, cw, nstep, [nstep], M.SEED_CELLS * M.CAP_TUMOUR)[0][-1, 0]
+            total = N.sum(axis=1)
+            share = N[:, -1] / np.maximum(total, 1e-9)
+            score[lab] = np.where((total >= 60) & (N[:, -1] >= 25), share, 0.0)        # enough alive to grow a line from
+        chosen: dict[int, list[str]] = {}
+        left = set(labels)
+        while left and len(chosen) < most:                                 # fewest wells that cover every alteration
+            gain = np.array([sum(min(score[a][j], 0.5) for a in left if score[a][j] >= 2 * SEL_MIN) for j in range(len(pool))])
+            for j in chosen:
+                gain[j] = 0.0
+            j = int(np.argmax(gain))
+            if gain[j] <= 0:
+                break
+            chosen[j] = [a for a in left if score[a][j] >= 2 * SEL_MIN]
+            left -= set(chosen[j])
+        order = list(chosen)
+        for lab in labels:                                                 # a second, different condition for each
+            if len(order) >= most:
+                break
+            for j in np.argsort(-score[lab]):
+                if score[lab][j] < 2 * SEL_MIN:
+                    break
+                if j not in chosen and all(set(pool[j]) != set(pool[i]) for i in chosen if lab in chosen[i]):
+                    chosen[int(j)] = [lab]
+                    order.append(int(j))
+                    break
+        self.say("selection wells for clones nobody has seen: " + ("; ".join(
+            "+".join(f"{d[:-1]} {v / CSS[M.IDX[d]]:g}x" for d, v in pool[j].items()) + " (" + ", ".join(a.split()[0] for a in chosen[j]) + ")"
+            for j in order[:8]) or "no condition would enrich one") + (f"; nothing for {sorted(a.split()[0] for a in left)}" if left else ""))
+        return [pool[j] for j in order]
 
     def fit(self, starts: int = 3, warm: dict | None = None, max_nfev: int = 40):
         """Least-squares fit of every free parameter to all filed data. Keeps the best of a few starts."""
@@ -463,22 +555,32 @@ class Scientist:
         return {} if self.z is None else {n: self.z[i] for n, i in self.st.ix.items()}
 
     # ------------------------------------------------------------------ regimens
-    def sets(self) -> list[dict]:
-        return [self.st.param_set(z) for z in self.ens]
+    def sets(self) -> tuple[list[dict], np.ndarray]:
+        """The worlds a regimen has to work in, with weights: the ensemble of fits, plus (once `robust` is on)
+        the fitted tumour with one more 1 % clone for every alteration that no line of survivors has ruled out."""
+        sets = [self.st.param_set(z) for z in self.ens]
+        hyp = []
+        if self.robust:
+            for lab in self.untested():
+                st, z = self.hypothesis(lab, 0.01)
+                hyp.append(st.param_set(z))
+        wh = min(HYP_PRIOR, 0.6 / max(len(hyp), 1))
+        w = np.array([(1.0 - wh * len(hyp)) / len(sets)] * len(sets) + [wh] * len(hyp))
+        return sets + hyp, w
 
     def expected(self, xs: np.ndarray) -> np.ndarray:
-        sets = self.sets()
-        _, rew = RS.score_plans(sets, np.ones(len(sets)) / len(sets), RS.plans_from_x(xs), shaped=False)
+        sets, w = self.sets()
+        _, rew = RS.score_plans(sets, w, RS.plans_from_x(xs), shaped=False)
         return rew
 
     def candidates(self, n: int, extra: list | None = None) -> list[np.ndarray]:
         """Constant-dose regimens with the best mean reward over the ensemble of fits, best first."""
-        sets = self.sets()
+        sets, w = self.sets()
         fast = self.budget == "fast"
         ex = np.array(extra) if extra else None
-        x, r, elite = RS.search(sets, iters=9 if fast else 14, pop=160 if fast else 256, elite=24, seed=int(self.rng.integers(1 << 30)),
-                                extra_x=ex, single_phase=True)
-        x, r = RS.polish(sets, x, rounds=2 if fast else 3, single_phase=True)
+        x, r, elite = RS.search(sets, weights=w, iters=9 if fast else 14, pop=160 if fast else 256, elite=24,
+                                seed=int(self.rng.integers(1 << 30)), extra_x=ex, single_phase=True)
+        x, r = RS.polish(sets, x, weights=w, rounds=2 if fast else 3, single_phase=True)
         out = [x]
         for e in elite:
             if len(out) >= n:
@@ -551,6 +653,16 @@ class Scientist:
                  if excess[i] > 1.0 and obs[i] >= 80 and obs[i] > 1.15 * prev[i]]
         return sorted(found, reverse=True)
 
+    def enriched(self, exp: dict, label: str) -> list[tuple[float, int]]:
+        """Wells of a tumour culture whose survivors the fit says are mostly the inferred clone `label`."""
+        K, P, ksh, tox, frac = self.st.build(self.z[None])
+        N = sim_wells(K, P, ksh, tox, list(range(1, self.st.C)), frac, exp["conc"], exp["nstep"], exp["reads"],
+                      M.SEED_CELLS * M.CAP_TUMOUR)[0][-1, 0]            # [W, clones] at the last read
+        share = N[:, 1 + self.minors.index(label)] / np.maximum(N.sum(axis=1), 1e-9)
+        obs = exp["counts"][:, -1]
+        found = [(float(share[i]) + min(1.0, obs[i] / 300.0), int(i)) for i in range(len(obs)) if obs[i] >= 45 and share[i] >= 0.6]
+        return sorted(found, reverse=True)
+
     def pick_wells(self, exp: dict, found: list[tuple[float, int]], k: int = 2) -> list[int]:
         """Up to k outgrowth wells whose drug sets differ, so that they can hold different clones."""
         picks: list[int] = []
@@ -567,7 +679,8 @@ class Scientist:
         chart = self.lab("patient_chart")
         major = list(chart["bulk_sequencing"]["alterations"])
         primary = next((PRIMARY[a] for a in major if a in PRIMARY), "MEKi")
-        self.major, self.minors, self.share_obs, self.hidden = major, [], {}, []
+        self.major, self.minors, self.share_obs, self.hidden, self.sought, self.rejected = major, [], {}, [], set(), set()
+        self.tested, self.running, self.robust = set(), [], False
         self.say(f"chart: {chart['tissue']}; {', '.join(major)}; driver drug {primary}")
 
         # ---- day 0: everything that needs time starts now
@@ -596,33 +709,58 @@ class Scientist:
         self.minors = list(self.share_obs)
         self.say(f"deep sequencing of the biopsy: minor clones {self.share_obs or 'none above 2 %'}")
         self.refit(starts=2)
-        self.expand(tpanel, 2)
+        self.expand(tpanel, 2, sel=2)
         pool: list[dict] = []
-        verA = self.verify(self.candidates(6), days=8, reads=[2, 4, 6, 8], low=True)
+        first_choice = self.candidates(5)
+        verA = self.verify(first_choice, days=8, reads=[2, 4, 6, 8], low=True)
+        spare = self.wells_left() - LINE_COST * (1 + sum(1 for ln in self.lines.values() if not ln.get("studied"))) - 16
+        pw = self.probe_wells(first_choice[:3], most=max(0, min(10, spare)))
+        probe = self.start("viability", "tumour", pw, PROBE_DAYS, [4, 6, PROBE_DAYS], tag="probe") if pw else None
         self.lab("advance_time", days=3)
 
-        # ---- day 13: name the resistant clones (sequencing) and test drugs on them
+        # ---- day 13: sequence the lines; test the drugs on those that grew back
         pending = self.study_lines()
-        self.lab("advance_time", days=5)
+        self.lab("advance_time", days=2)
 
-        # ---- day 18: refit with the clones named; a candidate whose culture grew back points to one more clone
+        # ---- day 15: the lines are named; a line that holds a new clone gets its drug test
         self.collect_lines(pending)
+        self.lab("advance_time", days=3)
+
+        # ---- day 18: refit with the clones named; from here a regimen must also hold against every clone that
+        #      no line has ruled out. Survivors of the selection wells and of a candidate that grew back: more lines
+        self.sweep()
         pool += self.collect_verify(verA)
+        probe = self.collect(probe)
+        self.robust = True
         self.refit(starts=2)
-        if verA["tumour"] is not None:
+        self.expand(probe, 1, sel=2)
+        if verA["tumour"] is not None and not any(not ln.get("studied") for ln in self.lines.values()):
             self.expand(next(e for e in self.data if e["id"] == verA["tumour"]["id"]), 1)
         cand = self.candidates(6, extra=[c["x"] for c in pool])
         cand = [x for x in cand if all(np.abs(x[:M.ND] - c["x"][:M.ND]).max() > 0.12 for c in pool)][:5]
         verB = self.verify(cand, days=9, reads=[2, 4, 6, 8, 9], low=False)
         self.lab("advance_time", days=3)
 
-        # ---- day 21: study a late line, if any
-        pending = self.study_lines()
-        self.lab("advance_time", days=6)
+        # ---- day 21: late lines: sequencing and the drug test at once
+        self.sweep()
+        late = self.study_lines(drugs=True)
+        self.lab("advance_time", days=2)
+
+        # ---- day 23: a clone named this late changes the choice; culture what the new fit prefers
+        verC = None
+        if self.collect_lines(late):
+            self.refit(starts=1, max_nfev=30)
+            seen = pool + [{"x": x} for x in verB["xs"]]
+            cand = self.candidates(4, extra=[c["x"] for c in seen])
+            cand = [x for x in cand if all(np.abs(x[:M.ND] - c["x"][:M.ND]).max() > 0.12 for c in seen)][:3]
+            verC = self.verify(cand, days=4, reads=[1, 2, 3, 4], low=False)
+        self.lab("advance_time", days=4)
 
         # ---- day 27: final fit and choice
-        self.collect_lines(pending)
+        self.sweep()
         pool += self.collect_verify(verB)
+        if verC:
+            pool += self.collect_verify(verC)
         self.refit(starts=1, max_nfev=30)
         tum = {e["id"]: e for e in self.data}
         for c in pool:
@@ -642,11 +780,41 @@ class Scientist:
             if best is None or r > best["expected"] + 0.15:
                 self.say("no cultured regimen is expected to cure under the final fit; taking the final search's best")
                 best = {"x": x, "expected": r, "explained": None}
+        best["x"], best["expected"] = self.step_down(best["x"], best["expected"])
         regimen = RS.regimen_from_x(best["x"])
         self.say(f"submitting {regimen} (expected reward {best['expected']:.2f})")
         r = self.lab("submit_regimen", regimen=regimen)
         return {"regimen": regimen, "expected": best["expected"], "explained": best["explained"],
                 "accepted": bool(r.get("accepted", False)), "minors": self.minors, "inferred": self.hidden, "notes": self.notes}
+
+    def step_down(self, x: np.ndarray, expected: float) -> tuple[np.ndarray, float]:
+        """Induction, then a lower maintenance dose: normal tissue is lost slowly, the tumour is killed fastest
+        while it is large. Kept only when every fitted world agrees that it is at least as good."""
+        sets, w = self.sets()
+        plans = RS.plans_from_x(x[None])
+        base = np.array([RS.score_plans([ps], [1.0], plans, shaped=False)[1][0] for ps in sets])
+        best = (x, expected, 0.0)
+        for share in (0.1, 0.2, 0.35):
+            x0 = x.copy()
+            x0[M.ND:2 * M.ND], x0[-1] = x0[:M.ND], share
+            x1, _ = RS.polish(sets, x0, weights=w, rounds=2, seed=int(self.rng.integers(1 << 30)))
+            new = np.array([RS.score_plans([ps], [1.0], RS.plans_from_x(x1[None]), shaped=False)[1][0] for ps in sets])
+            gain = float(w @ (new - base))
+            if gain > best[2] + 0.005 and np.all(new >= base - 0.02):
+                best = (x1, float(w @ new), gain)
+        if best[2] > 0:
+            # the fast model is well mixed; on the lattice a few cells of a resistant clone can outlast a short
+            # induction. Keep the step-down only if lesions simulated from the fits heal as often as before.
+            worlds = sets[:3] + sets[len(self.ens):][:2]
+            def healed(xx):
+                reg = RS.regimen_from_x(xx)
+                return float(np.mean([RS.lattice_reward(ps, reg, seed=17 + i, reps=4) for i, ps in enumerate(worlds)]))
+            was, now = healed(x), healed(best[0])
+            if now < was - 0.01:
+                self.say(f"step-down dropped: lesions simulated from the fits score {now:.2f} with it, {was:.2f} without")
+                return x, expected
+            self.say(f"stepping the dose down after an induction phase adds {best[2]:.2f}: {RS.regimen_from_x(best[0])}")
+        return best[0], best[1]
 
     # ------------------------------------------------------------------ steps
     def refit(self, starts: int = 2, max_nfev: int = 40, scan: bool = True):
@@ -659,22 +827,60 @@ class Scientist:
     def wells_left(self) -> int:
         return int(self.lab("lab_status").get("wells_left", 0))
 
-    def expand(self, exp: dict | None, k: int):
-        """Expand the survivors of up to k wells that grew back although the fit says they should not."""
+    @staticmethod
+    def wells_text(well: dict) -> str:
+        return "+".join(f"{d[:-1]} {v / CSS[M.IDX[d]]:.2g}x" for d, v in well.items()) or "no drug"
+
+    def expand(self, exp: dict | None, k: int, sel: int = 0):
+        """Expand the survivors of up to k wells that grew back although the fit says they should not, and of up
+        to `sel` wells whose survivors would show a clone nobody has seen."""
         if exp is None:
             return
         found = self.outgrowth(exp)
-        picks = self.pick_wells(exp, found, k) if found else []
-        self.say(f"{exp['id']}: unexplained regrowth in {len(found)} wells; expanding wells {picks}")
-        for i in picks:
+        picks = [(i, None) for i in (self.pick_wells(exp, found, k) if found else [])]
+        self.say(f"{exp['id']}: unexplained regrowth in {len(found)} wells; expanding wells {[i for i, _ in picks]}")
+        # a clone the fit only infers is isolated too: its line names it and measures what it responds to
+        if exp["cells"] == "tumour":
+            for label in self.hidden:
+                if label in self.sought or len(picks) >= k:
+                    continue
+                wells = [i for _, i in self.enriched(exp, label) if all(i != j for j, _ in picks)]
+                if wells:
+                    self.sought.add(label)
+                    picks.append((wells[0], label))
+                    self.say(f"{exp['id']}: well {wells[0]} should hold mostly the inferred {label} clone; expanding it")
+        picks = [(i, label, [], True) for i, label in picks]
+        sel = max(0, min(sel, 3 - len(picks)))
+        # survivors of the hardest selection: a rare resistant clone is a large share of them, so sequencing
+        # their line names it, or rules it out, even where the counts show nothing unusual
+        if exp["cells"] == "tumour" and sel > 0:
+            share, obs = self.selection(exp), exp["counts"][:, -1]
+            left, taken = set(share), {i for i, *_ in picks}
+            for _ in range(sel):
+                gain = np.array([sum(min(share[a][i], 0.5) for a in left if share[a][i] >= SEL_MIN) if obs[i] >= 45 and i not in taken else 0.0
+                                 for i in range(len(obs))])
+                i = int(np.argmax(gain)) if len(gain) else 0
+                if not left or gain[i] <= 0:
+                    break
+                covers = [a for a in left if share[a][i] >= SEL_MIN]
+                picks.append((i, None, covers, False))
+                taken.add(i)
+                left -= set(covers)
+                self.say(f"{exp['id']}: the survivors of well {i} ({self.wells_text(exp['wells'][i])}) would show a clone with "
+                         + ", ".join(a.split()[0] for a in covers) + "; expanding them")
+            if left:
+                self.say(f"{exp['id']}: no well would enrich {sorted(a.split()[0] for a in left)}")
+        for i, label, covers, study in picks:
             if self.wells_left() < LINE_COST + 12:
                 self.say("not enough wells left to study another line")
                 break
             r = self.lab("derive_line", experiment_id=exp["id"], well=i)
             if r.get("ok"):
-                self.lines[r["line"]] = {"well": i, "alterations": None, "sel": exp["wells"][i], "ready": r["ready_day"]}
+                self.lines[r["line"]] = {"well": i, "alterations": None, "sel": exp["wells"][i], "ready": r["ready_day"],
+                                         "sought": label, "covers": covers, "drugs": study}
+                self.tested |= set(covers)
 
-    def study_lines(self) -> dict:
+    def study_lines(self, drugs: bool = False) -> dict:
         """Sequence every new line and test the drugs on it. Returns the running experiments by line."""
         day = float(self.lab("lab_status").get("day", 0))
         out = {}
@@ -682,24 +888,61 @@ class Scientist:
             if line.get("studied") or line["ready"] > day + 1e-9:
                 continue
             line["studied"] = True
-            sel = line["sel"]
-            wells = [{}, sel] + [conc(**{d: 1.0}) for d in M.DRUGS] + [dict(sel, **conc(**{d: 1.0})) for d in M.DRUGS if d not in sel][:6]
-            out[name] = (self.start("sequencing", name), self.start("viability", name, wells, 5, [1, 2, 3, 4, 5]))
+            out[name] = (self.start("sequencing", name), self.test_line(name) if line.get("drugs", True) or drugs else None)
         return out
 
-    def collect_lines(self, pending: dict):
+    def test_line(self, name: str) -> dict | None:
+        """The drugs, alone and on top of what the line survived, on a derived line."""
+        line = self.lines[name]
+        sel = line["sel"]
+        days = min(5.0, float(self.lab("lab_status").get("days_left", 5)))
+        if line.get("tested") or days < 3 or self.wells_left() < 30:
+            return None
+        line["tested"] = True
+        wells = [{}, sel] + [conc(**{d: 1.0}) for d in M.DRUGS] + [dict(sel, **conc(**{d: 1.0})) for d in M.DRUGS if d not in sel][:6]
+        e = self.start("viability", name, wells, days, [r for r in (1, 2, 3, 4, 5) if r <= days])
+        if e:
+            self.running.append(e)
+        return e
+
+    def sweep(self):
+        """File every drug test on a line that has finished."""
+        for e in list(self.running):
+            if self.collect(e):
+                self.running.remove(e)
+
+    def collect_lines(self, pending: dict) -> bool:
+        """Read the lines' sequencing. Returns True when it named a clone that was not in the model."""
+        news = False
         for name, (s, _) in pending.items():
+            line = self.lines[name]
+            if line.get("alterations") is not None:
+                continue
             s = self.collect(s)
-            if s:
-                self.lines[name]["alterations"] = s["alterations"]
-                for a in s["alterations"]:
-                    if a not in self.major and a in M.ALTERATIONS and a not in self.minors:
-                        self.minors.append(a)
-                    if a in self.hidden:
-                        self.hidden.remove(a)
-                self.say(f"line {name} (survivors of {self.lines[name]['sel']}): {s['alterations']}")
-        for name, (_, v) in pending.items():
-            self.collect(v)
+            if not s:
+                continue
+            line["alterations"] = s["alterations"]
+            new = [a for a in s["alterations"] if a not in self.major and a in M.ALTERATIONS and a not in self.minors]
+            self.minors += new
+            for a in s["alterations"]:
+                if a in self.hidden:
+                    self.hidden.remove(a)
+            self.say(f"line {name} (survivors of {self.wells_text(line['sel'])}): {s['alterations']}")
+            for want in ([line["sought"]] if line.get("sought") else []) + list(line.get("covers") or []):
+                if want in s["alterations"]:
+                    continue
+                self.rejected.add(want)
+                if want in self.hidden:
+                    self.say(f"the line does not carry {want}; dropping that hypothesis")
+                    self.hidden.remove(want)
+                    self.minors.remove(want)
+            if line.get("covers"):
+                self.say(f"ruled out by line {name}: " + (", ".join(a.split()[0] for a in line["covers"] if a not in s["alterations"]) or "nothing"))
+            if new:
+                news = True
+                self.test_line(name)
+        self.sweep()
+        return news
 
     def verify(self, xs: list[np.ndarray], days: float, reads: list, low: bool) -> dict:
         """Culture tumour cells (two wells each) and healthy cells at the regimens' average concentrations."""

@@ -1,24 +1,304 @@
 {
  "description": "Trial response rates used in docs/validation.json part c that are not in clinical_trials.json. Checked against the PubMed abstracts saved in raw/pubmed/validation_abstracts.txt on 2026-11-14 unless marked unverified.",
  "trials": [
-  {"id": "FLAURA", "regimen": "osimertinib vs standard EGFR-TKI (gefitinib or erlotinib)", "indication": "untreated EGFR-mutated (ex19del / L858R) advanced NSCLC",
-   "ORR_pct": {"osimertinib": 80, "standard_EGFR_TKI": 76}, "median_PFS_months": {"osimertinib": 18.9, "standard_EGFR_TKI": 10.2},
-   "citation": "Soria JC et al. N Engl J Med 2018;378:113-125", "doi": "10.1056/NEJMoa1713137", "pmid": 29151359, "checked": "abstract"},
-  {"id": "EURTAC", "regimen": "erlotinib vs platinum chemotherapy", "indication": "EGFR-mutant advanced NSCLC, first line",
-   "ORR_pct": {"erlotinib": "unverified (58 % commonly cited; not in the abstract)"}, "median_PFS_months": {"erlotinib": 9.7, "chemotherapy": 5.2},
-   "citation": "Rosell R et al. Lancet Oncol 2012;13:239-46", "doi": "10.1016/S1470-2045(11)70393-X", "pmid": 22285168, "checked": "abstract (PFS only)"},
-  {"id": "KRYSTAL-1 CRC", "regimen": "adagrasib +/- cetuximab", "indication": "pretreated KRAS G12C metastatic colorectal cancer",
-   "ORR_pct": {"adagrasib": 19, "adagrasib+cetuximab": 46}, "n_evaluable": {"adagrasib": 43, "adagrasib+cetuximab": 28},
-   "median_PFS_months": {"adagrasib": 5.6, "adagrasib+cetuximab": 6.9},
-   "citation": "Yaeger R et al. N Engl J Med 2023;388:44-54", "doi": "10.1056/NEJMoa2212419", "pmid": 36546659, "checked": "abstract"},
-  {"id": "CodeBreaK 300", "regimen": "sotorasib 960 mg or 240 mg + panitumumab vs investigator's choice", "indication": "chemorefractory KRAS G12C metastatic colorectal cancer",
-   "ORR_pct": {"sotorasib960+panitumumab": 26.4, "sotorasib240+panitumumab": 5.7, "standard_care": 0}, "median_PFS_months": {"sotorasib960+panitumumab": 5.6, "standard_care": 2.2},
-   "citation": "Fakih MG et al. N Engl J Med 2023;389:2125-2139", "doi": "10.1056/NEJMoa2308795", "pmid": 37870968, "checked": "abstract"}
+  {
+   "id": "FLAURA",
+   "regimen": "osimertinib vs standard EGFR-TKI (gefitinib or erlotinib)",
+   "indication": "untreated EGFR-mutated (ex19del / L858R) advanced NSCLC",
+   "ORR_pct": {
+    "osimertinib": 80,
+    "standard_EGFR_TKI": 76
+   },
+   "median_PFS_months": {
+    "osimertinib": 18.9,
+    "standard_EGFR_TKI": 10.2
+   },
+   "citation": "Soria JC et al. N Engl J Med 2018;378:113-125",
+   "doi": "10.1056/NEJMoa1713137",
+   "pmid": 29151359,
+   "checked": "abstract"
+  },
+  {
+   "id": "EURTAC",
+   "regimen": "erlotinib vs platinum chemotherapy",
+   "indication": "EGFR-mutant advanced NSCLC, first line",
+   "ORR_pct": {
+    "erlotinib": "unverified (58 % commonly cited; not in the abstract)"
+   },
+   "median_PFS_months": {
+    "erlotinib": 9.7,
+    "chemotherapy": 5.2
+   },
+   "citation": "Rosell R et al. Lancet Oncol 2012;13:239-46",
+   "doi": "10.1016/S1470-2045(11)70393-X",
+   "pmid": 22285168,
+   "checked": "abstract (PFS only)"
+  },
+  {
+   "id": "KRYSTAL-1 CRC",
+   "regimen": "adagrasib +/- cetuximab",
+   "indication": "pretreated KRAS G12C metastatic colorectal cancer",
+   "ORR_pct": {
+    "adagrasib": 19,
+    "adagrasib+cetuximab": 46
+   },
+   "n_evaluable": {
+    "adagrasib": 43,
+    "adagrasib+cetuximab": 28
+   },
+   "median_PFS_months": {
+    "adagrasib": 5.6,
+    "adagrasib+cetuximab": 6.9
+   },
+   "citation": "Yaeger R et al. N Engl J Med 2023;388:44-54",
+   "doi": "10.1056/NEJMoa2212419",
+   "pmid": 36546659,
+   "checked": "abstract"
+  },
+  {
+   "id": "CodeBreaK 300",
+   "regimen": "sotorasib 960 mg or 240 mg + panitumumab vs investigator's choice",
+   "indication": "chemorefractory KRAS G12C metastatic colorectal cancer",
+   "ORR_pct": {
+    "sotorasib960+panitumumab": 26.4,
+    "sotorasib240+panitumumab": 5.7,
+    "standard_care": 0
+   },
+   "median_PFS_months": {
+    "sotorasib960+panitumumab": 5.6,
+    "standard_care": 2.2
+   },
+   "citation": "Fakih MG et al. N Engl J Med 2023;389:2125-2139",
+   "doi": "10.1056/NEJMoa2308795",
+   "pmid": 37870968,
+   "checked": "abstract"
+  }
  ],
  "mechanism_papers": [
-  {"claim": "MET amplification causes gefitinib resistance via ERBB3/PI3K; MET inhibition restores sensitivity; MET amplified in 4/18 (22 %) resistant specimens",
-   "citation": "Engelman JA et al. Science 2007;316:1039-43", "doi": "10.1126/science.1141478", "pmid": 17463250, "checked": "abstract"},
-  {"claim": "MET-amplified subpopulations exist before EGFR-TKI exposure; combined EGFR + MET inhibition cures resistance in vivo",
-   "citation": "Turke AB et al. Cancer Cell 2010;17:77-88", "doi": "10.1016/j.ccr.2009.11.022", "pmid": 20129249, "checked": "abstract"}
+  {
+   "claim": "MET amplification causes gefitinib resistance via ERBB3/PI3K; MET inhibition restores sensitivity; MET amplified in 4/18 (22 %) resistant specimens",
+   "citation": "Engelman JA et al. Science 2007;316:1039-43",
+   "doi": "10.1126/science.1141478",
+   "pmid": 17463250,
+   "checked": "abstract"
+  },
+  {
+   "claim": "MET-amplified subpopulations exist before EGFR-TKI exposure; combined EGFR + MET inhibition cures resistance in vivo",
+   "citation": "Turke AB et al. Cancer Cell 2010;17:77-88",
+   "doi": "10.1016/j.ccr.2009.11.022",
+   "pmid": 20129249,
+   "checked": "abstract"
+  }
+ ],
+ "toxicity_description": "Grade >=3 adverse-event rates used in docs/validation.json part f. 'all-cause' = any grade >=3 AE irrespective of causality; 'treatment-related' = attributed to the drugs. Checked on 2026-11-14 against the saved PubMed abstract or PMC full text named in 'checked'. Numbers that could not be found are listed with value null and marked unverified.",
+ "toxicity": [
+  {
+   "model": "RAFi",
+   "regimen": "dabrafenib",
+   "trial": "COMBI-d (monotherapy arm)",
+   "pct": 31,
+   "kind": "grade 3 or 4, all-cause",
+   "n": 211,
+   "citation": "Long GV et al. Lancet 2015;386:444-51",
+   "doi": "10.1016/S0140-6736(15)60898-4",
+   "pmid": 26037941,
+   "checked": "abstract (raw/pubmed/clin1.txt): 66 (31%) patients"
+  },
+  {
+   "model": "RAFi",
+   "regimen": "vemurafenib (BRAF V600E CRC)",
+   "trial": "Kopetz 2015 phase II pilot",
+   "pct": 71.4,
+   "kind": "at least one grade 3 AE, all-cause (cutaneous SCC counted as grade 3)",
+   "n": 21,
+   "citation": "Kopetz S et al. J Clin Oncol 2015;33:4032-8",
+   "doi": "10.1200/JCO.2015.63.2497",
+   "pmid": 26460303,
+   "checked": "PMC full text (raw/pubmed/PMC4669589.xml): 15 of 21 patients",
+   "context_only": "not used for the range: vemurafenib, not dabrafenib; pretreated CRC; all-cause; cutaneous SCC and keratoacanthoma counted as grade 3"
+  },
+  {
+   "model": "MEKi",
+   "regimen": "trametinib",
+   "trial": "METRIC",
+   "pct": null,
+   "kind": "unverified: no grade >= 3 rate in the abstract",
+   "citation": "Flaherty KT et al. N Engl J Med 2012;367:107-14",
+   "doi": "10.1056/NEJMoa1203421",
+   "pmid": 22663011,
+   "checked": "abstract (raw/pubmed/tox_abstracts.txt): no adverse-event rates in the abstract"
+  },
+  {
+   "model": "EGFRi",
+   "regimen": "osimertinib",
+   "trial": "FLAURA",
+   "pct": 34,
+   "kind": "grade 3 or higher, all-cause",
+   "citation": "Soria JC et al. N Engl J Med 2018;378:113-125",
+   "doi": "10.1056/NEJMoa1713137",
+   "pmid": 29151359,
+   "checked": "abstract (raw/pubmed/validation_abstracts.txt)"
+  },
+  {
+   "model": "EGFRi",
+   "regimen": "gefitinib or erlotinib",
+   "trial": "FLAURA (comparator arm)",
+   "pct": 45,
+   "kind": "grade 3 or higher, all-cause",
+   "citation": "Soria JC et al. N Engl J Med 2018;378:113-125",
+   "doi": "10.1056/NEJMoa1713137",
+   "pmid": 29151359,
+   "checked": "abstract (raw/pubmed/validation_abstracts.txt)"
+  },
+  {
+   "model": "KRASi",
+   "regimen": "adagrasib (KRAS G12C CRC)",
+   "trial": "KRYSTAL-1 (monotherapy)",
+   "pct": 34,
+   "kind": "grade 3 or 4, treatment-related",
+   "n": 44,
+   "citation": "Yaeger R et al. N Engl J Med 2023;388:44-54",
+   "doi": "10.1056/NEJMoa2212419",
+   "pmid": 36546659,
+   "checked": "abstract (raw/pubmed/validation_abstracts.txt)"
+  },
+  {
+   "model": "RAFi+MEKi",
+   "regimen": "dabrafenib + trametinib",
+   "trial": "COMBI-d",
+   "pct": 32,
+   "kind": "grade 3 or 4, all-cause",
+   "n": 209,
+   "citation": "Long GV et al. Lancet 2015;386:444-51",
+   "doi": "10.1016/S0140-6736(15)60898-4",
+   "pmid": 26037941,
+   "checked": "abstract (raw/pubmed/clin1.txt): 67 (32%) patients"
+  },
+  {
+   "model": "RAFi+MEKi",
+   "regimen": "dabrafenib + trametinib",
+   "trial": "COMBI-v",
+   "pct": null,
+   "kind": "unverified: abstract says only that severe AE rates were similar to vemurafenib",
+   "citation": "Robert C et al. N Engl J Med 2015;372:30-9",
+   "doi": "10.1056/NEJMoa1412690",
+   "pmid": 25399551,
+   "checked": "abstract (raw/pubmed/clin1.txt)"
+  },
+  {
+   "model": "RAFi+EGFRi",
+   "regimen": "encorafenib + cetuximab",
+   "trial": "BEACON CRC (doublet)",
+   "pct": 50,
+   "kind": "grade 3 or higher, all-cause",
+   "citation": "Kopetz S et al. N Engl J Med 2019;381:1632-1643",
+   "doi": "10.1056/NEJMoa1908075",
+   "pmid": 31566309,
+   "checked": "abstract (raw/pubmed/clin1.txt)"
+  },
+  {
+   "model": "RAFi+EGFRi",
+   "regimen": "encorafenib + cetuximab",
+   "trial": "BEACON CRC (doublet, updated)",
+   "pct": 57.4,
+   "kind": "grade 3 or higher, all-cause",
+   "citation": "Tabernero J et al. J Clin Oncol 2021;39:273-284",
+   "doi": "10.1200/JCO.20.02088",
+   "pmid": 33503393,
+   "checked": "abstract (raw/pubmed/clin1.txt)"
+  },
+  {
+   "model": "RAFi+EGFRi",
+   "regimen": "dabrafenib + panitumumab",
+   "trial": "Corcoran 2018 (D+P)",
+   "pct": 45,
+   "kind": "grade 3 or 4, all-cause",
+   "n": 20,
+   "citation": "Corcoran RB et al. Cancer Discov 2018;8:428-443",
+   "doi": "10.1158/2159-8290.CD-17-1226",
+   "pmid": 29431699,
+   "checked": "PMC full text (raw/pubmed/PMC5882509.xml)"
+  },
+  {
+   "model": "RAFi+MEKi+EGFRi",
+   "regimen": "encorafenib + binimetinib + cetuximab",
+   "trial": "BEACON CRC (triplet)",
+   "pct": 58,
+   "kind": "grade 3 or higher, all-cause",
+   "citation": "Kopetz S et al. N Engl J Med 2019;381:1632-1643",
+   "doi": "10.1056/NEJMoa1908075",
+   "pmid": 31566309,
+   "checked": "abstract (raw/pubmed/clin1.txt)"
+  },
+  {
+   "model": "RAFi+MEKi+EGFRi",
+   "regimen": "encorafenib + binimetinib + cetuximab",
+   "trial": "BEACON CRC (triplet, updated)",
+   "pct": 65.8,
+   "kind": "grade 3 or higher, all-cause",
+   "citation": "Tabernero J et al. J Clin Oncol 2021;39:273-284",
+   "doi": "10.1200/JCO.20.02088",
+   "pmid": 33503393,
+   "checked": "abstract (raw/pubmed/clin1.txt)"
+  },
+  {
+   "model": "RAFi+MEKi+EGFRi",
+   "regimen": "dabrafenib + trametinib + panitumumab",
+   "trial": "Corcoran 2018 (D+T+P)",
+   "pct": 70,
+   "kind": "grade 3 or 4, all-cause",
+   "n": 91,
+   "citation": "Corcoran RB et al. Cancer Discov 2018;8:428-443",
+   "doi": "10.1158/2159-8290.CD-17-1226",
+   "pmid": 29431699,
+   "checked": "PMC full text (raw/pubmed/PMC5882509.xml)"
+  },
+  {
+   "model": "KRASi+EGFRi",
+   "regimen": "adagrasib + cetuximab",
+   "trial": "KRYSTAL-1 (combination)",
+   "pct": 16,
+   "kind": "grade 3 or 4, treatment-related",
+   "n": 32,
+   "citation": "Yaeger R et al. N Engl J Med 2023;388:44-54",
+   "doi": "10.1056/NEJMoa2212419",
+   "pmid": 36546659,
+   "checked": "abstract (raw/pubmed/validation_abstracts.txt)"
+  },
+  {
+   "model": "KRASi+EGFRi",
+   "regimen": "sotorasib 960 mg + panitumumab",
+   "trial": "CodeBreaK 300",
+   "pct": 35.8,
+   "kind": "grade 3 or higher, treatment-related",
+   "citation": "Fakih MG et al. N Engl J Med 2023;389:2125-2139",
+   "doi": "10.1056/NEJMoa2308795",
+   "pmid": 37870968,
+   "checked": "abstract (raw/pubmed/validation_abstracts.txt)"
+  },
+  {
+   "model": "MEKi+PI3Ki",
+   "regimen": "PI3K/AKT/mTOR + RAF/MEK pathway inhibitor combinations (various phase I drugs and doses)",
+   "trial": "Shimizu 2012 (dual pathway)",
+   "pct": 53.9,
+   "kind": "drug-related grade >=3 (abstract prints 'grade >III'), pooled phase I; single-pathway agents 18.1 %",
+   "n": 76,
+   "citation": "Shimizu T et al. Clin Cancer Res 2012;18:2316-25",
+   "doi": "10.1158/1078-0432.CCR-11-2381",
+   "pmid": 22261800,
+   "checked": "abstract (raw/pubmed/clin2.txt)"
+  },
+  {
+   "model": "MEKi+PI3Ki",
+   "regimen": "buparlisib + trametinib (reduced doses: 60-70 mg + 1.5 mg)",
+   "trial": "Bedard 2015 phase Ib",
+   "pct": 65,
+   "kind": "grade 3 or 4, treatment-related",
+   "n": 113,
+   "citation": "Bedard PL et al. Clin Cancer Res 2015;21:730-8",
+   "doi": "10.1158/1078-0432.CCR-14-1814",
+   "pmid": 25500057,
+   "checked": "abstract (raw/pubmed/clin2.txt)"
+  }
  ]
 }

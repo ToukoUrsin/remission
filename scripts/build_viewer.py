@@ -440,8 +440,18 @@ def diagnose(score: dict, ep: dict, best: dict | None) -> dict:
                 f"lesion. Normal tissue dipped to {pct(1 - harm)} (harm {harm:.2f}).", tone="good", day=gone_day)
 
     summary = verdict + "."
-    return {"verdict": verdict, "success": bool(success), "callouts": callouts[:3], "summary": summary, "facts": facts,
-            "source": "derived"}
+    if not submitted:
+        tag = "nothing submitted"
+    elif main is not None and cured < 0.5:
+        tag = "regrew: " + labels[main].replace(" clone", "") + (", toxic" if toxic else "")
+    elif main is not None:
+        tag = f"cured {reps - relapsed} of {reps} lesions" + (", toxic" if toxic else "")
+    elif toxic:
+        tag = "tumour gone, too toxic"
+    else:
+        tag = "tumour gone"
+    return {"verdict": verdict, "tag": tag, "success": bool(success), "callouts": callouts[:3], "summary": summary,
+            "facts": facts, "source": "derived"}
 
 
 # ----------------------------------------------------------------------------- runs
@@ -537,10 +547,9 @@ def main() -> int:
             if not ep_path.exists():
                 exc = (result.get("exception_info") or {}).get("exception_message")
                 if not res_path.exists():
-                    print(f"  {label:<24} {pid:<8} still running (no result.json); left out")
-                    seen[pid] -= 1
-                    if not pat["runs"] and "chart" not in pat:
-                        patients.pop(pid)
+                    entry.update({"missing": True, "running": True, "reason": "still running"})
+                    pat["runs"].append(entry)
+                    print(f"  {label:<24} {pid:<8} still running (no result.json)")
                     continue
                 entry.update({"missing": True, "reason": (exc or "the run produced no episode")[:200]})
                 pat["runs"].append(entry)
@@ -566,10 +575,16 @@ def main() -> int:
                 bscore = {"reward": best["reward"], "healed": best["healed"], "harm": best["harm"]}
                 tot = [sum(r) for r in best["tumour"]]
                 gone = next((k for k in range(len(tot)) if all(v == 0 for v in tot[k:])), None)
+
+                def gone_at(col):
+                    return next((k for k in range(len(col)) if all(v == 0 for v in col[k:])), None)
+                bfacts = {"tumour_gone_day": gone, "healthy_gone_day": gone_at([float(v) for v in best["healthy"]]),
+                          "clones": [{"gone_day": gone_at([float(r[i]) for r in best["tumour"]])}
+                                     for i in range(len(best["tumour"][0]))]}
                 bobj = {"id": "best", "patient": pid, "label": "Best-known regimen", "kind": "best", "score": bscore,
                         "regimen": best["regimen"], "treat_end": b_end, "replay": pack_replay(best, b_end),
                         "diag": {"verdict": f"Tumour gone by day {gone}" if gone is not None else "Tumour not cleared",
-                                 "success": gone is not None, "source": "derived",
+                                 "success": gone is not None, "source": "derived", "facts": bfacts,
                                  "callouts": [{"key": "best", "tone": "note", "title": "Found with the hidden parameters",
                                                "detail": "A regimen known to cure this patient, searched with the true "
                                                          "parameter values the lab never shows. No experiments: it is the "
@@ -578,7 +593,8 @@ def main() -> int:
                 size = write_js(out / fname, "add", bobj)
                 written.append(fname)
                 pat["best"] = {"id": "best", "label": "Best-known regimen", "kind": "best", "file": fname, **bscore,
-                               "verdict": bobj["diag"]["verdict"]}
+                               "verdict": bobj["diag"]["verdict"], "tag": "tumour gone" if gone is not None else "",
+                               "success": gone is not None}
                 print(f"  {'Best-known regimen':<24} {pid:<8} reward {best['reward']:.2f}  {size / 1024:6.0f} KB")
 
             diag = diagnose(score, ep, best)
@@ -613,7 +629,7 @@ def main() -> int:
                           "cured": score["cured"], "submitted": bool(score.get("submitted")),
                           "wells_used": int(score.get("wells_used", 0)), "lab_days_used": score.get("lab_days_used", 0),
                           "n_experiments": int(score.get("n_experiments", 0)), "verdict": diag["verdict"],
-                          "success": diag["success"]})
+                          "tag": diag["tag"], "success": diag["success"]})
             pat["runs"].append(entry)
             flag = "  OVER 250 KB" if size > 250 * 1024 else ""
             print(f"  {label:<24} {pid:<8} reward {score['reward']:.2f}  {size / 1024:6.0f} KB{flag}")

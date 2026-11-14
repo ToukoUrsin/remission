@@ -17,6 +17,8 @@ services:
       # Sidecar-only. Never move these to task.toml [environment.env]: that
       # table is injected into `main`, where the agent can read it.
       REMISSION_SEED: "0"
+      REMISSION_WELLS: "384"
+      REMISSION_LAB_DAYS: "28"
       REMISSION_ADMIN_TOKEN: "template-token"
       # A regimen known to cure this patient (found with the hidden parameters); only for the replay viewer.
       REMISSION_BEST_KNOWN: "{}"

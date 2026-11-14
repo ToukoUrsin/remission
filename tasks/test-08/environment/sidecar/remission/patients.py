@@ -105,7 +105,9 @@ def make_patient(seed: int) -> dict:
         major["sA"] = min(major["sA"] + 0.2, 0.9)
         alts.append("pten")
     # Tumour cells are primed: their buffer barely covers their untreated death drive.
-    major["bcl"] = death_drive0(M.make_clone(**major)) * rng.uniform(1.30, 2.00)
+    # BRAF-mutant colorectal tumours are the least primed (their response rate to RAF/EGFR blockade is the
+    # lowest of the four tumour types: 20 to 27 % in BEACON CRC).
+    major["bcl"] = death_drive0(M.make_clone(**major)) * rng.uniform(1.30, 2.00) * (1.3 if arch == "BRAF_CRC" else 1.0)
     tumour = [M.make_clone(name="major", **major)]
     tumour[0]["alterations"] = list(alts)
 

@@ -1,0 +1,44 @@
+schema_version = "1.4"
+
+# Stamped by scripts/new_task.py. The seed is NOT in this file on purpose:
+# [environment.env] is injected into the agent's `main` container, so per-task
+# secrets for the sidecar live in environment/docker-compose.yaml instead.
+
+[task]
+name = "remission/dev-12"
+description = "Remission: work out how one patient's tumour and healthy cells respond in a simulated cell lab, then submit the regimen that cures the tumour without wrecking normal tissue."
+keywords = ["mcp", "sidecar", "rl-environment", "science", "oncology", "experiment-design", "pharmacology"]
+
+[metadata]
+family = "remission"
+seed_label = "dev-12"
+
+[agent]
+timeout_sec = 3600.0
+# Non-root agent: it cannot replace the interpreter the verifier uses or keep
+# root processes around. Remove this line to run the agent as root.
+user = "agent"
+
+[verifier]
+timeout_sec = 900.0
+user = "root"
+
+[environment]
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 10240
+network_mode = "public"
+
+[[environment.mcp_servers]]
+name = "remission"
+transport = "streamable-http"
+url = "http://remission:8000/mcp"
+
+# Gate agent start on the sidecar answering from inside `main`.
+[environment.healthcheck]
+command = "python3 -c \"import urllib.request; urllib.request.urlopen('http://remission:8000/health', timeout=5)\""
+interval_sec = 2.0
+timeout_sec = 10.0
+start_period_sec = 5.0
+retries = 90

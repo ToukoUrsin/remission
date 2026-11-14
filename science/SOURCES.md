@@ -88,6 +88,7 @@ Licence column: Sanger (GDSC / Cell Model Passports / GDSC Combinations) licence
 | raw/pubmed/pk.txt | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&id=<PMIDs> | 2026-11-14 | 21,223 | PubMed abstracts (publisher copyright; quoted for research) |
 | raw/pubmed/validation_abstracts.txt | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=29151359,22285168,36546659,37870968,17463250,20129249 | 2026-11-14 | 24,780 | PubMed abstracts (publisher copyright; quoted for research) |
 | raw/pubmed/pmc_navito.xml | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pmc&id=4668282,3025495 | 2026-11-14 | 133,956 | PMC copy; publisher / author-manuscript terms (research use) |
+| raw/pubmed/tox_abstracts.txt | https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&rettype=abstract&retmode=text&id=22663011 | 2026-11-14 | 4,016 | PubMed abstracts (publisher copyright; quoted for research) |
 
 Deleted after download (not used): NCI DTP doubling-time HTML (page redirected), Tarceva openFDA query (404), EMA Iressa PDF (HTTP 429).
 
@@ -120,6 +121,10 @@ Deleted after download (not used): NCI DTP doubling-time HTML (page redirected),
 | Shimizu T et al. Clin Cancer Res 2012 (dual-pathway phase I) | 10.1158/1078-0432.CCR-11-2381 | trials |
 | Bedard PL et al. Clin Cancer Res 2015 (buparlisib + trametinib) | 10.1158/1078-0432.CCR-14-1814 | trials |
 | Corcoran RB et al. Clin Cancer Res 2024 (navitoclax + trametinib) | 10.1158/1078-0432.CCR-23-3135 | trials |
+| Soria JC et al. N Engl J Med 2018 (FLAURA), PMID 29151359 | 10.1056/NEJMoa1713137 | trials, toxicity |
+| Yaeger R et al. N Engl J Med 2023 (KRYSTAL-1 CRC), PMID 36546659 | 10.1056/NEJMoa2212419 | trials, toxicity |
+| Fakih MG et al. N Engl J Med 2023 (CodeBreaK 300), PMID 37870968 | 10.1056/NEJMoa2308795 | trials, toxicity |
+| Flaherty KT et al. N Engl J Med 2012 (METRIC), PMID 22663011 | 10.1056/NEJMoa1203421 | toxicity (no rate in abstract: unverified) |
 | Hidalgo M et al. J Clin Oncol 2001 (erlotinib phase I), PMID 11432895 | 10.1200/JCO.2001.19.13.3267 | PK |
 | Lu JF et al. Clin Pharmacol Ther 2006 (erlotinib pop-PK), PMID 16890575 | 10.1016/j.clpt.2006.04.007 | PK |
 | Wilson WH et al. Lancet Oncol 2010 (navitoclax phase I), PMID 21094089, PMC3025495 | 10.1016/S1470-2045(10)70261-8 | PK |
@@ -150,3 +155,27 @@ Deleted after download (not used): NCI DTP doubling-time HTML (page redirected),
 
 - FDA labels (openFDA): Zelboraf, Tafinlar, Mekinist, Braftovi, Mektovi, Erbitux, Vectibix, erlotinib (generic), Iressa, Piqray, Venclexta (raw/fda_labels)
 - EMA SmPCs: Tafinlar, Mekinist, Braftovi, Tarceva, Piqray, Venclyxto, Erbitux (raw/ema)
+
+## Toxicity comparators (docs/validation.json part f)
+
+Grade ≥ 3 adverse-event rates, also in `science/validation_trials.json` → `toxicity`. Checked on 2026-11-14 in the file named. "All-cause" counts any grade ≥ 3 event; "treatment-related" only those attributed to the drugs.
+
+| Model regimen | Real regimen (trial) | Grade ≥ 3 AE | Kind | Checked in |
+|---|---|---|---|---|
+| RAFi | dabrafenib (COMBI-d monotherapy arm, n=211) | 31 % | all-cause, grade 3–4 | abstract, raw/pubmed/clin1.txt (PMID 26037941) |
+| RAFi | vemurafenib in BRAF CRC (Kopetz 2015, n=21) | 71.4 % | all-cause; context only, not used for the range | PMC full text, raw/pubmed/PMC4669589.xml |
+| MEKi | trametinib (METRIC) | **unverified** | – | abstract, raw/pubmed/tox_abstracts.txt: no rate given |
+| EGFRi | osimertinib (FLAURA) | 34 % | all-cause | abstract, raw/pubmed/validation_abstracts.txt (PMID 29151359) |
+| EGFRi | gefitinib or erlotinib (FLAURA comparator) | 45 % | all-cause | same |
+| KRASi | adagrasib (KRYSTAL-1 CRC, n=44) | 34 % | treatment-related, grade 3–4 | abstract, raw/pubmed/validation_abstracts.txt (PMID 36546659) |
+| RAFi+MEKi | dabrafenib + trametinib (COMBI-d, n=209) | 32 % | all-cause, grade 3–4 | abstract, raw/pubmed/clin1.txt (PMID 26037941) |
+| RAFi+MEKi | dabrafenib + trametinib (COMBI-v) | **unverified** | abstract says only "similar" to vemurafenib | abstract, raw/pubmed/clin1.txt (PMID 25399551) |
+| RAFi+EGFRi | encorafenib + cetuximab (BEACON doublet) | 50 % (2019), 57.4 % (2021 update) | all-cause | abstracts, raw/pubmed/clin1.txt (PMIDs 31566309, 33503393) |
+| RAFi+EGFRi | dabrafenib + panitumumab (Corcoran 2018, n=20) | 45 % | all-cause, grade 3–4 | PMC full text, raw/pubmed/PMC5882509.xml |
+| RAFi+MEKi+EGFRi | encorafenib + binimetinib + cetuximab (BEACON triplet) | 58 % (2019), 65.8 % (2021 update) | all-cause | abstracts, raw/pubmed/clin1.txt (PMIDs 31566309, 33503393) |
+| RAFi+MEKi+EGFRi | dabrafenib + trametinib + panitumumab (Corcoran 2018, n=91) | 70 % | all-cause, grade 3–4 | PMC full text, raw/pubmed/PMC5882509.xml |
+| KRASi+EGFRi | adagrasib + cetuximab (KRYSTAL-1 CRC, n=32) | 16 % | treatment-related, grade 3–4 | abstract, raw/pubmed/validation_abstracts.txt (PMID 36546659) |
+| KRASi+EGFRi | sotorasib 960 mg + panitumumab (CodeBreaK 300) | 35.8 % | treatment-related | abstract, raw/pubmed/validation_abstracts.txt (PMID 37870968) |
+| MEKi+PI3Ki | PI3K-pathway + MAPK-pathway phase I combinations, pooled (Shimizu 2012, n=76) | 53.9 % (single pathway 18.1 %) | drug-related; abstract prints "grade >III", read as grade ≥ 3 | abstract, raw/pubmed/clin2.txt (PMID 22261800) |
+| MEKi+PI3Ki | buparlisib + trametinib (Bedard 2015, n=113) | 65 % | treatment-related, grade 3–4 | abstract, raw/pubmed/clin2.txt (PMID 25500057) |
+

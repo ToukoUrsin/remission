@@ -6,6 +6,10 @@
                                  (chosen with hindsight over a development cohort), no experiment
     REMISSION_POLICY=screen      a three-day viability screen, then the combination that kills most
                                  tumour cells while sparing healthy cells, at label doses
+    REMISSION_POLICY=hedge       sequencing of the biopsy and nothing else, then the regimen that the public
+                                 model and regimen search rate best on average over every tumour it could
+                                 be: what sequencing shows plus, in turn, each resistant clone that could
+                                 hide below the detection limit, at the public typical parameter values
 """
 from __future__ import annotations
 
@@ -64,6 +68,26 @@ def screen():
     print(call("submit_regimen", regimen=constant({d: 1.0 for d in best})))
 
 
+def hedge():
+    """Cover everything that might be there instead of finding out what is."""
+    import regimen_search as RS
+    import scientist as S
+    major = list(call("patient_chart")["bulk_sequencing"]["alterations"])
+    seq = call("start_experiment", kind="sequencing", cells="tumour")
+    call("advance_time", days=2)
+    found = {a["alteration"]: a["cell_fraction"] for a in call("get_results", experiment_id=seq["id"])["alterations"]}
+    sci = S.Scientist(call, seed=0)
+    sci.major, sci.rejected, sci.tested = major, set(), set()
+    sci.share_obs = {a: f for a, f in found.items() if a not in major and a in M.ALTERATIONS}
+    sci.minors = list(sci.share_obs)
+    worlds = [st.param_set(z) for st, z in (sci.hypothesis(lab, 0.01) for lab in sci.unseen())]
+    x, _, _ = RS.search(worlds, iters=14, pop=256, seed=0)
+    x, r = RS.polish(worlds, x)
+    reg = RS.regimen_from_x(x)
+    print("hedge over", len(worlds), "possible tumours; expected reward", round(float(r), 3), json.dumps(reg))
+    print(call("submit_regimen", regimen=reg))
+
+
 def scientist():
     import scientist as S
     out = S.Scientist(call, seed=0).run()
@@ -72,4 +96,4 @@ def scientist():
 
 if __name__ == "__main__":
     policy = os.environ.get("REMISSION_POLICY", "scientist")
-    {"scientist": scientist, "guideline": guideline, "blind": blind, "screen": screen}[policy]()
+    {"scientist": scientist, "guideline": guideline, "blind": blind, "screen": screen, "hedge": hedge}[policy]()

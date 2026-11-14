@@ -42,6 +42,8 @@ HOST = os.environ.get("REMISSION_HOST", "0.0.0.0")
 PORT = int(os.environ.get("REMISSION_PORT", "8000"))
 KEEP_ALIVE_S = int(os.environ.get("REMISSION_KEEP_ALIVE_S", "7200"))
 SCORE_REPS = int(os.environ.get("REMISSION_SCORE_REPS", "16"))
+WELLS = int(os.environ.get("REMISSION_WELLS", "") or L.WELL_BUDGET)          # the suite's lab budget
+LAB_DAYS = float(os.environ.get("REMISSION_LAB_DAYS", "") or L.LAB_DAYS)
 try:                                    # a regimen known to cure this patient; shown in the replay, never to the agent
     BEST_KNOWN = json.loads(os.environ.get("REMISSION_BEST_KNOWN", "") or "{}")
 except ValueError:
@@ -53,8 +55,8 @@ def brief() -> dict:
     k, _ = M.pk_constants()
     return {
         "mission": (
-            "You run a precision-oncology lab for one patient. You have a biopsy of the tumour and matched healthy "
-            "cells from the same patient, 28 lab days and 384 wells. Work out how this patient's cells respond, then "
+            f"You run a precision-oncology lab for one patient. You have a biopsy of the tumour and matched healthy "
+            f"cells from the same patient, {LAB_DAYS:g} lab days and {WELLS} wells. Work out how this patient's cells respond, then "
             "submit ONE treatment regimen. After the session the patient is treated with it and followed for one year (364 days). "
             "Cure the tumour without wrecking the patient's normal tissue. Every patient here is refractory: the standard "
             "regimens for the tumour type do not cure them, and at least one regimen of these drugs does."),
@@ -79,8 +81,8 @@ def brief() -> dict:
         "drug_note": "avg_concentration_uM_at_dose_1 is the average concentration the tissue sees at the labelled daily "
                      "dose, in the same units as the wells: a well at that concentration matches dose 1.0 on average.",
         "lab": {
-            "clock": f"{L.LAB_DAYS} days; time passes only when you call advance_time; quarter-day resolution",
-            "wells": f"{L.WELL_BUDGET} in total; at most {L.MAX_WELLS} per experiment",
+            "clock": f"{LAB_DAYS:g} days; time passes only when you call advance_time; quarter-day resolution",
+            "wells": f"{WELLS} in total; at most {L.MAX_WELLS} per experiment",
             "cells": "'tumour' (the biopsy), 'healthy' (matched healthy cells), and lines you derive ('L1', 'L2', ...)",
             "assays": {
                 "viability": f"cells in wells at constant drug concentrations (micromolar), about {M.SEED_CELLS} cells seeded; "
@@ -90,7 +92,9 @@ def brief() -> dict:
                 "sequencing": f"alterations carried by at least {L.SEQ_LOD:.0%} of the cells of a cell source; costs "
                               f"{L.SEQ_COST} wells and takes {L.SEQ_DAYS:g} days",
                 "derive_line": f"expand the survivors of one well of a finished viability experiment into a new cell "
-                               f"source; costs {L.DERIVE_COST} wells and takes {L.DERIVE_DAYS:g} days",
+                               f"source; costs {L.DERIVE_COST} wells and takes {L.DERIVE_DAYS:g} days. The well must hold at "
+                               f"least {L.DERIVE_MIN_CELLS} live cells at the end of the experiment: from fewer nothing grows "
+                               f"out and the wells are spent",
             },
         },
         "model": {
@@ -104,6 +108,10 @@ def brief() -> dict:
                       "TUMOUR_RANGE) and what each alteration changes (ALTERATIONS).",
             "known": "Tumours often contain minor clones (well under 10 % of the cells) that already carry a resistance "
                      "alteration. The chart's bulk panel does not report clones under 10 %.",
+            "cohort": f"How the patients of this benchmark were chosen: in each of them at least one resistant clone is "
+                      f"below the detection limit of sequencing ({L.SEQ_LOD:.0%} of the cells), and it decides the outcome. "
+                      "The regimens that are best for the tumour sequencing of the biopsy shows do not cure, and neither "
+                      "does a regimen chosen to cover every clone that could be there without finding out which one is.",
         },
         "tools": ["get_brief", "patient_chart", "lab_status", "start_experiment", "derive_line", "advance_time",
                   "get_results", "submit_regimen"],
@@ -127,7 +135,7 @@ class Episode:
 
     def __init__(self, seed: int) -> None:
         self.patient = P.make_patient(seed)
-        self.lab = L.Lab(self.patient)
+        self.lab = L.Lab(self.patient, well_budget=WELLS, lab_days=LAB_DAYS)
         self.calls: list[dict[str, Any]] = []
         self.lock = threading.Lock()
         self.started_wall = time.time()

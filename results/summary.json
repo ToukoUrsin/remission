@@ -1,0 +1,39 @@
+{
+ "reference": "Reference scientist",
+ "labels": {
+  "fable": {
+   "runs": 4,
+   "tasks": 4,
+   "reward_mean": 0.562,
+   "reward_ci95": [
+    0.469,
+    0.655
+   ],
+   "cured_runs": 4,
+   "solved_runs": 4,
+   "classes": {
+    "solved": 4
+   },
+   "mistakes": {},
+   "wall_minutes_median": 10.9,
+   "tool_calls_median": 53.0
+  },
+  "opus": {
+   "runs": 4,
+   "tasks": 4,
+   "reward_mean": 0.513,
+   "reward_ci95": [
+    0.214,
+    0.692
+   ],
+   "cured_runs": 3,
+   "solved_runs": 4,
+   "classes": {
+    "solved": 4
+   },
+   "mistakes": {},
+   "wall_minutes_median": 10.5,
+   "tool_calls_median": 33.5
+  }
+ }
+}

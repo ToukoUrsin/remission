@@ -1,0 +1,1865 @@
+{
+ "_about": "Cohort patients of the named salts, in the order the salt generates them: every generated patient of the first `screened` that passes all six rules of remission/cohort.py. A suite is the first `count` of them with at most `per_type` of one tumour type (scripts/new_task.py --salt). best is the best constant-dose regimen of the cohort test's grid and its reward on the lattice; hedges are rule 6's two regimens with their reward on the real tumour.",
+ "remission-v3-test": {
+  "screened": 14000,
+  "passed_rules_1_to_5": 150,
+  "patients": [
+   {
+    "index": 408,
+    "seed": 1019416027,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 2.0,
+        "MEKi": 1.0,
+        "BCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.673,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.726,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.707,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 891,
+    "seed": 1551177275,
+    "archetype": "EGFR",
+    "hidden": [
+     "alt"
+    ],
+    "minors": [
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 0.25,
+        "METi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.615,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.537,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.432,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 1195,
+    "seed": 1586187126,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.25,
+        "MCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.724,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.549,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.541,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 1916,
+    "seed": 1059807690,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "ras",
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 0.5,
+        "BCLi": 1.5,
+        "MCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.563,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.472,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.447,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 3317,
+    "seed": 1451944932,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 2.0,
+        "BCLi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.591,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.327,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.278,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 3426,
+    "seed": 35568460,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 1.0,
+        "BCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.674,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.299,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.23,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 3779,
+    "seed": 2014354864,
+    "archetype": "EGFR",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 1.0,
+        "BCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.66,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.698,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.689,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 3872,
+    "seed": 253942617,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "mcl1",
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.5,
+        "METi": 0.5,
+        "BCLi": 0.5,
+        "MCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.551,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.677,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.633,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 3889,
+    "seed": 1661806466,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1",
+     "alt"
+    ],
+    "minors": [
+     "mcl1",
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "METi": 2.0,
+        "MCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.651,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.551,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.52,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 3973,
+    "seed": 561023924,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 1.0,
+        "BCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.53,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.563,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.524,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 4410,
+    "seed": 1635055385,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx",
+     "pten"
+    ],
+    "minors": [
+     "bclx",
+     "pten"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.5,
+        "MEKi": 0.5,
+        "METi": 1.5,
+        "BCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.569,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.495,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.466,
+      "reward": 0.002,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 4514,
+    "seed": 1762563845,
+    "archetype": "EGFR",
+    "hidden": [
+     "alt"
+    ],
+    "minors": [
+     "bclx",
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "MEKi": 0.5,
+        "EGFRi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.616,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.375,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.285,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 4800,
+    "seed": 322991120,
+    "archetype": "EGFR",
+    "hidden": [
+     "pten",
+     "t790m"
+    ],
+    "minors": [
+     "pten",
+     "t790m"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 2.0,
+        "MCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.537,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.497,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.395,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 5861,
+    "seed": 1439458463,
+    "archetype": "EGFR",
+    "hidden": [
+     "alt"
+    ],
+    "minors": [
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 0.25,
+        "METi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.575,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.301,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.234,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 5958,
+    "seed": 387287581,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 2.0,
+        "METi": 2.0,
+        "MCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.623,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.597,
+      "reward": 0.001,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.511,
+      "reward": 0.001,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 6412,
+    "seed": 1305950128,
+    "archetype": "EGFR",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 2.0,
+        "BCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.576,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.308,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.222,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 7151,
+    "seed": 2046911573,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "alt",
+     "mcl1"
+    ],
+    "minors": [
+     "alt",
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "METi": 2.0,
+        "MCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.523,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.454,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.428,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 7517,
+    "seed": 1212444909,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "pten"
+    ],
+    "minors": [
+     "pten"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.0,
+        "MEKi": 1.0,
+        "BCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.553,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.323,
+      "reward": 0.015,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.309,
+      "reward": 0.015,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 7732,
+    "seed": 334808188,
+    "archetype": "EGFR",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 0.5,
+        "MCLi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.534,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.603,
+      "reward": 0.005,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.568,
+      "reward": 0.004,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 8061,
+    "seed": 2140662377,
+    "archetype": "KRAS",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 1.0,
+        "KRASi": 0.5,
+        "BCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.521,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.317,
+      "reward": 0.006,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.204,
+      "reward": 0.007,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 8449,
+    "seed": 2129256489,
+    "archetype": "BRAF_CRC",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "EGFRi": 0.5,
+        "BCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.549,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.151,
+      "reward": 0.012,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.15,
+      "reward": 0.012,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 8658,
+    "seed": 318346904,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.0,
+        "MEKi": 1.0,
+        "MCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.562,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.471,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.344,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 9369,
+    "seed": 1464100753,
+    "archetype": "EGFR",
+    "hidden": [
+     "alt"
+    ],
+    "minors": [
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 0.25,
+        "METi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.569,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.477,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.284,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 9399,
+    "seed": 650142597,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 2.0,
+        "BCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.533,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.232,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.137,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 9487,
+    "seed": 1367041212,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1",
+     "mek1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 0.5,
+        "KRASi": 0.5,
+        "MCLi": 1.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.576,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.503,
+      "reward": 0.001,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.451,
+      "reward": 0.001,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 10266,
+    "seed": 1850100226,
+    "archetype": "EGFR",
+    "hidden": [
+     "alt",
+     "ras"
+    ],
+    "minors": [
+     "alt",
+     "ras"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "MEKi": 1.0,
+        "EGFRi": 0.5,
+        "BCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.516,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.468,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.432,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 10307,
+    "seed": 1906679306,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "alt"
+    ],
+    "minors": [
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.0,
+        "METi": 2.0,
+        "MCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.694,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.645,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.609,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 10439,
+    "seed": 1559685183,
+    "archetype": "EGFR",
+    "hidden": [
+     "t790m"
+    ],
+    "minors": [
+     "t790m",
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "MEKi": 0.25,
+        "BCLi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.582,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.497,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.435,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 10667,
+    "seed": 261312356,
+    "archetype": "EGFR",
+    "hidden": [
+     "bclx",
+     "ras"
+    ],
+    "minors": [
+     "bclx",
+     "ras"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 1.0,
+        "KRASi": 0.5,
+        "BCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.588,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.586,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.535,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 11090,
+    "seed": 1122405946,
+    "archetype": "EGFR",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 1.0,
+        "MCLi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.577,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.428,
+      "reward": 0.012,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.322,
+      "reward": 0.011,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 11558,
+    "seed": 2030086682,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx",
+     "alt"
+    ],
+    "minors": [
+     "bclx",
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "METi": 2.0,
+        "BCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.619,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.586,
+      "reward": 0.007,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.574,
+      "reward": 0.007,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 11707,
+    "seed": 1929913111,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 0.5,
+        "BCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.709,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.574,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.561,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 12518,
+    "seed": 1871410601,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1",
+     "mek1"
+    ],
+    "minors": [
+     "mcl1",
+     "mek1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 0.5,
+        "MCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.695,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.527,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.477,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 12934,
+    "seed": 1993709194,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1",
+     "ras"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.5,
+        "METi": 1.5,
+        "KRASi": 1.5,
+        "MCLi": 1.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.616,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.589,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.423,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 13696,
+    "seed": 516027265,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "pten",
+     "mcl1"
+    ],
+    "minors": [
+     "pten",
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.5,
+        "MEKi": 0.5,
+        "METi": 0.5,
+        "MCLi": 1.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.59,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.542,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.394,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 13849,
+    "seed": 1812254895,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 0.5,
+        "METi": 0.5,
+        "BCLi": 1.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.569,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.456,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.435,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   }
+  ]
+ },
+ "remission-v3-dev": {
+  "screened": 6000,
+  "passed_rules_1_to_5": 60,
+  "patients": [
+   {
+    "index": 80,
+    "seed": 412179855,
+    "archetype": "EGFR",
+    "hidden": [
+     "alt",
+     "bclx"
+    ],
+    "minors": [
+     "alt",
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 0.25,
+        "METi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.523,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.464,
+      "reward": 0.007,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.305,
+      "reward": 0.007,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 977,
+    "seed": 1362011159,
+    "archetype": "KRAS",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "MEKi": 1.0,
+        "KRASi": 0.5,
+        "MCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.594,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.22,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.151,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 1228,
+    "seed": 1273158636,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx",
+     "mek1"
+    ],
+    "minors": [
+     "bclx",
+     "mek1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "METi": 0.5,
+        "BCLi": 1.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.602,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.279,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.218,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 2522,
+    "seed": 1860180630,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "bclx"
+    ],
+    "minors": [
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.25,
+        "BCLi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.536,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.269,
+      "reward": 0.013,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.165,
+      "reward": 0.013,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 2998,
+    "seed": 2116994058,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "ras"
+    ],
+    "minors": [
+     "alt",
+     "ras"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.5,
+        "MEKi": 0.5,
+        "METi": 0.5,
+        "KRASi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.541,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.632,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.593,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 3868,
+    "seed": 34320406,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "ras",
+     "mcl1"
+    ],
+    "minors": [
+     "ras",
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 0.5,
+        "MEKi": 1.5,
+        "KRASi": 0.5,
+        "MCLi": 1.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.501,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.703,
+      "reward": 0.022,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.65,
+      "reward": 0.021,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 4113,
+    "seed": 1612755040,
+    "archetype": "EGFR",
+    "hidden": [
+     "mcl1",
+     "bclx"
+    ],
+    "minors": [
+     "mcl1",
+     "bclx"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 1.0,
+        "METi": 0.5,
+        "BCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.648,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.68,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.656,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 4237,
+    "seed": 1371310847,
+    "archetype": "KRAS",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "MEKi": 0.5,
+        "KRASi": 0.5,
+        "MCLi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.518,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.276,
+      "reward": 0.001,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.193,
+      "reward": 0.001,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 4402,
+    "seed": 1106456390,
+    "archetype": "EGFR",
+    "hidden": [
+     "alt"
+    ],
+    "minors": [
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 0.5,
+        "METi": 1.0,
+        "BCLi": 0.5
+       }
+      }
+     ]
+    },
+    "best_reward": 0.504,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.264,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.176,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 5074,
+    "seed": 401642786,
+    "archetype": "BRAF_MEL",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "ras",
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 2.0,
+        "MEKi": 2.0,
+        "METi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.549,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.633,
+      "reward": 0.001,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.622,
+      "reward": 0.001,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 5242,
+    "seed": 477804724,
+    "archetype": "EGFR",
+    "hidden": [
+     "mcl1"
+    ],
+    "minors": [
+     "mcl1"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "EGFRi": 0.25,
+        "MCLi": 0.25
+       }
+      }
+     ]
+    },
+    "best_reward": 0.516,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.334,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.221,
+      "reward": 0.0,
+      "lattice": 0.0
+     }
+    ]
+   },
+   {
+    "index": 5997,
+    "seed": 902252389,
+    "archetype": "BRAF_CRC",
+    "hidden": [
+     "alt"
+    ],
+    "minors": [
+     "alt"
+    ],
+    "best": {
+     "phases": [
+      {
+       "days": 84,
+       "doses": {
+        "RAFi": 1.0,
+        "EGFRi": 1.0,
+        "METi": 2.0
+       }
+      }
+     ]
+    },
+    "best_reward": 0.527,
+    "hedges": [
+     {
+      "hedge": "typical",
+      "expected": 0.274,
+      "reward": 0.0,
+      "lattice": 0.0
+     },
+     {
+      "hedge": "strong",
+      "expected": 0.264,
+      "reward": 0.001,
+      "lattice": 0.0
+     }
+    ]
+   }
+  ]
+ }
+}

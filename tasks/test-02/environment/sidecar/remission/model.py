@@ -54,9 +54,9 @@ PK = {
     "EGFRi": {"t_half_h": 36.0,  "css": 0.24},
     "METi":  {"t_half_h": 6.5,   "css": 0.060},
     "KRASi": {"t_half_h": 24.0,  "css": 0.50},
-    "PI3Ki": {"t_half_h": 9.0,   "css": 0.50},
+    "PI3Ki": {"t_half_h": 9.0,   "css": 2.5},
     "BCLi":  {"t_half_h": 17.0,  "css": 0.175},
-    "MCLi":  {"t_half_h": 12.0,  "css": 0.075},
+    "MCLi":  {"t_half_h": 12.0,  "css": 0.45},
 }
 CSS_LABEL = np.array([PK[d]["css"] for d in DRUGS])
 DOSE_MAX = 2.0          # highest allowed daily dose, as a multiple of the labelled dose
@@ -172,8 +172,8 @@ def step_feedback(p, F, E, E0, dt=DT):
 # Typical potency of each drug (K, micromolar: the concentration that occupies half of the target).
 # Between patients K varies about 2.2-fold (1 sd of ln K = 0.8). The same K holds for all of a
 # patient's cells, times the clone's `kshift` for that drug.
-K_TYPICAL = {"RAFi": 0.050, "MEKi": 0.0040, "EGFRi": 0.060, "METi": 0.020, "KRASi": 0.10, "PI3Ki": 0.20,
-             "BCLi": 0.070, "MCLi": 0.030}
+K_TYPICAL = {"RAFi": 0.050, "MEKi": 0.0040, "EGFRi": 0.060, "METi": 0.020, "KRASi": 0.10, "PI3Ki": 1.0,
+             "BCLi": 0.070, "MCLi": 0.18}
 K_LN_SD = 0.8
 # Off-target toxicity of each drug to the patient's healthy cells: extra death rate (per day) at the
 # concentration `css`. Median 0.02, and it varies a lot between patients and drugs (1 sd of ln = 1.2).
@@ -185,9 +185,10 @@ HEALTHY_RANGE = dict(fb=(1.0, 5.0), kp=(0.24, 0.50), kdmax=(0.6, 0.9), bfrac=(0.
                      sE=(0.45, 0.65), sA=(0.45, 0.65),
                      margin=(1.6, 2.6))      # bcl = margin x the cell's untreated death drive: not primed
 
-# The dominant tumour clone. `margin` as above: tumour cells are primed for apoptosis.
+# The dominant tumour clone. `margin` as above: tumour cells are primed for apoptosis (1.3 to 2.0;
+# BRAF-mutant colorectal tumours are the least primed, 1.7 to 2.6).
 TUMOUR_RANGE = dict(egfr=(0.005, 6.0), alt=(0.005, 1.5), fb=(0.5, 6.0), kp=(0.50, 0.90), kdmax=(0.9, 1.5),
-                    bfrac=(0.10, 0.40), mfrac=(0.10, 0.40), sE=(0.70, 0.95), sA=(0.25, 0.90), margin=(1.30, 2.00))
+                    bfrac=(0.10, 0.40), mfrac=(0.10, 0.40), sE=(0.70, 0.95), sA=(0.25, 0.90), margin=(1.30, 2.60))
 
 # What each alteration in a sequencing report does to a clone. (parameter, low, high, how)
 #   set: the parameter takes a value in [low, high]      mul: it is multiplied by a value in [low, high]

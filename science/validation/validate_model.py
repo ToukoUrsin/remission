@@ -10,7 +10,8 @@ Parts (see docs/MODEL.md):
   b  five mechanistic checks against classic papers
   c  label-dose guideline regimens in the unselected virtual population vs trial ORRs
   d  model PK constants vs label PK
-  e  benchmark cohort selection (summary of the development scan)
+  e  benchmark cohort selection (summary of the development scan; flagged stale if older than the model)
+  f  normal-tissue harm at label dose (single agents and standard combinations) vs grade >= 3 AE rates
 """
 from __future__ import annotations
 
@@ -108,6 +109,12 @@ def progression_day(T, T0):
     return int(hit[0]) if len(hit) else None
 
 
+def confirmed(rel, thr, gap=28):
+    """RECIST-like confirmed response: burden <= thr x baseline on some day d and again on day d + gap, both on treatment."""
+    ok = rel[:M.TREAT_DAYS + 1] <= thr
+    return bool(np.any(ok[:-gap] & ok[gap:]))
+
+
 def clinical(p, lattice_reps):
     reg = C.constant(C.GUIDELINES[p["archetype"]][0])
     plan = M.expand_regimen(reg)
@@ -122,9 +129,27 @@ def clinical(p, lattice_reps):
         best = (T[:, 1:M.TREAT_DAYS + 1].min(axis=1) / T[:, 0] - 1.0)
         out.update(lat_best=best.tolist(), lat_reward=lat["reward"].tolist(),
                    lat_elim=[bool(T[r, -1] == 0) for r in range(lattice_reps)],
+                   lat_confirmed30=[confirmed(T[r] / T[r, 0], 0.70) for r in range(lattice_reps)],
+                   lat_confirmed51=[confirmed(T[r] / T[r, 0], 0.49) for r in range(lattice_reps)],
                    lat_pd=[progression_day(T[r], T[r, 0]) for r in range(lattice_reps)],
                    lat_curve=(T.mean(axis=0)[::7] / T[:, 0].mean()).round(4).tolist())
     return out
+
+
+# Part f regimens: every class alone, then the standard combinations, all at label dose (1.0) for 84 days.
+TOX_REGIMENS = [(d,) for d in M.DRUGS] + [("RAFi", "MEKi"), ("RAFi", "EGFRi"), ("RAFi", "MEKi", "EGFRi"),
+                                          ("KRASi", "EGFRi"), ("MEKi", "PI3Ki")]
+TOX_THRESHOLD = 0.30      # "large harm": at least 30 % of the normal tissue lost at some point
+TOX_SWEEP = (0.10, 0.20, 0.30, 0.50, 0.80)
+
+
+def toxicity(p):
+    """harm (largest fractional loss of normal tissue, M.regimen_course) for each TOX_REGIMENS entry, with the
+    patient's off-target toxicity (healthy['tox']) and without it (on-target signalling effects only)."""
+    plans = np.stack([M.expand_regimen(C.constant({d: 1.0 for d in r})) for r in TOX_REGIMENS])
+    h = M.regimen_course(p["K"], [p["healthy"]], plans, full=False)["harm"]
+    h0 = M.regimen_course(p["K"], [dict(p["healthy"], tox=np.zeros(M.ND))], plans, full=False)["harm"]
+    return {"harm": h.round(4).tolist(), "harm_on_target": h0.round(4).tolist()}
 
 
 def work(args):
@@ -134,7 +159,7 @@ def work(args):
     major = p["tumour"][0]
     return {"i": i, "seed": seed, "arch": p["archetype"], "alts": list(major["alterations"]),
             "minors": [c["name"][6:] for c in p["tumour"][1:]], "frac": p["frac"].tolist(),
-            "dr": dose_response(p), "clin": clinical(p, lattice_reps)}
+            "dr": dose_response(p), "clin": clinical(p, lattice_reps), "tox": toxicity(p)}
 
 
 # ---------------------------------------------------------------------------
@@ -431,6 +456,8 @@ def part_c(res, lattice_reps):
                             "orr_like_51pct_area": round(float(np.mean(lb <= -0.51)), 3),
                             "median_best_change": round(float(np.median(lb)), 3),
                             "share_reward_ge_0.4": round(float(np.mean(lr >= 0.4)), 3),
+                            "confirmed_orr_like_30pct_burden": round(float(np.mean([x for s in sub for x in s["lat_confirmed30"]])), 3),
+                            "confirmed_orr_like_51pct_area": round(float(np.mean([x for s in sub for x in s["lat_confirmed51"]])), 3),
                             "share_eliminated_day364": round(float(np.mean([np.mean(s["lat_elim"]) for s in sub])), 3)}
             pdl = [x for s in sub for x in s["lat_pd"]]
             o["lattice"]["share_progressing_on_treatment"] = round(float(np.mean([d is not None and d <= M.TREAT_DAYS for d in pdl])), 3)
@@ -490,9 +517,55 @@ def part_d():
 # ---------------------------------------------------------------------------
 def part_e():
     path = os.path.join(SCI, "cohort_scan_summary.json")
-    if os.path.exists(path):
-        return json.load(open(path))
-    return {"note": "science/cohort_scan_summary.json missing; run science/validation/cohort_summary.py"}
+    if not os.path.exists(path):
+        return {"note": "science/cohort_scan_summary.json missing; run science/validation/cohort_summary.py"}
+    e = json.load(open(path))
+    newest = max(os.path.getmtime(os.path.join(ROOT, "remission", f)) for f in ("model.py", "patients.py", "cohort.py"))
+    if os.path.getmtime(path) < newest:
+        e["stale"] = ("science/cohort_scan_summary.json is older than remission/model.py, patients.py or cohort.py: "
+                      "the development scan was run on an earlier model and must be redone")
+    return e
+
+
+# ---------------------------------------------------------------------------
+# Part f: toxicity at label dose vs published grade >= 3 adverse-event rates
+# ---------------------------------------------------------------------------
+TOX_RULE = ("believable if the simulated share with harm >= %.2f lies within the verified published grade >= 3 AE "
+            "range widened by 10 percentage points on each side" % TOX_THRESHOLD)
+
+
+def part_f(res):
+    pub = json.load(open(os.path.join(SCI, "validation_trials.json")))["toxicity"]
+    H = np.array([r["tox"]["harm"] for r in res])
+    H0 = np.array([r["tox"]["harm_on_target"] for r in res])
+    rows = []
+    for j, reg in enumerate(TOX_REGIMENS):
+        key = "+".join(reg)
+        h, h0 = H[:, j], H0[:, j]
+        row = {"regimen": key, "n": int(len(h)),
+               "harm": {"median": round(float(np.median(h)), 3), "q25": round(float(np.percentile(h, 25)), 3),
+                        "q75": round(float(np.percentile(h, 75)), 3), "p90": round(float(np.percentile(h, 90)), 3)},
+               "share_harm_ge": {f"{t:.2f}": round(float(np.mean(h >= t)), 3) for t in TOX_SWEEP},
+               "share_harm_ge_threshold_on_target_only": round(float(np.mean(h0 >= TOX_THRESHOLD)), 3),
+               "median_harm_on_target_only": round(float(np.median(h0)), 3)}
+        refs = [x for x in pub if x["model"] == key]
+        row["published"] = [{k: x[k] for k in ("trial", "regimen", "pct", "kind", "pmid", "context_only") if k in x} for x in refs]
+        vals = [x["pct"] for x in refs if isinstance(x.get("pct"), (int, float)) and not x.get("context_only")]
+        sim = 100 * row["share_harm_ge"][f"{TOX_THRESHOLD:.2f}"]
+        if vals:
+            lo, hi = min(vals), max(vals)
+            row["published_range_pct"] = [lo, hi]
+            row["sim_minus_published_pct_points"] = round(sim - hi if sim > hi else (sim - lo if sim < lo else 0.0), 1)
+            row["believable"] = bool(lo - 10 <= sim <= hi + 10)
+        else:
+            row["published_range_pct"] = None
+            row["believable"] = None
+        row["_h"] = h
+        rows.append(row)
+    return {"population": "all validation patients (harm depends only on the patient's healthy cells and potencies)",
+            "regimen": "label dose (1.0) of every drug, once daily, days 0-83; harm read to day 364",
+            "harm_definition": "largest fractional loss of the patient's normal tissue (model.regimen_course)",
+            "threshold": TOX_THRESHOLD, "rule": TOX_RULE, "rows": rows}
 
 
 # ---------------------------------------------------------------------------
@@ -507,6 +580,11 @@ def _style(plt):
                          "grid.color": "#e6e5e1", "grid.linewidth": 0.8, "figure.dpi": 130, "savefig.dpi": 130})
 
 
+SHORT = {"BRAF V600E melanoma": "BRAF mel", "BRAF V600E colorectal": "BRAF CRC", "KRAS G12C (any solid)": "KRAS G12C*",
+         "KRAS-mutant colorectal": "KRAS CRC*", "EGFR-mutant NSCLC": "EGFR lung", "PIK3CA-mut or PTEN-null (any solid)": "PIK3CA/PTEN",
+         "melanoma + colorectal + NSCLC (all)": "mel+CRC+lung"}
+
+
 def fig_a(table, plt):
     fig, axes = plt.subplots(2, 4, figsize=(17, 8.5))
     for ax, d in zip(axes.flat, M.DRUGS):
@@ -517,12 +595,12 @@ def fig_a(table, plt):
             for dx, key, col in ((0, "_sim_ic", BLUE), (1, "_gdsc_ic", ORANGE)):
                 vals = np.array(r[key]) / np.log(10)
                 if len(vals):
-                    bp = ax.boxplot(vals, positions=[x + dx], widths=0.7, patch_artist=True, showfliers=False,
+                    bp = ax.boxplot(vals, positions=[x + dx], widths=0.7, patch_artist=True, showfliers=False, whis=(5, 95),
                                     medianprops=dict(color="black", linewidth=2))
                     for b in bp["boxes"]:
                         b.set(facecolor=col, alpha=0.75, edgecolor=col)
             pos.append(x + 0.5)
-            labels.append(r["sim_group"] + ("" if r["gdsc_drug"] == GDSC_DRUG[d][0] else f"\nvs {r['gdsc_drug']}") + f"\n(n={r['sim_ln_ic50']['n'] if r['sim_ln_ic50'] else 0}/"
+            labels.append(SHORT[r["gdsc_group"]] + ("" if r["gdsc_drug"] == GDSC_DRUG[d][0] else f"\n{r['gdsc_drug']}") + f"\n(n={r['sim_ln_ic50']['n'] if r['sim_ln_ic50'] else 0}/"
                           f"{r['gdsc_ln_ic50']['n'] if r['gdsc_ln_ic50'] else 0})")
         lo, hi = GDSC_DRUG[d][1], GDSC_DRUG[d][2]
         ax.axhspan(np.log10(lo), np.log10(hi), color="#f3f2ee", zorder=0)
@@ -538,7 +616,8 @@ def fig_a(table, plt):
                         Patch(color="#f3f2ee", label="GDSC screened range"),
                         Line2D([], [], color=GREY, ls="--", label="model css at label dose")],
                loc="lower center", ncol=4, frameon=False)
-    fig.suptitle("72 h single-agent IC50: simulated tumours vs GDSC2 lines (box = IQR, n = sim/GDSC)", fontsize=15)
+    fig.suptitle("72 h single-agent IC50: simulated tumours vs GDSC2 lines (box = IQR, whiskers 5-95 %, n = sim/GDSC)\n"
+                 "* sim = KRAS G12C CRC tumours; fitted IC50 capped at e^3 x top concentration", fontsize=14)
     fig.tight_layout(rect=[0, 0.05, 1, 0.96])
     fig.savefig(os.path.join(IMG, "val_gdsc_ic50.png"))
     plt.close(fig)
@@ -616,13 +695,13 @@ def fig_c(c, plt, lattice_reps):
     order = ["BRAF_MEL", "BRAF_CRC", "KRAS", "EGFR"]
     x = np.arange(len(order))
     sim30 = [100 * c[a][src]["orr_like_30pct_burden"] for a in order]
-    sim51 = [100 * c[a][src]["orr_like_51pct_area"] for a in order]
+    sim51 = [100 * c[a][src].get("confirmed_orr_like_30pct_burden", np.nan) for a in order]
     tr = [c[a]["trial_orr_pct"] for a in order]
     trlo = [c[a]["trial_orr_range_pct"][0] for a in order]
     trhi = [c[a]["trial_orr_range_pct"][1] for a in order]
     w = 0.27
     ax.bar(x - w, sim30, w * 0.92, color=BLUE, label="sim: burden −30 %")
-    ax.bar(x, sim51, w * 0.92, color=BLUE, alpha=0.45, label="sim: area −51 % (≈ diameter −30 %)")
+    ax.bar(x, sim51, w * 0.92, color=BLUE, alpha=0.45, label="sim: −30 %, confirmed 4 weeks later")
     ax.bar(x + w, tr, w * 0.92, color=ORANGE, label="pivotal trial ORR")
     ax.errorbar(x + w, tr, yerr=[np.array(tr) - trlo, np.array(trhi) - tr], fmt="none", ecolor="black", capsize=4)
     for xi, v in zip(x, sim30):
@@ -631,8 +710,11 @@ def fig_c(c, plt, lattice_reps):
         ax.text(xi + w, v + 1.5, f"{v:.0f}", ha="center", fontsize=11)
     ax.set_xticks(x)
     ax.set_xticklabels([ARCH_LABEL[a] for a in order], fontsize=11)
-    ax.set(ylabel="% of patients", ylim=(0, 105), title="Response-like rate, label-dose standard regimen")
-    ax.legend(frameon=False, loc="upper right", fontsize=10)
+    for xi, v in zip(x, sim51):
+        ax.text(xi, v + 1.5, f"{v:.0f}", ha="center", fontsize=11)
+    ax.set(ylabel="% of patients", ylim=(0, 132), title="Response-like rate, label-dose standard regimen")
+    ax.set_yticks([0, 20, 40, 60, 80, 100])
+    ax.legend(frameon=False, loc="upper center", ncol=2, fontsize=10)
     ax = axes[1]
     if lattice_reps:
         days = np.arange(0, M.FOLLOW_DAYS + 1, 7)
@@ -654,7 +736,13 @@ def fig_e(e, plt):
     if "by_type" not in e:
         return
     order = ["BRAF_MEL", "BRAF_CRC", "KRAS", "EGFR"]
-    cats = [("eligible (5 guidelines, approx.)", "#2a78d6"), ("eligible only with 3 guidelines", "#9cc0ec"),
+    for a in order:   # use the owner's exact 5-guideline cohort list where present
+        bt = e["by_type"][a]
+        if bt.get("eligible_v2_keep_list") is not None:
+            sh = bt["share"]
+            sh["eligible (5 guidelines)"] = bt["eligible_v2_keep_list"] / bt["n"]
+            sh["eligible only with 3 guidelines"] = (bt["eligible_3_guidelines"] - bt["eligible_v2_keep_list"]) / bt["n"]
+    cats = [("eligible (5 guidelines)", "#2a78d6"), ("eligible only with 3 guidelines", "#9cc0ec"),
             ("a guideline regimen works", ORANGE), ("no grid regimen cures", GREY), ("fails lattice checks", "#d8d7d2")]
     fig, ax = plt.subplots(figsize=(12, 5.5))
     left = np.zeros(len(order))
@@ -668,11 +756,56 @@ def fig_e(e, plt):
         left += vals
     ax.set_yticks(np.arange(len(order)))
     ax.set_yticklabels([f"{a} (n={e['by_type'][a]['n']})" for a in order])
-    ax.set(xlabel="% of generated patients", xlim=(0, 100), title="Who enters the benchmark cohort (development scan, 1600 patients)")
+    ax.set(xlabel="% of generated patients", xlim=(0, 100), title="Who enters the benchmark cohort (development scan, 1600 patients)"
+           + ("\nSTALE: scan predates the current model" if e.get("stale") else ""))
     ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, fontsize=10)
     ax.grid(axis="y", visible=False)
     fig.tight_layout()
     fig.savefig(os.path.join(IMG, "val_cohort.png"))
+    plt.close(fig)
+
+
+TOX_NOTE = ("Published (orange): RAFi = dabrafenib COMBI-d 31, vemurafenib in BRAF CRC 71 (hollow: context only); EGFRi = osimertinib 34, gefitinib/erlotinib 45 (FLAURA); "
+            "KRASi = adagrasib 34 (KRYSTAL-1);\nRAFi+MEKi = dabrafenib+trametinib 32 (COMBI-d); RAFi+EGFRi = encorafenib+cetuximab 50 / 57 (BEACON), "
+            "dabrafenib+panitumumab 45; RAFi+MEKi+EGFRi = BEACON triplet 58 / 66, D+T+P 70;\nKRASi+EGFRi = adagrasib+cetuximab 16 (treatment-related), "
+            "sotorasib+panitumumab 36 (CodeBreaK 300);\nMEKi+PI3Ki = dual-pathway phase I 54 (Shimizu 2012), buparlisib+trametinib 65 (Bedard 2015). "
+            "No verified rate for MEKi, METi, PI3Ki, BCLi, MCLi alone.")
+
+
+def fig_f(f, plt):
+    rows = f["rows"]
+    thr = f"{f['threshold']:.2f}"
+    fig, ax = plt.subplots(figsize=(17, 8))
+    x = np.arange(len(rows))
+    sim = np.array([100 * r["share_harm_ge"][thr] for r in rows])
+    on = np.array([100 * r["share_harm_ge_threshold_on_target_only"] for r in rows])
+    lo = np.array([100 * r["share_harm_ge"]["0.50"] for r in rows])
+    hi = np.array([100 * r["share_harm_ge"]["0.20"] for r in rows])
+    w = 0.38
+    ax.bar(x - w / 2, sim, w * 0.92, color=BLUE, label=f"sim: harm ≥ {f['threshold']:.1f} (whisker: ≥ 0.5 to ≥ 0.2)")
+    ax.errorbar(x - w / 2, sim, yerr=[sim - lo, hi - sim], fmt="none", ecolor="black", capsize=4)
+    ax.bar(x + w / 2, on, w * 0.92, color=BLUE, alpha=0.4, label=f"sim: harm ≥ {f['threshold']:.1f}, on-target only (no off-target term)")
+    first = True
+    for xi, r in zip(x, rows):
+        ax.text(xi - w / 2, sim[xi] + 1.5 if hi[xi] - sim[xi] < 3 else hi[xi] + 1.5, f"{sim[xi]:.0f}", ha="center", fontsize=11)
+        for pbl in r["published"]:
+            if isinstance(pbl.get("pct"), (int, float)):
+                ctx = bool(pbl.get("context_only"))
+                ax.plot(xi + w / 2, pbl["pct"], marker="D", ms=9, ls="none", markeredgecolor=ORANGE if ctx else "black",
+                        color="white" if ctx else ORANGE,
+                        label=("published, context only (not in range)" if ctx else "published grade ≥ 3 AE rate (verified)")
+                        if (ctx or first) else None)
+                first = first and ctx
+    ax.axvline(len(M.DRUGS) - 0.5, color=GREY, lw=1.2, ls="--")
+    ax.set_xticks(x)
+    ax.set_xticklabels([r["regimen"].replace("+", "+\n") for r in rows], fontsize=11)
+    ax.set(ylabel="% of patients", ylim=(0, 112),
+           title=f"Normal-tissue harm at label dose for 84 days (n = {rows[0]['n']} virtual patients) vs grade ≥ 3 adverse events")
+    ax.set_yticks([0, 20, 40, 60, 80, 100])
+    ax.legend(frameon=False, loc="upper left", fontsize=11)
+    fig.text(0.01, 0.01, TOX_NOTE, fontsize=10, color="#444444", va="bottom")
+    fig.tight_layout(rect=[0, 0.13, 1, 1])
+    fig.savefig(os.path.join(IMG, "val_toxicity.png"))
     plt.close(fig)
 
 
@@ -707,6 +840,7 @@ def main():
     Cc = part_c(res, a.lattice_reps)
     D = part_d()
     E = part_e()
+    Ff = part_f(res)
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -715,16 +849,18 @@ def main():
     fig_b(curves, B, plt)
     fig_c(Cc, plt, a.lattice_reps)
     fig_e(E, plt)
+    fig_f(Ff, plt)
     from collections import Counter
     out = {"command": "science/.venv/bin/python science/validation/validate_model.py",
            "population": {"salt": "validation", "n": a.n, "by_type": dict(Counter(r["arch"] for r in res)),
                           "lattice_reps": a.lattice_reps, "selection": "none (unselected generator output)"},
-           "a_gdsc": A, "b_mechanisms": B, "c_clinical": Cc, "d_pk": D, "e_cohort": E,
+           "a_gdsc": A, "b_mechanisms": B, "c_clinical": Cc, "d_pk": D, "e_cohort": E, "f_toxicity": Ff,
            "runtime_s": {"population": round(t1 - t0), "total": round(time.time() - t0)}}
     json.dump(strip(out), open(os.path.join(DOCS, "validation.json"), "w"), indent=1)
     print(json.dumps(strip({"a": {d: [(r["sim_group"], r.get("delta_log10_ic50_median")) for r in A[d]] for d in A},
                             "b": {k: v["pass"] for k, v in B.items()},
-                            "c": {k: (v.get("lattice", v["mean_model"])["orr_like_30pct_burden"], v["trial_orr_pct"]) for k, v in Cc.items()}}), indent=1))
+                            "c": {k: (v.get("lattice", v["mean_model"])["orr_like_30pct_burden"], v["trial_orr_pct"]) for k, v in Cc.items()},
+                            "f": {r["regimen"]: (r["share_harm_ge"][f"{TOX_THRESHOLD:.2f}"], r["published_range_pct"]) for r in Ff["rows"]}}), indent=1))
     print("done in %.0f s" % (time.time() - t0))
 
 

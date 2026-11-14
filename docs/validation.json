@@ -2,14 +2,14 @@
  "command": "science/.venv/bin/python science/validation/validate_model.py",
  "population": {
   "salt": "validation",
-  "n": 48,
+  "n": 600,
   "by_type": {
-   "EGFR": 13,
-   "KRAS": 10,
-   "BRAF_CRC": 14,
-   "BRAF_MEL": 11
+   "EGFR": 158,
+   "KRAS": 137,
+   "BRAF_CRC": 194,
+   "BRAF_MEL": 111
   },
-  "lattice_reps": 1,
+  "lattice_reps": 2,
   "selection": "none (unselected generator output)"
  },
  "a_gdsc": {
@@ -23,10 +23,10 @@
      10.0
     ],
     "sim_ln_ic50": {
-     "n": 11,
-     "median": 1.475,
-     "q25": -0.247,
-     "q75": 2.516
+     "n": 111,
+     "median": 0.188,
+     "q25": -1.26,
+     "q75": 2.318
     },
     "gdsc_ln_ic50": {
      "n": 38,
@@ -35,10 +35,10 @@
      "q75": 1.778
     },
     "sim_auc": {
-     "n": 11,
-     "median": 0.733,
-     "q25": 0.593,
-     "q75": 0.806
+     "n": 111,
+     "median": 0.651,
+     "q25": 0.487,
+     "q75": 0.798
     },
     "gdsc_auc": {
      "n": 38,
@@ -46,10 +46,10 @@
      "q25": 0.288,
      "q75": 0.82
     },
-    "sim_share_ic50_above_max": 0.273,
+    "sim_share_ic50_above_max": 0.252,
     "gdsc_share_ic50_above_max": 0.211,
-    "delta_log10_ic50_median": 1.02,
-    "delta_auc_median": 0.201
+    "delta_log10_ic50_median": 0.46,
+    "delta_auc_median": 0.119
    },
    {
     "sim_group": "BRAF CRC",
@@ -60,9 +60,9 @@
      10.0
     ],
     "sim_ln_ic50": {
-     "n": 14,
-     "median": 5.303,
-     "q25": 5.303,
+     "n": 194,
+     "median": 5.3,
+     "q25": 5.205,
      "q75": 5.303
     },
     "gdsc_ln_ic50": {
@@ -72,10 +72,10 @@
      "q75": 2.043
     },
     "sim_auc": {
-     "n": 14,
-     "median": 0.993,
-     "q25": 0.966,
-     "q75": 0.998
+     "n": 194,
+     "median": 1.0,
+     "q25": 0.998,
+     "q75": 1.0
     },
     "gdsc_auc": {
      "n": 7,
@@ -86,7 +86,7 @@
     "sim_share_ic50_above_max": 1.0,
     "gdsc_share_ic50_above_max": 0.143,
     "delta_log10_ic50_median": 1.68,
-    "delta_auc_median": 0.24
+    "delta_auc_median": 0.247
    }
   ],
   "MEKi": [
@@ -99,10 +99,10 @@
      1.0
     ],
     "sim_ln_ic50": {
-     "n": 11,
-     "median": -4.044,
-     "q25": -4.667,
-     "q75": -3.721
+     "n": 111,
+     "median": -4.291,
+     "q25": -5.002,
+     "q75": -3.804
     },
     "gdsc_ln_ic50": {
      "n": 40,
@@ -111,10 +111,10 @@
      "q75": -1.768
     },
     "sim_auc": {
-     "n": 11,
-     "median": 0.415,
-     "q25": 0.327,
-     "q75": 0.461
+     "n": 111,
+     "median": 0.38,
+     "q25": 0.278,
+     "q75": 0.45
     },
     "gdsc_auc": {
      "n": 40,
@@ -124,8 +124,8 @@
     },
     "sim_share_ic50_above_max": 0.0,
     "gdsc_share_ic50_above_max": 0.025,
-    "delta_log10_ic50_median": -0.15,
-    "delta_auc_median": -0.054
+    "delta_log10_ic50_median": -0.26,
+    "delta_auc_median": -0.09
    },
    {
     "sim_group": "BRAF CRC",
@@ -136,10 +136,10 @@
      1.0
     ],
     "sim_ln_ic50": {
-     "n": 14,
-     "median": -3.592,
-     "q25": -4.554,
-     "q75": -3.197
+     "n": 194,
+     "median": -2.907,
+     "q25": -3.796,
+     "q75": -2.345
     },
     "gdsc_ln_ic50": {
      "n": 7,
@@ -148,10 +148,10 @@
      "q75": -2.177
     },
     "sim_auc": {
-     "n": 14,
-     "median": 0.48,
-     "q25": 0.342,
-     "q75": 0.537
+     "n": 194,
+     "median": 0.578,
+     "q25": 0.451,
+     "q75": 0.658
     },
     "gdsc_auc": {
      "n": 7,
@@ -161,8 +161,8 @@
     },
     "sim_share_ic50_above_max": 0.0,
     "gdsc_share_ic50_above_max": 0.0,
-    "delta_log10_ic50_median": -0.03,
-    "delta_auc_median": -0.014
+    "delta_log10_ic50_median": 0.26,
+    "delta_auc_median": 0.084
    },
    {
     "sim_group": "KRAS G12C CRC",
@@ -173,10 +173,10 @@
      1.0
     ],
     "sim_ln_ic50": {
-     "n": 10,
-     "median": -4.055,
-     "q25": -4.654,
-     "q75": -3.519
+     "n": 137,
+     "median": -3.904,
+     "q25": -4.614,
+     "q75": -3.257
     },
     "gdsc_ln_ic50": {
      "n": 20,
@@ -185,10 +185,10 @@
      "q75": 0.633
     },
     "sim_auc": {
-     "n": 10,
-     "median": 0.413,
-     "q25": 0.328,
-     "q75": 0.491
+     "n": 137,
+     "median": 0.435,
+     "q25": 0.334,
+     "q75": 0.528
     },
     "gdsc_auc": {
      "n": 20,
@@ -198,8 +198,45 @@
     },
     "sim_share_ic50_above_max": 0.0,
     "gdsc_share_ic50_above_max": 0.4,
-    "delta_log10_ic50_median": -1.24,
-    "delta_auc_median": -0.313
+    "delta_log10_ic50_median": -1.17,
+    "delta_auc_median": -0.291
+   },
+   {
+    "sim_group": "KRAS G12C CRC",
+    "gdsc_group": "KRAS-mutant colorectal",
+    "gdsc_drug": "Trametinib",
+    "range_uM": [
+     0.001,
+     1.0
+    ],
+    "sim_ln_ic50": {
+     "n": 137,
+     "median": -3.904,
+     "q25": -4.614,
+     "q75": -3.257
+    },
+    "gdsc_ln_ic50": {
+     "n": 26,
+     "median": -2.169,
+     "q25": -3.35,
+     "q75": -0.962
+    },
+    "sim_auc": {
+     "n": 137,
+     "median": 0.435,
+     "q25": 0.334,
+     "q75": 0.528
+    },
+    "gdsc_auc": {
+     "n": 26,
+     "median": 0.652,
+     "q25": 0.514,
+     "q75": 0.737
+    },
+    "sim_share_ic50_above_max": 0.0,
+    "gdsc_share_ic50_above_max": 0.115,
+    "delta_log10_ic50_median": -0.75,
+    "delta_auc_median": -0.216
    }
   ],
   "EGFRi": [
@@ -212,10 +249,10 @@
      2.0
     ],
     "sim_ln_ic50": {
-     "n": 13,
-     "median": -4.052,
-     "q25": -4.275,
-     "q75": -3.568
+     "n": 158,
+     "median": -4.054,
+     "q25": -4.702,
+     "q75": -3.47
     },
     "gdsc_ln_ic50": {
      "n": 7,
@@ -224,10 +261,10 @@
      "q75": 0.776
     },
     "sim_auc": {
-     "n": 13,
+     "n": 158,
      "median": 0.316,
-     "q25": 0.283,
-     "q75": 0.386
+     "q25": 0.229,
+     "q75": 0.4
     },
     "gdsc_auc": {
      "n": 7,
@@ -238,7 +275,44 @@
     "sim_share_ic50_above_max": 0.0,
     "gdsc_share_ic50_above_max": 0.286,
     "delta_log10_ic50_median": -1.9,
-    "delta_auc_median": -0.331
+    "delta_auc_median": -0.332
+   },
+   {
+    "sim_group": "EGFR lung",
+    "gdsc_group": "EGFR-mutant NSCLC",
+    "gdsc_drug": "Osimertinib",
+    "range_uM": [
+     0.001,
+     1.0
+    ],
+    "sim_ln_ic50": {
+     "n": 158,
+     "median": -4.054,
+     "q25": -4.702,
+     "q75": -3.47
+    },
+    "gdsc_ln_ic50": {
+     "n": 7,
+     "median": -2.605,
+     "q25": -3.288,
+     "q75": -1.115
+    },
+    "sim_auc": {
+     "n": 158,
+     "median": 0.316,
+     "q25": 0.229,
+     "q75": 0.4
+    },
+    "gdsc_auc": {
+     "n": 7,
+     "median": 0.592,
+     "q25": 0.52,
+     "q75": 0.719
+    },
+    "sim_share_ic50_above_max": 0.0,
+    "gdsc_share_ic50_above_max": 0.286,
+    "delta_log10_ic50_median": -0.63,
+    "delta_auc_median": -0.276
    },
    {
     "sim_group": "BRAF CRC",
@@ -249,9 +323,9 @@
      2.0
     ],
     "sim_ln_ic50": {
-     "n": 14,
+     "n": 194,
      "median": 3.693,
-     "q25": 2.175,
+     "q25": 2.711,
      "q75": 3.693
     },
     "gdsc_ln_ic50": {
@@ -261,10 +335,10 @@
      "q75": 4.429
     },
     "sim_auc": {
-     "n": 14,
-     "median": 0.915,
-     "q25": 0.853,
-     "q75": 0.95
+     "n": 194,
+     "median": 0.92,
+     "q25": 0.893,
+     "q75": 0.947
     },
     "gdsc_auc": {
      "n": 7,
@@ -272,10 +346,10 @@
      "q25": 0.952,
      "q75": 0.978
     },
-    "sim_share_ic50_above_max": 0.929,
+    "sim_share_ic50_above_max": 0.995,
     "gdsc_share_ic50_above_max": 1.0,
     "delta_log10_ic50_median": 0.02,
-    "delta_auc_median": -0.047
+    "delta_auc_median": -0.042
    }
   ],
   "METi": [
@@ -288,7 +362,7 @@
      10.0
     ],
     "sim_ln_ic50": {
-     "n": 48,
+     "n": 600,
      "median": 5.303,
      "q25": 5.303,
      "q75": 5.303
@@ -300,9 +374,9 @@
      "q75": 3.558
     },
     "sim_auc": {
-     "n": 48,
-     "median": 0.992,
-     "q25": 0.951,
+     "n": 600,
+     "median": 0.996,
+     "q25": 0.977,
      "q75": 0.999
     },
     "gdsc_auc": {
@@ -311,10 +385,10 @@
      "q25": 0.866,
      "q75": 0.935
     },
-    "sim_share_ic50_above_max": 0.958,
+    "sim_share_ic50_above_max": 0.97,
     "gdsc_share_ic50_above_max": 0.605,
     "delta_log10_ic50_median": 1.14,
-    "delta_auc_median": 0.091
+    "delta_auc_median": 0.095
    }
   ],
   "KRASi": [
@@ -327,9 +401,9 @@
      20.0
     ],
     "sim_ln_ic50": {
-     "n": 10,
+     "n": 137,
      "median": 5.996,
-     "q25": 5.439,
+     "q25": 5.273,
      "q75": 5.996
     },
     "gdsc_ln_ic50": {
@@ -339,10 +413,10 @@
      "q75": 6.48
     },
     "sim_auc": {
-     "n": 10,
-     "median": 0.953,
-     "q25": 0.889,
-     "q75": 0.985
+     "n": 137,
+     "median": 0.932,
+     "q25": 0.849,
+     "q75": 0.982
     },
     "gdsc_auc": {
      "n": 19,
@@ -350,10 +424,10 @@
      "q25": 0.92,
      "q75": 0.977
     },
-    "sim_share_ic50_above_max": 1.0,
+    "sim_share_ic50_above_max": 0.905,
     "gdsc_share_ic50_above_max": 0.947,
     "delta_log10_ic50_median": 0.08,
-    "delta_auc_median": 0.007
+    "delta_auc_median": -0.014
    }
   ],
   "PI3Ki": [
@@ -366,10 +440,10 @@
      5.0
     ],
     "sim_ln_ic50": {
-     "n": 14,
-     "median": 0.589,
-     "q25": 0.001,
-     "q75": 1.228
+     "n": 178,
+     "median": 2.208,
+     "q25": 1.391,
+     "q75": 2.92
     },
     "gdsc_ln_ic50": {
      "n": 164,
@@ -378,10 +452,10 @@
      "q75": 4.272
     },
     "sim_auc": {
-     "n": 14,
-     "median": 0.82,
-     "q25": 0.756,
-     "q75": 0.905
+     "n": 178,
+     "median": 0.939,
+     "q25": 0.891,
+     "q75": 0.966
     },
     "gdsc_auc": {
      "n": 164,
@@ -389,10 +463,10 @@
      "q25": 0.873,
      "q75": 0.967
     },
-    "sim_share_ic50_above_max": 0.143,
+    "sim_share_ic50_above_max": 0.697,
     "gdsc_share_ic50_above_max": 0.848,
-    "delta_log10_ic50_median": -1.11,
-    "delta_auc_median": -0.111
+    "delta_log10_ic50_median": -0.41,
+    "delta_auc_median": 0.008
    }
   ],
   "BCLi": [
@@ -405,9 +479,9 @@
      10.0
     ],
     "sim_ln_ic50": {
-     "n": 48,
-     "median": 3.721,
-     "q25": -0.155,
+     "n": 600,
+     "median": 5.303,
+     "q25": 1.469,
      "q75": 5.303
     },
     "gdsc_ln_ic50": {
@@ -417,10 +491,10 @@
      "q75": 3.468
     },
     "sim_auc": {
-     "n": 48,
-     "median": 0.834,
-     "q25": 0.645,
-     "q75": 0.919
+     "n": 600,
+     "median": 0.893,
+     "q25": 0.755,
+     "q75": 0.974
     },
     "gdsc_auc": {
      "n": 205,
@@ -428,10 +502,10 @@
      "q25": 0.836,
      "q75": 0.943
     },
-    "sim_share_ic50_above_max": 0.583,
+    "sim_share_ic50_above_max": 0.69,
     "gdsc_share_ic50_above_max": 0.537,
-    "delta_log10_ic50_median": 0.55,
-    "delta_auc_median": -0.072
+    "delta_log10_ic50_median": 1.23,
+    "delta_auc_median": -0.014
    }
   ],
   "MCLi": [
@@ -444,9 +518,9 @@
      10.0
     ],
     "sim_ln_ic50": {
-     "n": 48,
-     "median": 3.012,
-     "q25": -0.77,
+     "n": 600,
+     "median": 5.127,
+     "q25": 1.954,
      "q75": 5.303
     },
     "gdsc_ln_ic50": {
@@ -456,10 +530,10 @@
      "q75": 6.241
     },
     "sim_auc": {
-     "n": 48,
-     "median": 0.765,
-     "q25": 0.528,
-     "q75": 0.917
+     "n": 600,
+     "median": 0.907,
+     "q25": 0.773,
+     "q75": 0.977
     },
     "gdsc_auc": {
      "n": 152,
@@ -467,56 +541,73 @@
      "q25": 0.953,
      "q75": 0.981
     },
-    "sim_share_ic50_above_max": 0.542,
+    "sim_share_ic50_above_max": 0.718,
     "gdsc_share_ic50_above_max": 0.888,
-    "delta_log10_ic50_median": -1.06,
-    "delta_auc_median": -0.208
+    "delta_log10_ic50_median": -0.14,
+    "delta_auc_median": -0.066
    }
   ]
  },
  "b_mechanisms": {
   "i_erk_rebound": {
-   "crc_nadir": 0.6917,
-   "crc_24h": 0.7955,
-   "mel_nadir": 0.3219,
-   "mel_24h": 0.4993,
-   "crc_rafi_egfri_24h": 0.5043,
+   "crc_nadir": 0.7021,
+   "crc_24h": 0.8073,
+   "mel_nadir": 0.3007,
+   "mel_24h": 0.4432,
+   "crc_rafi_egfri_24h": 0.5604,
    "literature": "Corcoran 2012: CRC pERK recovers to ~25-50 % of baseline by 24 h; melanoma suppression sustained over 24 h",
    "pass": false,
-   "crc_24h_in_25_50pct": false
+   "crc_24h_in_25_50pct": false,
+   "crc_nadir_1uM": 0.6416,
+   "crc_24h_1uM": 0.7815,
+   "mel_nadir_1uM": 0.1621,
+   "mel_24h_1uM": 0.3639,
+   "crc_rafi_meki_24h": 0.4415,
+   "crc_rafi_meki_biopsy_note": "Corcoran 2015 (clinical_trials.json): on-treatment pERK reduction 47 +/- 24 % in CRC biopsies on dabrafenib+trametinib"
   },
   "ii_paradox": {
-   "kras_max_erk_fold": 1.1831,
-   "healthy_max_erk_fold": 1.7186,
-   "braf_mel_erk_at_css": 0.393,
-   "kras_viability72_rafi_css": 0.9998,
+   "kras_max_erk_fold": 1.1856,
+   "healthy_max_erk_fold": 1.7183,
+   "braf_mel_erk_at_css": 0.3661,
+   "kras_viability72_rafi_css": 1.0009,
    "literature": "Poulikakos 2010, Hatzivassiliou 2010: RAF inhibitors raise pMEK/pERK in BRAF-wt cells with active RAS; fold not stated in text (unverified)",
    "pass": false
   },
   "iii_feedback_relief": {
-   "mel_meki_erk_nadir": 0.3736,
-   "mel_meki_erk_24h": 0.391,
-   "mel_meki_erk_48h": 0.4027,
-   "mel_ras_gtp_fold_12h": 1.6263,
-   "mel_ras_gtp_fold_24h": 1.9375,
-   "mel_ras_gtp_fold_48h": 2.1691,
-   "mel_akt_fold_24h": 1.5824,
-   "crc_meki_erk_24h": 0.5625,
-   "crc_akt_fold_24h": 1.4069,
-   "mel_rafi_erk_24h": 0.4993,
-   "mel_rafi_meki_erk_24h": 0.1529,
+   "mel_meki_erk_nadir": 0.3631,
+   "mel_meki_erk_24h": 0.3894,
+   "mel_meki_erk_48h": 0.395,
+   "mel_ras_gtp_fold_12h": 1.6764,
+   "mel_ras_gtp_fold_24h": 1.9993,
+   "mel_ras_gtp_fold_48h": 2.241,
+   "mel_akt_fold_24h": 1.6317,
+   "crc_meki_erk_24h": 0.5255,
+   "crc_akt_fold_24h": 1.432,
+   "mel_rafi_erk_24h": 0.4432,
+   "mel_rafi_meki_erk_24h": 0.1126,
    "literature": "Lito 2012: pERK partly rebounds by 24-48 h; Ras-GTP not raised at 12 h, induced by 24-48 h; RAF+MEK near-complete. Turke 2012: MEK inhibition raises pAKT.",
    "pass": false,
    "ras_gtp_already_up_at_12h": true
   },
+  "iii_b_lito_rafi_melanoma": {
+   "mel_rafi_erk_nadir": 0.3007,
+   "mel_rafi_erk_8h": 0.3896,
+   "mel_rafi_erk_24h": 0.4432,
+   "mel_rafi_erk_48h": 0.4614,
+   "mel_rafi_ras_gtp_fold_12h": 1.7164,
+   "mel_rafi_ras_gtp_fold_24h": 2.0002,
+   "literature": "Lito 2012: vemurafenib in BRAF V600E melanoma, pERK minimal at ~2 h, partial rebound by 8 h, more by 24-48 h; Ras-GTP induced by 24-48 h, not at 12 h",
+   "pass": true,
+   "ras_gtp_already_up_at_12h": true
+  },
   "iv_met_bypass": {
    "median_log10_ic50_uM": {
-    "parental": -1.76,
-    "MET-amp": 0.49,
-    "MET-amp + METi": -1.61
+    "parental": -1.78,
+    "MET-amp": 0.51,
+    "MET-amp + METi": -1.65
    },
-   "fold_shift_met_amp": 177.8,
-   "fold_shift_with_meti": 1.4,
+   "fold_shift_met_amp": 195.0,
+   "fold_shift_with_meti": 1.3,
    "literature": "Engelman 2007: MET amplification causes gefitinib resistance, MET inhibition restores sensitivity; Turke 2010: pre-existing MET-amplified subpopulations",
    "pass": true
   },
@@ -531,22 +622,22 @@
     0.1
    ],
    "median_days_to_regrowth": [
-    134.0,
-    128.0,
-    120.0,
-    114.0,
-    107.0,
-    101.0,
-    95.0
+    65.0,
+    57.0,
+    41.5,
+    28.5,
+    20.0,
+    14.5,
+    11.0
    ],
    "share_regrowing_on_treatment": [
-    0.3077,
-    0.3077,
-    0.3846,
-    0.3846,
-    0.3846,
-    0.3846,
-    0.3846
+    0.5,
+    0.5125,
+    0.5375,
+    0.5375,
+    0.5375,
+    0.55,
+    0.5625
    ],
    "median_kras_share_at_regrowth": [
     1.0,
@@ -554,18 +645,18 @@
     1.0,
     1.0,
     1.0,
-    1.0,
-    1.0
+    0.9997,
+    0.9987
    ],
-   "days_per_10x_share": -13.143,
-   "n_patients": 13,
+   "days_per_10x_share": -19.1703,
+   "n_patients": 80,
    "literature": "Misale 2012: KRAS-mutant cells pre-exist (~0.2 % in Lim1215), 60 % of relapses gain KRAS mutations; Diaz 2012: KRAS mutants in serum 5-6 months into panitumumab",
    "pass": true
   }
  },
  "c_clinical": {
   "BRAF_CRC": {
-   "n": 14,
+   "n": 194,
    "regimen": {
     "RAFi": 1.0,
     "MEKi": 1.0,
@@ -578,27 +669,29 @@
     26.8
    ],
    "mean_model": {
-    "orr_like_30pct_burden": 0.571,
-    "orr_like_51pct_area": 0.5,
-    "median_best_change": -0.551,
+    "orr_like_30pct_burden": 0.237,
+    "orr_like_51pct_area": 0.227,
+    "median_best_change": 0.114,
     "share_reward_ge_0.4": 0.0,
-    "mean_cure_probability": 0.072,
-    "share_progressing_on_treatment": 0.929,
-    "median_days_to_regrowth": 12.0
+    "mean_cure_probability": 0.037,
+    "share_progressing_on_treatment": 0.918,
+    "median_days_to_regrowth": 2.0
    },
    "lattice": {
-    "reps_per_patient": 1,
-    "orr_like_30pct_burden": 0.857,
-    "orr_like_51pct_area": 0.714,
-    "median_best_change": -0.743,
+    "reps_per_patient": 2,
+    "orr_like_30pct_burden": 0.418,
+    "orr_like_51pct_area": 0.345,
+    "median_best_change": -0.14,
     "share_reward_ge_0.4": 0.0,
-    "share_eliminated_day364": 0.143,
-    "share_progressing_on_treatment": 0.786,
-    "median_days_to_regrowth": 25.5
+    "confirmed_orr_like_30pct_burden": 0.291,
+    "confirmed_orr_like_51pct_area": 0.229,
+    "share_eliminated_day364": 0.052,
+    "share_progressing_on_treatment": 0.907,
+    "median_days_to_regrowth": 24.0
    }
   },
   "BRAF_MEL": {
-   "n": 11,
+   "n": 111,
    "regimen": {
     "RAFi": 1.0,
     "MEKi": 1.0
@@ -610,27 +703,29 @@
     67
    ],
    "mean_model": {
-    "orr_like_30pct_burden": 0.545,
-    "orr_like_51pct_area": 0.545,
-    "median_best_change": -0.745,
-    "share_reward_ge_0.4": 0.091,
-    "mean_cure_probability": 0.182,
-    "share_progressing_on_treatment": 0.818,
-    "median_days_to_regrowth": 9.0
+    "orr_like_30pct_burden": 0.766,
+    "orr_like_51pct_area": 0.739,
+    "median_best_change": -0.887,
+    "share_reward_ge_0.4": 0.072,
+    "mean_cure_probability": 0.172,
+    "share_progressing_on_treatment": 0.748,
+    "median_days_to_regrowth": 16.0
    },
    "lattice": {
-    "reps_per_patient": 1,
-    "orr_like_30pct_burden": 0.909,
-    "orr_like_51pct_area": 0.727,
-    "median_best_change": -0.751,
-    "share_reward_ge_0.4": 0.091,
-    "share_eliminated_day364": 0.182,
-    "share_progressing_on_treatment": 0.818,
-    "median_days_to_regrowth": 37.0
+    "reps_per_patient": 2,
+    "orr_like_30pct_burden": 0.901,
+    "orr_like_51pct_area": 0.829,
+    "median_best_change": -0.891,
+    "share_reward_ge_0.4": 0.09,
+    "confirmed_orr_like_30pct_burden": 0.739,
+    "confirmed_orr_like_51pct_area": 0.604,
+    "share_eliminated_day364": 0.203,
+    "share_progressing_on_treatment": 0.725,
+    "median_days_to_regrowth": 25.0
    }
   },
   "KRAS": {
-   "n": 10,
+   "n": 137,
    "regimen": {
     "KRASi": 1.0,
     "EGFRi": 1.0
@@ -642,27 +737,29 @@
     46
    ],
    "mean_model": {
-    "orr_like_30pct_burden": 0.2,
-    "orr_like_51pct_area": 0.0,
-    "median_best_change": -0.055,
+    "orr_like_30pct_burden": 0.27,
+    "orr_like_51pct_area": 0.168,
+    "median_best_change": 0.011,
     "share_reward_ge_0.4": 0.0,
-    "mean_cure_probability": 0.005,
-    "share_progressing_on_treatment": 1.0,
-    "median_days_to_regrowth": 11.0
+    "mean_cure_probability": 0.008,
+    "share_progressing_on_treatment": 0.993,
+    "median_days_to_regrowth": 5.0
    },
    "lattice": {
-    "reps_per_patient": 1,
-    "orr_like_30pct_burden": 0.8,
-    "orr_like_51pct_area": 0.4,
-    "median_best_change": -0.448,
+    "reps_per_patient": 2,
+    "orr_like_30pct_burden": 0.555,
+    "orr_like_51pct_area": 0.343,
+    "median_best_change": -0.344,
     "share_reward_ge_0.4": 0.0,
-    "share_eliminated_day364": 0.0,
-    "share_progressing_on_treatment": 1.0,
-    "median_days_to_regrowth": 20.5
+    "confirmed_orr_like_30pct_burden": 0.212,
+    "confirmed_orr_like_51pct_area": 0.084,
+    "share_eliminated_day364": 0.011,
+    "share_progressing_on_treatment": 0.985,
+    "median_days_to_regrowth": 19.0
    }
   },
   "EGFR": {
-   "n": 13,
+   "n": 158,
    "regimen": {
     "EGFRi": 1.0
    },
@@ -673,23 +770,25 @@
     80
    ],
    "mean_model": {
-    "orr_like_30pct_burden": 1.0,
-    "orr_like_51pct_area": 1.0,
-    "median_best_change": -0.992,
-    "share_reward_ge_0.4": 0.385,
-    "mean_cure_probability": 0.388,
-    "share_progressing_on_treatment": 0.615,
-    "median_days_to_regrowth": 35.0
+    "orr_like_30pct_burden": 0.968,
+    "orr_like_51pct_area": 0.956,
+    "median_best_change": -0.971,
+    "share_reward_ge_0.4": 0.177,
+    "mean_cure_probability": 0.265,
+    "share_progressing_on_treatment": 0.652,
+    "median_days_to_regrowth": 17.0
    },
    "lattice": {
-    "reps_per_patient": 1,
-    "orr_like_30pct_burden": 1.0,
-    "orr_like_51pct_area": 1.0,
-    "median_best_change": -0.991,
-    "share_reward_ge_0.4": 0.462,
-    "share_eliminated_day364": 0.462,
-    "share_progressing_on_treatment": 0.538,
-    "median_days_to_regrowth": 32.0
+    "reps_per_patient": 2,
+    "orr_like_30pct_burden": 0.994,
+    "orr_like_51pct_area": 0.981,
+    "median_best_change": -0.965,
+    "share_reward_ge_0.4": 0.171,
+    "confirmed_orr_like_30pct_burden": 0.753,
+    "confirmed_orr_like_51pct_area": 0.684,
+    "share_eliminated_day364": 0.285,
+    "share_progressing_on_treatment": 0.639,
+    "median_days_to_regrowth": 19.0
    }
   }
  },
@@ -745,14 +844,14 @@
   {
    "class": "PI3Ki",
    "model_t_half_h": 9.0,
-   "model_css_uM": 0.5,
+   "model_css_uM": 2.5,
    "drug": "alpelisib",
    "label_t_half_h": "8-9",
    "label_cavg_total_uM": 3.1357,
    "fraction_unbound": 0.11,
    "label_cavg_free_uM": 0.3449,
-   "model_css_over_free_cavg": 1.45,
-   "model_css_over_total_cavg": 0.159
+   "model_css_over_free_cavg": 7.25,
+   "model_css_over_total_cavg": 0.797
   },
   {
    "class": "BCLi",
@@ -767,7 +866,7 @@
   {
    "class": "MCLi",
    "model_t_half_h": 12.0,
-   "model_css_uM": 0.075,
+   "model_css_uM": 0.45,
    "drug": "no approved MCL-1 inhibitor; 12 h is a modelling choice"
   }
  ],
@@ -797,9 +896,10 @@
     "share": {
      "no grid regimen cures": 0.487,
      "a guideline regimen works": 0.2656,
-     "eligible only with 3 guidelines": 0.0911,
+     "eligible only with 3 guidelines": 0.0859,
      "eligible (5 guidelines, approx.)": 0.1458,
-     "fails lattice checks": 0.0104
+     "fails lattice checks": 0.0104,
+     "eligible (5 guidelines)": 0.151
     },
     "eligible_3_guidelines": 91,
     "eligible_v2_keep_list": 58,
@@ -816,8 +916,9 @@
     "share": {
      "no grid regimen cures": 0.8059,
      "eligible (5 guidelines, approx.)": 0.0655,
-     "eligible only with 3 guidelines": 0.0451,
-     "a guideline regimen works": 0.0835
+     "eligible only with 3 guidelines": 0.0587,
+     "a guideline regimen works": 0.0835,
+     "eligible (5 guidelines)": 0.0519
     },
     "eligible_3_guidelines": 49,
     "eligible_v2_keep_list": 23,
@@ -834,10 +935,11 @@
     },
     "share": {
      "no grid regimen cures": 0.8369,
-     "eligible only with 3 guidelines": 0.0585,
+     "eligible only with 3 guidelines": 0.08,
      "eligible (5 guidelines, approx.)": 0.0769,
      "a guideline regimen works": 0.0246,
-     "fails lattice checks": 0.0031
+     "fails lattice checks": 0.0031,
+     "eligible (5 guidelines)": 0.0554
     },
     "eligible_3_guidelines": 44,
     "eligible_v2_keep_list": 18,
@@ -857,17 +959,482 @@
      "a guideline regimen works": 0.2812,
      "eligible (5 guidelines, approx.)": 0.1049,
      "fails lattice checks": 0.0134,
-     "eligible only with 3 guidelines": 0.1004
+     "eligible only with 3 guidelines": 0.125,
+     "eligible (5 guidelines)": 0.0804
     },
     "eligible_3_guidelines": 92,
     "eligible_v2_keep_list": 36,
     "grid_best_median_all": 0.468
    }
   },
-  "note": "The 3-guideline numbers are exact cohort.screen results. The 5-guideline count only re-checks guidelines 3-5 on the fast model."
+  "note": "The 3-guideline numbers are exact cohort.screen results. The 5-guideline count only re-checks guidelines 3-5 on the fast model.",
+  "stale": "science/cohort_scan_summary.json is older than remission/model.py, patients.py or cohort.py: the development scan was run on an earlier model and must be redone"
+ },
+ "f_toxicity": {
+  "population": "all validation patients (harm depends only on the patient's healthy cells and potencies)",
+  "regimen": "label dose (1.0) of every drug, once daily, days 0-83; harm read to day 364",
+  "harm_definition": "largest fractional loss of the patient's normal tissue (model.regimen_course)",
+  "threshold": 0.3,
+  "rule": "believable if the simulated share with harm >= 0.30 lies within the verified published grade >= 3 AE range widened by 10 percentage points on each side",
+  "rows": [
+   {
+    "regimen": "RAFi",
+    "n": 600,
+    "harm": {
+     "median": 0.123,
+     "q25": 0.055,
+     "q75": 0.293,
+     "p90": 0.684
+    },
+    "share_harm_ge": {
+     "0.10": 0.573,
+     "0.20": 0.36,
+     "0.30": 0.243,
+     "0.50": 0.142,
+     "0.80": 0.068
+    },
+    "share_harm_ge_threshold_on_target_only": 0.0,
+    "median_harm_on_target_only": 0.001,
+    "published": [
+     {
+      "trial": "COMBI-d (monotherapy arm)",
+      "regimen": "dabrafenib",
+      "pct": 31,
+      "kind": "grade 3 or 4, all-cause",
+      "pmid": 26037941
+     },
+     {
+      "trial": "Kopetz 2015 phase II pilot",
+      "regimen": "vemurafenib (BRAF V600E CRC)",
+      "pct": 71.4,
+      "kind": "at least one grade 3 AE, all-cause (cutaneous SCC counted as grade 3)",
+      "pmid": 26460303,
+      "context_only": "not used for the range: vemurafenib, not dabrafenib; pretreated CRC; all-cause; cutaneous SCC and keratoacanthoma counted as grade 3"
+     }
+    ],
+    "published_range_pct": [
+     31,
+     31
+    ],
+    "sim_minus_published_pct_points": -6.7,
+    "believable": true
+   },
+   {
+    "regimen": "MEKi",
+    "n": 600,
+    "harm": {
+     "median": 0.478,
+     "q25": 0.233,
+     "q75": 0.892,
+     "p90": 0.998
+    },
+    "share_harm_ge": {
+     "0.10": 0.947,
+     "0.20": 0.785,
+     "0.30": 0.682,
+     "0.50": 0.488,
+     "0.80": 0.292
+    },
+    "share_harm_ge_threshold_on_target_only": 0.317,
+    "median_harm_on_target_only": 0.154,
+    "published": [
+     {
+      "trial": "METRIC",
+      "regimen": "trametinib",
+      "pct": null,
+      "kind": "unverified: no grade >= 3 rate in the abstract",
+      "pmid": 22663011
+     }
+    ],
+    "published_range_pct": null,
+    "believable": null
+   },
+   {
+    "regimen": "EGFRi",
+    "n": 600,
+    "harm": {
+     "median": 0.326,
+     "q25": 0.209,
+     "q75": 0.592,
+     "p90": 0.903
+    },
+    "share_harm_ge": {
+     "0.10": 0.963,
+     "0.20": 0.772,
+     "0.30": 0.545,
+     "0.50": 0.318,
+     "0.80": 0.135
+    },
+    "share_harm_ge_threshold_on_target_only": 0.087,
+    "median_harm_on_target_only": 0.137,
+    "published": [
+     {
+      "trial": "FLAURA",
+      "regimen": "osimertinib",
+      "pct": 34,
+      "kind": "grade 3 or higher, all-cause",
+      "pmid": 29151359
+     },
+     {
+      "trial": "FLAURA (comparator arm)",
+      "regimen": "gefitinib or erlotinib",
+      "pct": 45,
+      "kind": "grade 3 or higher, all-cause",
+      "pmid": 29151359
+     }
+    ],
+    "published_range_pct": [
+     34,
+     45
+    ],
+    "sim_minus_published_pct_points": 9.5,
+    "believable": true
+   },
+   {
+    "regimen": "METi",
+    "n": 600,
+    "harm": {
+     "median": 0.189,
+     "q25": 0.105,
+     "q75": 0.38,
+     "p90": 0.767
+    },
+    "share_harm_ge": {
+     "0.10": 0.763,
+     "0.20": 0.473,
+     "0.30": 0.325,
+     "0.50": 0.192,
+     "0.80": 0.09
+    },
+    "share_harm_ge_threshold_on_target_only": 0.0,
+    "median_harm_on_target_only": 0.031,
+    "published": [],
+    "published_range_pct": null,
+    "believable": null
+   },
+   {
+    "regimen": "KRASi",
+    "n": 600,
+    "harm": {
+     "median": 0.138,
+     "q25": 0.055,
+     "q75": 0.308,
+     "p90": 0.629
+    },
+    "share_harm_ge": {
+     "0.10": 0.577,
+     "0.20": 0.378,
+     "0.30": 0.253,
+     "0.50": 0.142,
+     "0.80": 0.062
+    },
+    "share_harm_ge_threshold_on_target_only": 0.0,
+    "median_harm_on_target_only": 0.0,
+    "published": [
+     {
+      "trial": "KRYSTAL-1 (monotherapy)",
+      "regimen": "adagrasib (KRAS G12C CRC)",
+      "pct": 34,
+      "kind": "grade 3 or 4, treatment-related",
+      "pmid": 36546659
+     }
+    ],
+    "published_range_pct": [
+     34,
+     34
+    ],
+    "sim_minus_published_pct_points": -8.7,
+    "believable": true
+   },
+   {
+    "regimen": "PI3Ki",
+    "n": 600,
+    "harm": {
+     "median": 0.381,
+     "q25": 0.212,
+     "q75": 0.702,
+     "p90": 0.975
+    },
+    "share_harm_ge": {
+     "0.10": 0.96,
+     "0.20": 0.77,
+     "0.30": 0.608,
+     "0.50": 0.388,
+     "0.80": 0.207
+    },
+    "share_harm_ge_threshold_on_target_only": 0.26,
+    "median_harm_on_target_only": 0.159,
+    "published": [],
+    "published_range_pct": null,
+    "believable": null
+   },
+   {
+    "regimen": "BCLi",
+    "n": 600,
+    "harm": {
+     "median": 0.408,
+     "q25": 0.183,
+     "q75": 0.826,
+     "p90": 1.0
+    },
+    "share_harm_ge": {
+     "0.10": 0.883,
+     "0.20": 0.733,
+     "0.30": 0.63,
+     "0.50": 0.43,
+     "0.80": 0.26
+    },
+    "share_harm_ge_threshold_on_target_only": 0.323,
+    "median_harm_on_target_only": 0.12,
+    "published": [],
+    "published_range_pct": null,
+    "believable": null
+   },
+   {
+    "regimen": "MCLi",
+    "n": 600,
+    "harm": {
+     "median": 0.359,
+     "q25": 0.18,
+     "q75": 0.818,
+     "p90": 0.999
+    },
+    "share_harm_ge": {
+     "0.10": 0.892,
+     "0.20": 0.705,
+     "0.30": 0.56,
+     "0.50": 0.408,
+     "0.80": 0.262
+    },
+    "share_harm_ge_threshold_on_target_only": 0.302,
+    "median_harm_on_target_only": 0.12,
+    "published": [],
+    "published_range_pct": null,
+    "believable": null
+   },
+   {
+    "regimen": "RAFi+MEKi",
+    "n": 600,
+    "harm": {
+     "median": 0.569,
+     "q25": 0.303,
+     "q75": 0.937,
+     "p90": 1.0
+    },
+    "share_harm_ge": {
+     "0.10": 0.965,
+     "0.20": 0.863,
+     "0.30": 0.752,
+     "0.50": 0.573,
+     "0.80": 0.347
+    },
+    "share_harm_ge_threshold_on_target_only": 0.138,
+    "median_harm_on_target_only": 0.064,
+    "published": [
+     {
+      "trial": "COMBI-d",
+      "regimen": "dabrafenib + trametinib",
+      "pct": 32,
+      "kind": "grade 3 or 4, all-cause",
+      "pmid": 26037941
+     },
+     {
+      "trial": "COMBI-v",
+      "regimen": "dabrafenib + trametinib",
+      "pct": null,
+      "kind": "unverified: abstract says only that severe AE rates were similar to vemurafenib",
+      "pmid": 25399551
+     }
+    ],
+    "published_range_pct": [
+     32,
+     32
+    ],
+    "sim_minus_published_pct_points": 43.2,
+    "believable": false
+   },
+   {
+    "regimen": "RAFi+EGFRi",
+    "n": 600,
+    "harm": {
+     "median": 0.53,
+     "q25": 0.314,
+     "q75": 0.835,
+     "p90": 0.998
+    },
+    "share_harm_ge": {
+     "0.10": 0.985,
+     "0.20": 0.915,
+     "0.30": 0.768,
+     "0.50": 0.52,
+     "0.80": 0.28
+    },
+    "share_harm_ge_threshold_on_target_only": 0.025,
+    "median_harm_on_target_only": 0.091,
+    "published": [
+     {
+      "trial": "BEACON CRC (doublet)",
+      "regimen": "encorafenib + cetuximab",
+      "pct": 50,
+      "kind": "grade 3 or higher, all-cause",
+      "pmid": 31566309
+     },
+     {
+      "trial": "BEACON CRC (doublet, updated)",
+      "regimen": "encorafenib + cetuximab",
+      "pct": 57.4,
+      "kind": "grade 3 or higher, all-cause",
+      "pmid": 33503393
+     },
+     {
+      "trial": "Corcoran 2018 (D+P)",
+      "regimen": "dabrafenib + panitumumab",
+      "pct": 45,
+      "kind": "grade 3 or 4, all-cause",
+      "pmid": 29431699
+     }
+    ],
+    "published_range_pct": [
+     45,
+     57.4
+    ],
+    "sim_minus_published_pct_points": 19.4,
+    "believable": false
+   },
+   {
+    "regimen": "RAFi+MEKi+EGFRi",
+    "n": 600,
+    "harm": {
+     "median": 0.998,
+     "q25": 0.926,
+     "q75": 1.0,
+     "p90": 1.0
+    },
+    "share_harm_ge": {
+     "0.10": 1.0,
+     "0.20": 1.0,
+     "0.30": 0.993,
+     "0.50": 0.952,
+     "0.80": 0.827
+    },
+    "share_harm_ge_threshold_on_target_only": 0.665,
+    "median_harm_on_target_only": 0.439,
+    "published": [
+     {
+      "trial": "BEACON CRC (triplet)",
+      "regimen": "encorafenib + binimetinib + cetuximab",
+      "pct": 58,
+      "kind": "grade 3 or higher, all-cause",
+      "pmid": 31566309
+     },
+     {
+      "trial": "BEACON CRC (triplet, updated)",
+      "regimen": "encorafenib + binimetinib + cetuximab",
+      "pct": 65.8,
+      "kind": "grade 3 or higher, all-cause",
+      "pmid": 33503393
+     },
+     {
+      "trial": "Corcoran 2018 (D+T+P)",
+      "regimen": "dabrafenib + trametinib + panitumumab",
+      "pct": 70,
+      "kind": "grade 3 or 4, all-cause",
+      "pmid": 29431699
+     }
+    ],
+    "published_range_pct": [
+     58,
+     70
+    ],
+    "sim_minus_published_pct_points": 29.3,
+    "believable": false
+   },
+   {
+    "regimen": "KRASi+EGFRi",
+    "n": 600,
+    "harm": {
+     "median": 0.615,
+     "q25": 0.377,
+     "q75": 0.883,
+     "p90": 0.998
+    },
+    "share_harm_ge": {
+     "0.10": 0.99,
+     "0.20": 0.95,
+     "0.30": 0.832,
+     "0.50": 0.608,
+     "0.80": 0.323
+    },
+    "share_harm_ge_threshold_on_target_only": 0.087,
+    "median_harm_on_target_only": 0.137,
+    "published": [
+     {
+      "trial": "KRYSTAL-1 (combination)",
+      "regimen": "adagrasib + cetuximab",
+      "pct": 16,
+      "kind": "grade 3 or 4, treatment-related",
+      "pmid": 36546659
+     },
+     {
+      "trial": "CodeBreaK 300",
+      "regimen": "sotorasib 960 mg + panitumumab",
+      "pct": 35.8,
+      "kind": "grade 3 or higher, treatment-related",
+      "pmid": 37870968
+     }
+    ],
+    "published_range_pct": [
+     16,
+     35.8
+    ],
+    "sim_minus_published_pct_points": 47.4,
+    "believable": false
+   },
+   {
+    "regimen": "MEKi+PI3Ki",
+    "n": 600,
+    "harm": {
+     "median": 0.946,
+     "q25": 0.63,
+     "q75": 1.0,
+     "p90": 1.0
+    },
+    "share_harm_ge": {
+     "0.10": 1.0,
+     "0.20": 0.995,
+     "0.30": 0.948,
+     "0.50": 0.832,
+     "0.80": 0.642
+    },
+    "share_harm_ge_threshold_on_target_only": 0.61,
+    "median_harm_on_target_only": 0.411,
+    "published": [
+     {
+      "trial": "Shimizu 2012 (dual pathway)",
+      "regimen": "PI3K/AKT/mTOR + RAF/MEK pathway inhibitor combinations (various phase I drugs and doses)",
+      "pct": 53.9,
+      "kind": "drug-related grade >=3 (abstract prints 'grade >III'), pooled phase I; single-pathway agents 18.1 %",
+      "pmid": 22261800
+     },
+     {
+      "trial": "Bedard 2015 phase Ib",
+      "regimen": "buparlisib + trametinib (reduced doses: 60-70 mg + 1.5 mg)",
+      "pct": 65,
+      "kind": "grade 3 or 4, treatment-related",
+      "pmid": 25500057
+     }
+    ],
+    "published_range_pct": [
+     53.9,
+     65
+    ],
+    "sim_minus_published_pct_points": 29.8,
+    "believable": false
+   }
+  ]
  },
  "runtime_s": {
-  "population": 10,
-  "total": 26
+  "population": 49,
+  "total": 112
  }
 }

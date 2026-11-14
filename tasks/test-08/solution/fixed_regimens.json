@@ -6,7 +6,9 @@
    "EGFRi": 1.0
   },
   "hindsight": {
-   "BCLi": 0.25
+   "RAFi": 1.0,
+   "EGFRi": 1.0,
+   "METi": 2.0
   }
  },
  "BRAF_MEL": {
@@ -15,8 +17,10 @@
    "MEKi": 1.0
   },
   "hindsight": {
-   "MEKi": 0.25,
-   "MCLi": 1.0
+   "RAFi": 1.5,
+   "METi": 1.5,
+   "KRASi": 0.5,
+   "MCLi": 0.5
   }
  },
  "KRAS": {
@@ -25,8 +29,9 @@
    "EGFRi": 1.0
   },
   "hindsight": {
-   "KRASi": 0.5,
-   "BCLi": 0.5
+   "MEKi": 0.5,
+   "KRASi": 2.0,
+   "MCLi": 2.0
   }
  },
  "EGFR": {
@@ -34,8 +39,9 @@
    "EGFRi": 1.0
   },
   "hindsight": {
-   "EGFRi": 0.25,
-   "METi": 0.25
+   "EGFRi": 1.0,
+   "METi": 0.5,
+   "BCLi": 1.0
   }
  }
 }

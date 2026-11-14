@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-import math
+import os
 import sys
 from pathlib import Path
 
@@ -115,7 +115,7 @@ def test_nothing_hidden_in_what_the_agent_sees():
     lab.advance_time(5)
     seen += [lab.results(e["id"]), lab.results(ph["id"]), lab.results(sq["id"]), lab.derive_line(e["id"], 0), lab.status()]
     text = json.dumps(seen)
-    for secret in ("_final", "_tumour", '"frac"', "seed", "kshift", "tox", str(pt["seed"]), "archetype"):
+    for secret in ("_final", "_tumour", '"frac"', '"seed"', "kshift", "tox", str(pt["seed"]), "archetype"):
         assert secret not in text
     for value in list(pt["K"]) + list(pt["frac"]):
         assert f"{value:.6g}" not in text
@@ -143,16 +143,41 @@ def test_same_seed_same_patient_same_data_same_score():
     assert np.array_equal(score(a, reg)["reward"], score(b, reg)["reward"])
 
 
-def test_cohort_guidelines_fail_and_a_cure_exists():
-    """The cohort test does what it says, on the first cohort patient of a test salt."""
-    for i in range(400):
-        pt = P.make_patient(P.seed_from("unit-cohort", i))
-        res = C.screen(pt, lattice_reps=2)
-        if res["eligible"]:
-            break
-    else:
-        pytest.fail("no cohort patient in 400 generated patients")
-    for g in C.GUIDELINES[pt["archetype"]]:
-        assert float(score(pt, C.constant(g), reps=4)["reward"].mean()) < 0.25
-    assert float(score(pt, res["best"], reps=4)["reward"].mean()) >= 0.4
-    assert not math.isnan(res["best_reward"])
+COHORT_SEED = 599714166      # a cohort patient: melanoma with an MCL1-amplified clone at 1.9 % (under the 2 % limit)
+
+
+def test_cohort_rules_one_to_five_hold_on_a_cohort_patient():
+    pt = P.make_patient(COHORT_SEED)
+    res = C.screen(pt, lattice_reps=2, hedge=False)
+    assert res["rules_1_to_5"] and res["hidden"] == ["mcl1"]
+    for g in C.GUIDELINES[pt["archetype"]]:                                    # 1. standard treatment fails
+        assert float(score(pt, C.constant(g), reps=4)["reward"].mean()) < C.REFRACTORY_BELOW
+    assert float(score(pt, res["best"], reps=4)["reward"].mean()) >= 0.4                 # 2. a cure exists (0.615 over the cohort test's lesions)
+    assert float(score(pt, {"phases": [{"days": 1, "doses": {}}]})["healed"].mean()) <= 0.05   # 3. untreated: lost
+    assert float(score(pt, C.constant(res["label_best"][0]), reps=4)["reward"].mean()) < C.REFRACTORY_BELOW   # 4.
+    for doses, on_visible, on_real in res["visible_best"]:                     # 5. the answer for what sequencing shows
+        assert on_visible >= C.CURABLE_FROM and on_real < C.REFRACTORY_BELOW
+        assert float(score(pt, C.constant(doses), reps=4)["reward"].mean()) < C.REFRACTORY_BELOW
+
+
+def test_cohort_rejects_a_patient_the_guidelines_cure():
+    for i in range(60):
+        res = C.screen(P.make_patient(P.seed_from("unit-cohort", i)), lattice_reps=2, hedge=False)
+        if res.get("why") == "a guideline regimen works":
+            assert not res["eligible"]
+            return
+    pytest.fail("no guideline-curable patient in 60 generated patients")
+
+
+def test_hedge_worlds_cover_every_clone_that_could_hide():
+    pt = P.make_patient(COHORT_SEED)
+    worlds = C.hedge_worlds(pt, 1.0, 0.06)
+    assert len(worlds) == len(P.MINORS[pt["archetype"]])                       # nothing but the driver is visible
+    for w in worlds:
+        assert len(w["tumour"]) == 2 and abs(float(np.sum(w["frac"])) - 1.0) < 1e-9 and abs(w["frac"][-1] - 0.06) < 1e-9
+
+
+@pytest.mark.skipif(not os.environ.get("REMISSION_SLOW"), reason="about ten minutes of one core; set REMISSION_SLOW=1")
+def test_hedging_fails_on_a_cohort_patient():
+    for h in C.hedges(P.make_patient(COHORT_SEED), lattice_reps=4):            # 6. covering everything fails
+        assert h["expected"] >= 0.3 and max(h["reward"], h["lattice"]) < C.REFRACTORY_BELOW

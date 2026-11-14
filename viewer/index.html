@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Remission replay</title>
+<meta name="description" content="Replay of Remission runs: an AI agent's lab work and regimen for one virtual patient, next to the reference scientist's, on the same tissue and the same clock.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/viewer.css">
+</head>
+<body>
+<header class="top">
+  <h1 class="brand">Remission <span>replay</span></h1>
+  <nav class="views" aria-label="View">
+    <button type="button" data-view="replay" aria-pressed="true">Replay</button>
+    <button type="button" data-view="overview" aria-pressed="false">All runs</button>
+  </nav>
+  <div class="patients" id="patients" role="group" aria-label="Patient"></div>
+  <p class="rule"><b>Reward = healed − harm</b><span> · healed: healthy share of the lesion on day 364 · harm: worst loss of normal tissue</span></p>
+  <ul class="legend" aria-label="Cell colours">
+    <li><i class="sw sw-h"></i>healthy cell</li>
+    <li><i class="sw sw-c0"></i>tumour, dominant clone</li>
+    <li><i class="sw sw-c1"></i>tumour, resistant minor clone</li>
+    <li><i class="sw sw-e"></i>empty site</li>
+  </ul>
+</header>
+
+<main id="replay">
+  <p class="patient-line" id="patient-line"></p>
+
+  <section class="stage" aria-label="Tissue replay">
+    <aside class="flank" id="flank-L" aria-label="Left run: lab work and diagnosis"></aside>
+
+    <div class="pair">
+      <div class="pair-head">
+        <div class="pick" id="pick-L"></div>
+        <div class="clock" aria-live="off">
+          <button type="button" class="play" id="play" aria-label="Play">
+            <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path class="i-play" d="M6 3.5v13l11-6.5z"/><path class="i-pause" d="M5 3.5h3.6v13H5zM11.4 3.5H15v13h-3.6z"/></svg>
+          </button>
+          <div class="day"><span class="day-word">day</span><span class="day-num" id="day-num">0</span><span class="day-phase" id="day-phase"></span></div>
+          <div class="speed" id="speed" role="group" aria-label="Playback speed"></div>
+        </div>
+        <div class="pick pick-R" id="pick-R"></div>
+      </div>
+      <div class="dishes">
+        <figure class="dish" id="dish-L">
+          <div class="lattice"><canvas aria-label="Tissue lattice, left run"></canvas></div>
+          <figcaption></figcaption>
+        </figure>
+        <figure class="dish" id="dish-R">
+          <div class="lattice"><canvas aria-label="Tissue lattice, right run"></canvas></div>
+          <figcaption></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <aside class="flank" id="flank-R" aria-label="Right run: lab work and diagnosis"></aside>
+  </section>
+
+  <section class="year" id="year" aria-label="The year after submission: drug levels, cells in the lesion, normal tissue">
+    <div class="year-run" id="year-L"></div>
+    <div class="year-run" id="year-R"></div>
+    <div class="year-axis" id="year-axis"></div>
+    <div class="year-hit" id="year-hit" role="slider" tabindex="0" aria-label="Day" aria-valuemin="0" aria-valuemax="364" aria-valuenow="0">
+      <div class="hoverline" id="hoverline"></div>
+      <div class="playhead" id="playhead"><i></i></div>
+    </div>
+  </section>
+</main>
+
+<main id="overview" hidden>
+  <div class="ov-head">
+    <h2>All runs</h2>
+    <p>Reward per patient. Select a cell to replay that run next to the reference scientist.</p>
+  </div>
+  <div class="ov-scroll"><table class="ov" id="ov-table"></table></div>
+</main>
+
+<div class="pop" id="pop" hidden></div>
+<div class="tip" id="tip" hidden></div>
+<p class="fatal" id="fatal" hidden></p>
+
+<script src="js/inflate.js"></script>
+<script src="data/index.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
