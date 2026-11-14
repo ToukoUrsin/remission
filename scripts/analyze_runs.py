@@ -407,7 +407,7 @@ def summarise(rows: list[dict], reference: str) -> dict:
 
 
 def markdown(summary: dict) -> str:
-    lines = ["| run | tasks x runs | reward (95 % CI) | cured | gap to reference (95 % CI) | what went wrong |",
+    lines = ["| run | tasks x runs | reward (95 % CI) | tumour cleared | gap to reference (95 % CI) | tags (a run can carry several) |",
              "|---|---|---|---|---|---|"]
     for lab, s in summary["labels"].items():
         gap = "-" if "gap_to_reference" not in s else f"{s['gap_to_reference']:.2f} ({s['gap_ci95'][0]:.2f} to {s['gap_ci95'][1]:.2f})"

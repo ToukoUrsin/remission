@@ -799,7 +799,8 @@
     row('healthy cells', 'var(--healthy)', function (r) { return cells(r.replay.healthy[day]); });
     p.clones.forEach(function (c, i) { row(c.label, 'var(--c' + i + ')', function (r) { return cells(r.replay.tumour[i][day]); }); });
     row('normal tissue', 'var(--ink-2)', function (r) { return pct(r.replay.normal[day], 0); });
-    showTip(html + '</table>', evn.clientX, evn.clientY + 16);
+    var reps = (runs[0].replay.reward_reps || []).length;
+    showTip(html + '</table>' + (reps > 1 ? '<div class="t-tipnote">mean of ' + reps + ' copies of the lesion; the picture shows one</div>' : ''), evn.clientX, evn.clientY + 16);
   }
 
   function bindYear() {

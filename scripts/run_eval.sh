@@ -69,7 +69,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-command -v "$HARBOR" >/dev/null || { echo "harbor not found: uv tool install harbor" >&2; exit 1; }
+command -v "$HARBOR" >/dev/null || { echo "harbor not found: uv tool install harbor==0.25.0" >&2; exit 1; }
 mkdir -p "$JOBS_DIR"
 JOBS_DIR="$(cd "$JOBS_DIR" && pwd)"
 

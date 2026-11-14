@@ -1,4 +1,4 @@
-| run | tasks x runs | reward (95 % CI) | cured | gap to reference (95 % CI) | what went wrong |
+| run | tasks x runs | reward (95 % CI) | tumour cleared | gap to reference (95 % CI) | tags (a run can carry several) |
 |---|---|---|---|---|---|
 | Reference scientist | 10 x 3 | 0.64 (0.59 to 0.69) | 30/30 | - | - |
 | Claude Fable 5.2 | 10 x 3 | 0.59 (0.52 to 0.66) | 30/30 | 0.06 (0.01 to 0.11) | avoidable_harm 9 |

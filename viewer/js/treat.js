@@ -254,7 +254,7 @@
     for (var d = f.nadir_day; d <= DAYS; d++) if (total(d) >= 0.5 * start) { back = d; break; }
     var low;
     if (f.nadir >= 0.9 * start) low = 'The tumour never shrank.';
-    else if (f.nadir < 0.05 * start) low = 'Tumour down to ' + cells(f.nadir) + ' cells by day ' + f.nadir_day + ', and the lesion looked healed.';
+    else if (f.nadir < 0.05 * start) low = 'Tumour down to ' + cells(f.nadir) + ' cells by day ' + f.nadir_day + ' (mean of ' + R.reps + ' copies), and the lesion looked healed.';
     else low = 'Tumour down to ' + pct(f.nadir / start) + ' of its size by day ' + f.nadir_day + '.';
     var who, c = cl[main];
     if (main === 0) {
