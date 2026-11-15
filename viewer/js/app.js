@@ -571,7 +571,7 @@
   }
 
   function showPop(side, e, anchor, pin) {
-    var run = side.run, p = patient(S.patient), pop = $('pop'), html = '';
+    var run = side.run, p = patient(side.pid || S.patient), pop = $('pop'), html = '';
     var kindName = { sequencing: 'Deep sequencing', phospho: 'Signalling: pERK and pAKT', viability: 'Viability', derive: 'New cell line' }[e.type];
     if (e.type === 'derive') {
       var d = e.derive, ln = d.line && run.lines[d.line];
@@ -681,7 +681,7 @@
   }
 
   function renderYear(side) {
-    var run = side.run, p = patient(S.patient), G = yearGeom(), box = $('year-' + side.key);
+    var run = side.run, p = patient(side.pid || S.patient), G = yearGeom(), box = $('year-' + side.key);
     if (G.pw <= 0) return;                          // hidden (overview): drawn again by show()
     var H = TR.drug + TR.cells + TR.norm + 2 * TR.gap, x = G.x, rp = run.replay;
     var s = '<svg width="' + G.W + '" height="' + H + '" role="img" aria-label="' + esc(run.label) + ': drug levels, cells in the lesion and normal tissue over 364 days">';
@@ -730,7 +730,7 @@
     var facts = run.diag.facts || null;
     var series = [{ cls: 'l-h', name: 'healthy', v: rp.healthy, known: facts ? facts.healthy_gone_day : undefined }];
     rp.tumour.forEach(function (col, i) {
-      series.push({ cls: 'l-c' + i, name: i ? shortClone(p.clones[i].label) : 'dominant', v: col, tumour: true,
+      series.push({ cls: 'l-c' + i, name: i ? (p.clones[i] ? shortClone(p.clones[i].label) : 'clone ' + (i + 1)) : 'dominant', v: col, tumour: true,
                     known: facts && facts.clones[i] ? facts.clones[i].gone_day : undefined });
     });
     var ends = [], notes = [];
@@ -790,7 +790,7 @@
   }
 
   function yearTip(day, evn) {
-    var p = patient(S.patient), runs = [SIDE.L.run, SIDE.R.run];
+    var p = patient(SIDE.L.pid || S.patient), runs = [SIDE.L.run, SIDE.R.run];
     if (!runs[0] || !runs[1]) return;
     var html = '<b>Day ' + day + '</b><table><tr><th></th><th>' + esc(runs[0].label) + '</th><th>' + esc(runs[1].label) + '</th></tr>';
     function row(name, color, fn) {
@@ -932,7 +932,8 @@
     if (S.view !== 'treat' && TREAT) TREAT.hide();
     if (S.view === 'overview') { pause(); closePop(); renderOverview(); }
     else if (S.view === 'treat') { pause(); closePop(); hideTip(); TREAT.show({ patient: S.treatPatient }); }
-    else if (SIDE.L.run && SIDE.R.run) {            // the year band cannot be measured while hidden: draw it now
+    else if (SIDE.L.run && SIDE.R.run && SIDE.L.pid === S.patient) {   // the year band cannot be measured while hidden: draw it now.
+      // Not while the runs on screen are still another patient's (a patient was just picked): loadSides draws them when they arrive.
       if (layout()) { initLattice(SIDE.L); initLattice(SIDE.R); }
       renderYear(SIDE.L); renderYear(SIDE.R); renderAxis();
       setDay(S.day, true);
@@ -960,6 +961,7 @@
     return Promise.all([D.load(p.id, eL.id, eL.file), D.load(p.id, eR.id, eR.file)]).then(function (runs) {
       if (token !== loadToken) return;
       SIDE.L.run = runs[0]; SIDE.R.run = runs[1];
+      SIDE.L.pid = SIDE.R.pid = p.id;                 // the patient these two runs belong to
       layout();
       ['L', 'R'].forEach(function (k) {
         var side = SIDE[k];
