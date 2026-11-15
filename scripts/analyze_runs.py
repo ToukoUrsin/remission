@@ -179,7 +179,7 @@ def diagnose(ep: dict, score: dict) -> dict:
     minors = [{"index": j, "alteration": next((a for a in c["alterations"] if a not in major), c["name"]), "share": c["share"]}
               for j, c in enumerate(truth["clones"]) if j > 0]
     hidden = [m for m in minors if m["share"] < L.SEQ_LOD]
-    out = {"reward": round(reward, 3), "healed": round(healed, 3), "harm": round(harm, 3), "cured_share": round(cured, 3),
+    out = {"reward": round(reward, 4), "healed": round(healed, 3), "harm": round(harm, 3), "cured_share": round(cured, 3),
            "best_known": round(best, 3), "regimen": regimen, "facts": facts,
            "minor_clones": [{"alteration": m["alteration"], "share": round(m["share"], 4), "seen": m["alteration"] in seen,
                              "below_sequencing_limit": m["share"] < L.SEQ_LOD} for m in minors],

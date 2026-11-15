@@ -14,6 +14,12 @@ family = "remission"
 seed_label = "test-06"
 
 [agent]
+# Sealed: during the agent phase the container reaches the lab (the `remission` sidecar) and nothing else.
+# An agent that calls a model also needs that model's host, for example
+#   harbor run -p <this task> -a opencode -m anthropic/<model> --allow-agent-host api.anthropic.com --allow-agent-host models.dev
+# scripts/run_eval.sh adds those hosts itself. Delete the next two lines to give the agent the internet.
+network_mode = "allowlist"
+allowed_hosts = ["remission"]
 timeout_sec = 3600.0
 # Non-root agent: it cannot replace the interpreter the verifier uses or keep
 # root processes around. Remove this line to run the agent as root.

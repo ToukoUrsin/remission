@@ -44,29 +44,31 @@ reward for that patient is left. Gaps are computed before rounding.
 
 How to read it:
 
-- **The reference heals every patient in every run** and scores 0.64. With a patient's true parameters and no lab
-  work the same regimen search reaches 0.68 (`results/true_parameter_search.jsonl`), so little is left above it.
+- **The reference heals every patient in every run** and scores 0.64. It is a yardstick, not a ceiling: with a
+  patient's true parameters and no lab work the same regimen search averages 0.68
+  (`results/true_parameter_search.jsonl`), higher than the reference on 7 patients and lower on 3.
 - **GPT-6.1 Sol and Claude Haiku 5.5 are far below it**, by 0.49 and 0.36. Sol scores 0.00 in 17 of its 30 runs.
 - **Claude Opus 5.5 and Claude Fable 5.2 are close**, 0.08 and 0.06 below. Both intervals exclude 0 and both models
   are below the reference on 8 of the 10 patients, but not on every patient or in every run: 8 of Fable's 30 runs and
   6 of Opus's beat the reference on the same patient. What these two lose is normal tissue: mean harm 0.37 and 0.39
-  against the reference's 0.29.
+  against the reference's 0.29. Most of Fable's gap is in the 19 runs where it never checked how much of the hour
+  was left and stopped early ([below](#where-agents-lose-the-reward)).
 
 Every run, per patient (each number is one run's reward; the reference gave the same reward in all three runs):
 
 <!-- patients:start -->
 | Patient | Tumour | Clone below the sequencing limit | Reference scientist | Claude Fable 5.2 | Claude Opus 5.5 | GPT-6.1 Sol | Claude Haiku 5.5 | Best shortcut |
 |---|---|---|---|---|---|---|---|---|
-| test-01 | melanoma, BRAF V600E | BCL-xL amplified 1.1 % | 0.65 | 0.67 0.57 0.71 | 0.60 0.62 0.63 | 0.66 0.06 0.41 | 0.26 0.58 | 0.35 |
-| test-02 | lung, EGFR L858R | MET amplified 1.0 % | 0.63 | 0.68 0.69 0.73 | 0.71 0.69 0.56 | 0.54 0.00 0.12 | 0.34 0.21 | 0.02 |
+| test-01 | melanoma, BRAF V600E | BCL-xL amplified 1.1 % | 0.65 | 0.67 0.57 0.71 | 0.60 0.63 0.63 | 0.65 0.06 0.41 | 0.26 0.58 | 0.35 |
+| test-02 | lung, EGFR L858R | MET amplified 1.0 % | 0.63 | 0.67 0.69 0.73 | 0.71 0.69 0.56 | 0.54 0.00 0.12 | 0.35 0.21 | 0.02 |
 | test-03 | melanoma, BRAF V600E | MCL-1 amplified 0.9 % | 0.79 | 0.62 0.74 0.69 | 0.72 0.63 0.75 | 0.46 0.58 0.00 | 0.72 0.46 | 0.12 |
 | test-04 | melanoma, BRAF V600E | BCL-xL amplified 1.3 % | 0.64 | 0.48 0.60 0.56 | 0.62 0.60 0.54 | 0.37 0.00 0.32 | 0.19 0.14 | 0.00 |
 | test-05 | melanoma, BRAF V600E | BCL-xL amplified 0.9 % | 0.73 | 0.80 0.78 0.77 | 0.59 0.70 0.77 | 0.00 0.00 0.00 | 0.00 0.26 | 0.00 |
 | test-06 | lung, EGFR L858R | BCL-xL amplified 1.2 % | 0.71 | 0.67 0.58 0.64 | 0.62 0.61 0.00 | 0.71 0.00 0.04 | 0.56 0.60 | 0.38 |
 | test-07 | lung, EGFR L858R | MET amplified 1.0 % | 0.65 | 0.39 0.57 0.49 | 0.65 0.55 0.56 | 0.00 0.00 0.00 | 0.15 0.65 | 0.04 |
-| test-08 | lung, EGFR L858R | PTEN loss 1.3 %, EGFR T790M 0.9 % | 0.54 | 0.48 0.48 0.34 | 0.56 0.38 0.45 | 0.00 0.20 0.00 | 0.07 0.00 | 0.00 |
-| test-09 | colorectal, KRAS G12C | BCL-xL amplified 0.5 % | 0.51 | 0.49 0.50 0.50 | 0.53 0.54 0.47 | 0.00 0.00 0.00 | 0.01 0.42 | 0.00 |
-| test-10 | colorectal, BRAF V600E | BCL-xL amplified 0.5 % | 0.60 | 0.54 0.40 0.42 | 0.25 0.44 0.53 | 0.08 0.00 0.00 | 0.00 0.08 | 0.01 |
+| test-08 | lung, EGFR L858R | PTEN loss 1.3 %, EGFR T790M 0.9 % | 0.54 | 0.48 0.48 0.34 | 0.56 0.38 0.45 | 0.00 0.20 0.00 | 0.08 0.00 | 0.00 |
+| test-09 | colorectal, KRAS G12C | BCL-xL amplified 0.5 % | 0.51 | 0.49 0.50 0.50 | 0.53 0.54 0.47 | 0.00 0.00 0.00 | 0.00 0.42 | 0.00 |
+| test-10 | colorectal, BRAF V600E | BCL-xL amplified 0.5 % | 0.60 | 0.54 0.40 0.42 | 0.25 0.44 0.52 | 0.08 0.00 0.00 | 0.00 0.08 | 0.01 |
 <!-- patients:end -->
 
 All runs are in `results/run_analysis.jsonl` (one line per run: regimen, lab work, what went wrong, what the same
@@ -102,7 +104,7 @@ After a run:
 scripts/analyze_runs.py "Reference scientist=jobs/<tag>-oracle" "My agent=jobs/<tag>-agent" --md -   # why each run scored what it did
 python3 scripts/build_viewer.py "Reference scientist=jobs/<tag>-oracle" "My agent=jobs/<tag>-agent"
 python3 viewer/serve.py                                                                              # http://localhost:8377
-python3 -m pytest tests -q                                                                           # 32 reward-integrity tests, no Docker
+python3 -m pytest tests -q                                                                           # reward-integrity tests, no Docker: 32 run, 1 slow one needs REMISSION_SLOW=1
 ```
 
 The reference is deterministic: three Harbor runs per patient gave the same reward to four decimals
@@ -181,6 +183,7 @@ Three decisions account for the lost reward.
 tissue during the course. Every drug also kills healthy cells, by an amount that differs per patient and per drug,
 and the only way to learn it is to put the drugs on the healthy cells in a well. GPT-6.1 Sol destroyed the normal
 tissue in 16 of 30 runs; in 13 of the 16 the submitted combination had never been on the patient's healthy cells.
+(The table's 14 of 21 counts every Sol run that lost reward to harm: these 16 and the 5 healed ones with avoidable harm.)
 Claude Haiku 5.5 did it in 10 of 20 runs, and in 7 of the 10 the combination had been on healthy cells and was
 submitted anyway. Claude Opus 5.5: 2 of 30 runs. Claude Fable 5.2: none, but 9 of its 30 runs carry avoidable harm.
 
@@ -199,13 +202,26 @@ at doses high enough to cost the tissue.
 In every one of these runs the agent had what it needed. The brief says that a clone below the detection limit
 decides the outcome. Healthy cells, long cultures, `derive_line` and sequencing fit in the budget: the reference
 uses about 320 of the 384 wells and 27 of the 28 days. `cellmodel.py` holds the exact equations, including how harm
-is computed. Nothing is hidden behind wording, and no run was lost to the clock: the longest agent run took 36 of
-the 60 minutes, and the median is 5 to 12 minutes depending on the model. Opus and Sol submit on lab day 19 of 28.
+is computed. Nothing is hidden behind wording.
+
+**The 60-minute limit was never reached, and it still cost the Claude models lab work.** The longest agent run took
+36 minutes and the median is 5 to 12 depending on the model. But `lab_status` shows lab days and wells, not minutes,
+and the agents guessed. In their own messages 14 of Fable's 30 runs, 11 of Opus's 30 and 8 of Haiku's 20 give the
+time limit as the reason they submitted early or skipped a check, after 5 to 16 minutes of the 60
+(`results/clock_mentions.jsonl` has each sentence, `scripts/clock_mentions.py` makes it).
+
+The agent has a shell, and one command shows the time. Fable ran `date` in 11 of its runs: those worked for 19 to
+36 minutes, submitted on lab day 27 and average 0.01 below the reference. Its other 19 runs never looked, stopped
+after 8 to 13 minutes on lab day 20 and average 0.09 below. So most of Fable's gap is in the runs where it did not
+check the time. Opus, Haiku and Sol never ran `date`. For Opus and Haiku the runs that name the limit score like
+the ones that do not (0.09 against 0.08 below the reference, 0.37 against 0.36). Sol never mentions time, and
+submits on lab day 19 anyway. We did not rerun with the minutes shown in `lab_status`; the closest thing is the
+pilot on branch `v4` (see Limits).
 
 ## Why the reward is hard to game
 
-Doing less than the task scores about nothing. Every shortcut below is a script in `solution/solve.py` that plays
-through the same public tools, and `scripts/run_eval.sh` reruns all of them:
+Doing less than the task scores about nothing. Every shortcut below is a policy in `tasks/<task>/solution/solve.py`
+that plays through the same public tools, and `scripts/run_eval.sh` reruns all of them:
 
 | Shortcut | What it does | Mean reward | Best patient |
 |---|---|---|---|
@@ -227,28 +243,34 @@ on the other nine.
   patients with their hidden parameters. The single best regimen for all of them averages 0.09. Chosen per tumour
   type, still with hindsight: 0.14 for melanoma (22 patients) and 0.14 for EGFR lung (12 patients). Chosen on the
   development patients, as an agent with memory of earlier patients could: 0.04 (`results/fixed_regimens.json`).
-- **Nothing to look up.** By default the agent's container can reach the lab, the model's API host and OpenCode's
-  model list, nothing else (`--open` lifts this). The patient's seed, parameters and the scoring code are in the lab
-  sidecar. The agent's container holds the public model, the search and the lab client.
+- **Nothing to look up.** Each `task.toml` seals the agent phase: the container reaches the lab and nothing else.
+  `scripts/run_eval.sh` adds the model's API host and OpenCode's model list (`--open` lifts the seal). A plain
+  `harbor run` on a task is sealed too and needs `--allow-agent-host <model host>`. The patient's seed, parameters
+  and the scoring code are in the lab sidecar. The agent's container holds the public model, the search and the
+  lab client.
 - **One submission, no score back.** `submit_regimen` works once. Results appear only when the lab clock passes
   them. Wells, days and the regimen format are enforced by the lab, not by the prompt.
 - **The verifier does not trust the agent's container.** It runs as root after the agent's processes are killed,
   takes the output directory, and fetches the score from the sidecar with a token that is uploaded only after
   the agent has finished. Any failure writes 0.
-- **Tested.** `tests/test_integrity.py` (32 tests) checks the points above in-process, among them: untreated
+- **Tested.** `tests/test_integrity.py` (33 tests; 32 run by default, the ten-minute hedge test needs
+  `REMISSION_SLOW=1`) checks the points above in-process, among them: untreated
   scores 0, everything at full dose scores under 0.05, malformed regimens are refused, nothing hidden leaks into
   any tool result, clones below the detection limit are not reported.
 - **Attacked.** A separate GPT-6.1 Sol session read the repository and then tried, inside real Harbor trials, to earn
   reward without treating the patient or to read something hidden: the environment, `/proc`, mounts and the Docker
   socket, the lab's admin routes, the reward file, malformed regimens, the clock and the well budget, racing
   submissions, a second MCP session, call timing. No attack scored above 0 and none exposed a secret
-  ([docs/REDTEAM.md](docs/REDTEAM.md)).
+  ([docs/REDTEAM.md](docs/REDTEAM.md); the trials' output is in `results/redteam_trials.jsonl`).
 
-One thing a judge should know: the seeds of the ten test patients are in this repository
-(`tasks/test-*/environment/docker-compose.yaml`), because Harbor builds the sidecar from the task directory. An agent
-inside the task cannot read them. Someone with the repository can compute a good regimen offline. For a run where
-that is impossible, `scripts/run_eval.sh --fresh N` draws N new cohort patients from a random salt on your machine
-(about one core-hour of screening per patient).
+What a judge should know: the ten test patients are a published test set. For each of them
+`tasks/test-*/environment/docker-compose.yaml` holds the seed, the lab's admin token (also in `tests/admin_token`)
+and a regimen found with the hidden parameters, which the replay shows as "best known". Harbor builds the sidecar
+from the task directory, so they have to be there. An agent inside a sealed task cannot read them: they are in the
+sidecar's environment and files, and the red team tried. Someone with the repository can compute a good regimen
+offline, and so could an agent run with `--open` once the repository is public. The reported agent runs were
+sealed. For a run where nothing is published, `scripts/run_eval.sh --fresh N` draws N new cohort patients from a
+random salt on your machine, each with a new token (about one core-hour of screening per patient).
 
 ## Is the cell model believable?
 
@@ -308,8 +330,8 @@ The honest result: it gets better on patients it has treated before, and not mea
 
 - **Patients it had treated:** the same 12 development patients go from 0.09 to 0.34 with the notes. The notes name
   those patients' clones and doses, so part of this is memory.
-- **New patients:** on the ten test patients the reward goes from 0.28 to 0.30, a difference of +0.01 (95 % interval
-  −0.14 to +0.16), better on 5 patients and worse on 5.
+- **New patients:** on the ten test patients the reward goes from 0.285 to 0.297, so +0.01 (95 % interval −0.14 to
+  +0.16), better on 5 patients and worse on 5.
 - **A second round** (it treats the development patients again with its notes, then rewrites them:
   [experience/notes_round2.md](experience/notes_round2.md)) scores 0.21 on the test patients, −0.08 (−0.27 to +0.10).
 
@@ -344,10 +366,21 @@ round. Fine-tuning on the trajectories was not tried.
   GPT-6.1 Sol's and Haiku's.
 - **On two patients the reference leaves something.** On test-01 and test-02 its regimen clears 14 of the 16
   replicate lesions (rewards 0.65 and 0.63).
+- **The lab does not show the session minutes, and the Claude models misjudged them.** No run reached the 60
+  minutes, but 33 of the 80 Claude runs say they cut work for the limit, after 5 to 16 minutes
+  ([above](#where-agents-lose-the-reward)). The agent can see the time with one shell command and Fable is level
+  with the reference in the 11 runs where it did. Read Fable's 0.06 with that in mind. The reported runs were not
+  repeated with the minutes in `lab_status`.
 - **A stricter variant did not widen the gap, so it is not the benchmark.** Branch `v4` adds a hard tolerability
-  limit (harm above 0.30 scores 0) and a session clock. On five pilot patients Fable scored 0.70 against the
-  reference's 0.67, using 26 to 31 of the 60 minutes and nearly all wells; Opus 0.66 on three patients; Sol 0.00 on
-  all five. Two things changed at once there, so it is a pilot and no reported number comes from it.
+  limit (harm above 0.30 scores 0) and puts the session minutes in `lab_status` and `advance_time`. On five pilot
+  patients Fable scored 0.70 in 7 valid runs against the reference's 0.67, working 19 to 42 minutes and to lab day
+  26 to 28; Opus 0.66 in 3 valid runs, all to lab day 28; Sol 0.00 on all five (`results/pilot_runs.jsonl` on that
+  branch; 5 more runs were lost to model API failures). Two things changed at once there, so it is a pilot and no
+  reported number comes from it. It does suggest that the Claude models use the whole lab when they can see the
+  minutes.
+- **Harbor marks most agent runs with an error after the regimen is in.** OpenCode exits with code 1 when its
+  session ends, and Harbor records `NonZeroAgentExitCodeError` on 24 of 30 Fable runs, 18 of 30 Opus, 18 of 30 Sol
+  and 15 of 20 Haiku. In every one of them the regimen had been submitted and the verifier scored it.
 - **Runs left out** are listed with the reason in `results/excluded_runs.jsonl`: 9 that say nothing about the agent
   (4 where the model API failed before a regimen was submitted, 5 reference trials that never reached the
   verifier), 5 we cancelled mid-run when the runs moved to another machine, and 5 valid reference runs beyond the
@@ -366,9 +399,10 @@ round. Fine-tuning on the trajectories was not tried.
 | `scripts/new_task.py` | makes task directories; `--fresh` draws new cohort patients |
 | `scripts/fixed_regimen_check.py`, `scripts/experience.py`, `scripts/make_figures.py` | the fixed-regimen check, the experience loop, the figures |
 | `viewer/` | the replay viewer and "treat a patient" (`viewer/serve.py`) |
-| `results/` | every reported number: `summary.json`, `run_analysis.jsonl`, `fixed_regimens.json` |
+| `results/` | every reported number: `summary.json`, `run_analysis.jsonl`, `fixed_regimens.json`; what the agents said about the time limit (`clock_mentions.jsonl`, from `scripts/clock_mentions.py`); the red team's trials (`redteam_trials.jsonl`) |
 | `science/`, `docs/MODEL.md` | public data, sources and the validation of the model |
 | `docs/REDTEAM.md` | what an attacker tried against the reward, and what happened |
+| branch `v4` | the stricter pilot variant named under Limits; not the benchmark |
 | `deck/` | the pitch deck (`Remission-deck.pdf`), built from `results/` by `deck/build.py` |
 | `tests/` | reward-integrity tests |
 

@@ -177,6 +177,17 @@ def test_hedge_worlds_cover_every_clone_that_could_hide():
         assert len(w["tumour"]) == 2 and abs(float(np.sum(w["frac"])) - 1.0) < 1e-9 and abs(w["frac"][-1] - 0.06) < 1e-9
 
 
+def test_tasks_ship_sealed():
+    """The agent phase is cut down to the lab in each task.toml itself, not only by scripts/run_eval.sh."""
+    tomllib = pytest.importorskip("tomllib")
+    tomls = sorted((ROOT / "tasks").rglob("task.toml"))
+    assert len(tomls) >= 11
+    for path in tomls:
+        agent = tomllib.loads(path.read_text())["agent"]
+        assert agent.get("network_mode") == "allowlist", path
+        assert agent.get("allowed_hosts") == ["remission"], path
+
+
 @pytest.mark.skipif(not os.environ.get("REMISSION_SLOW"), reason="about ten minutes of one core; set REMISSION_SLOW=1")
 def test_hedging_fails_on_a_cohort_patient():
     for h in C.hedges(P.make_patient(COHORT_SEED), lattice_reps=4):            # 6. covering everything fails

@@ -108,6 +108,16 @@ def build(url: str) -> str:
     best = max(agents, key=lambda a: a[1]["reward_mean"])
     worst_frontier = min((a for a in agents if "Haiku" not in a[0]), key=lambda a: a[1]["reward_mean"])
     top_shortcut = max(shortcuts, key=lambda a: a[1]["reward_mean"])
+    # whose runs destroyed the normal tissue, most first: "16 of GPT-6.1 Sol's 30, ..."
+    toxic = sorted(((lab, c) for lab, c in fc.items() if c["too_toxic"]), key=lambda x: -x[1]["too_toxic"])
+    toxic_who = ", ".join(f'{c["too_toxic"]} of {lab}\'s {c["runs"]}' for lab, c in toxic)
+    toxic_top = (f' ({toxic[0][1]["too_toxic_untested"]} of {toxic[0][0]}\'s {toxic[0][1]["too_toxic"]})' if toxic else "")
+    # the session clock: the best agent's runs that looked at the time (ran `date`) against those that did not
+    clock = [json.loads(x) for x in (ROOT / "results" / "clock_mentions.jsonl").read_text().splitlines() if x.strip()]
+    mine = [r for r in clock if r["agent"] == best[0]]
+    looked = [r for r in mine if r["date_calls"]]
+    blind = [r for r in mine if not r["date_calls"]]
+    under = lambda rs: f2(sum(r["reference_reward"] - r["reward"] for r in rs) / len(rs))
 
     s = []
     # 1 title
@@ -164,9 +174,9 @@ def build(url: str) -> str:
   <div class="col" style="flex:1.15;justify-content:center"><div class="fig">{img("docs/img/results_outcomes_dark.png")}</div></div>
   <div class="col" style="justify-content:center">
     <ul class="points">
-      <li class="t"><b>{tot.get("too_toxic", 0)} runs cleared the tumour and destroyed the normal tissue.</b> In {tot.get("too_toxic_untested", 0)} of them the submitted combination had never met the patient's healthy cells in a well. In the other {tot.get("too_toxic", 0) - tot.get("too_toxic_untested", 0)} it had been on healthy cells and was submitted anyway.</li>
+      <li class="t"><b>{tot.get("too_toxic", 0)} runs cleared the tumour and destroyed the normal tissue:</b> {toxic_who}. In {tot.get("too_toxic_untested", 0)} of the {tot.get("too_toxic", 0)}{toxic_top} the submitted combination had never met the patient's healthy cells in a well. In the other {tot.get("too_toxic", 0) - tot.get("too_toxic_untested", 0)} it had and was submitted anyway.</li>
       <li class="c"><b>{tot.get("missed_clone", 0)} runs relapsed from the hidden clone.</b> {tot.get("missed_clone_never_named", 0)} never named it. The others named it and still gave a course too short or too weak to kill it.</li>
-      <li><b>{best[0]} heals all {best[1]["runs"]} runs</b> and still ends {f2(best[1]["gap_to_reference"])} under the reference: {fc[best[0]]["suboptimal"]} runs carry harm it could have measured and dosed away.</li>
+      <li><b>{best[0]} heals all {best[1]["runs"]} runs</b> and still ends {f2(best[1]["gap_to_reference"])} under the reference. The lab shows no session minutes. In {len(blind)} runs it never checked the time and stopped after {min(r["minutes"] for r in blind):.0f} to {max(r["minutes"] for r in blind):.0f} of the 60 minutes: {under(blind)} under. In the {len(looked)} where it looked: {under(looked)} under.</li>
       <li class="g"><b>The tools were there.</b> Healthy cells, long cultures, growing out survivors, sequencing them. The reference uses nothing else.</li>
     </ul>
   </div>
@@ -230,7 +240,7 @@ def build(url: str) -> str:
       <div class="big dim" style="font-size:90px">→</div>
       <div class="stat"><span class="big{" good" if better else ""}">{f2(a["reward_mean"])}</span><span class="l">with the notes it wrote itself</span></div>
     </div>
-    <p class="lead" style="font-size:27px">The 10 test patients, {b["runs"]} and {a["runs"]} runs. Difference {exp["difference"]:+.2f} (95 % interval {lo:+.2f} to {hi:+.2f}).{second}</p>
+    <p class="lead" style="font-size:27px">The 10 test patients, {b["runs"]} and {a["runs"]} runs. Before rounding {b["reward_mean"]:.3f} to {a["reward_mean"]:.3f}: {exp["difference"]:+.2f} (95 % interval {lo:+.2f} to {hi:+.2f}).{second}</p>
   </div>
   <div class="col" style="justify-content:center">
     <ul class="points">

@@ -26,10 +26,10 @@
 #                 (about a minute per patient; uses .venv or python3 with numpy,
 #                 else a python:3.12 container)
 #   --open        let the agent keep its internet. Without it the agent plays
-#                 sealed: its network is cut down to the lab, the model's host and
-#                 OpenCode's model list (Harbor allowlist, local Docker). The host
-#                 is taken from the model name or *_BASE_URL; name others with
-#                 --model-host HOST
+#                 sealed, as the tasks are written: its network is cut down to the
+#                 lab, the model's host and OpenCode's model list (Harbor
+#                 allowlist, local Docker). The host is taken from the model name
+#                 or *_BASE_URL; name others with --model-host HOST
 #
 # Without TASK_DIRs: every tasks/*/ except _template.
 # The agent phase uses the credentials in the environment (ANTHROPIC_API_KEY,
@@ -114,11 +114,38 @@ if missing:
 Path(out).write_text(json.dumps({"tasks": [{"path": p} for p in paths]}))
 PY
 
-# The agent plays sealed unless --open: copies of the tasks whose agent phase may
-# only reach the lab's MCP server, the model and OpenCode's model list. Nothing
-# else about the task changes; the reference and the baselines use the tasks as
-# they are.
-SEAL_ARGS=(); AGENT_CFG="$WORK/tasks.json"
+# The tasks ship sealed: task.toml lets the agent phase reach the lab's MCP server
+# and nothing else. The agent plays on them like that, plus the model's host and
+# OpenCode's model list. Two sets of copies are made here and nothing else about
+# a task changes:
+#   sealed   the seal written in (so a task made without it is sealed too)
+#   open     the seal taken out: for the agent with --open, and for the reference
+#            and the shortcut scripts, which are ours and call only the lab (they
+#            ran like this for the reported numbers)
+python3 - "$WORK/tasks.json" "$WORK" <<'PY'
+import json, re, shutil, sys
+from pathlib import Path
+cfg, work = Path(sys.argv[1]), Path(sys.argv[2])
+SEAL = 'network_mode = "allowlist"\nallowed_hosts = ["remission"]\n'
+AGENT = re.compile(r"^\[agent\][^\n]*\n(.*?)(?=^\[|\Z)", re.M | re.S)     # the body of the [agent] table
+SEAL_LINE = re.compile(r"^(?:network_mode|allowed_hosts)[ \t]*=.*\n", re.M)
+lists = {"sealed": [], "open": []}
+for t in json.loads(cfg.read_text())["tasks"]:
+    src = Path(t["path"])
+    toml = (src / "task.toml").read_text()
+    m = AGENT.search(toml)
+    if not m:
+        sys.exit(f"{src}: no [agent] section in task.toml")
+    body = SEAL_LINE.sub("", m.group(1))
+    for kind, new_body in (("sealed", SEAL + body), ("open", body)):
+        dst = work / kind / src.name
+        shutil.copytree(src, dst)
+        (dst / "task.toml").write_text(toml[:m.start(1)] + new_body + toml[m.end(1):])
+        lists[kind].append({"path": str(dst)})
+for kind, tasks in lists.items():
+    (work / f"tasks-{kind}.json").write_text(json.dumps({"tasks": tasks}))
+PY
+SEAL_ARGS=(); AGENT_CFG="$WORK/tasks-open.json"
 if [ "$SEALED" = 1 ] && [ "$RUN_AGENT" = 1 ]; then
   if [ ${#MODEL_HOSTS[@]} -eq 0 ]; then
     case "$MODEL" in
@@ -130,24 +157,7 @@ if [ "$SEALED" = 1 ] && [ "$RUN_AGENT" = 1 ]; then
     esac
     MODEL_HOSTS=("$(python3 -c 'import sys, urllib.parse as u; print(u.urlparse(sys.argv[1]).hostname)' "$url")")
   fi
-  AGENT_CFG="$WORK/tasks-agent.json"
-  python3 - "$WORK/tasks.json" "$AGENT_CFG" "$WORK/sealed" <<'PY'
-import json, re, shutil, sys
-from pathlib import Path
-cfg, out_cfg, out = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
-tasks = []
-for t in json.loads(cfg.read_text())["tasks"]:
-    src = Path(t["path"])
-    dst = out / src.name
-    shutil.copytree(src, dst)
-    toml = (dst / "task.toml").read_text()
-    toml, n = re.subn(r"^\[agent\]$", '[agent]\nnetwork_mode = "allowlist"\nallowed_hosts = ["remission"]', toml, count=1, flags=re.M)
-    if n != 1:
-        sys.exit(f"{src}: no [agent] section in task.toml")
-    (dst / "task.toml").write_text(toml)
-    tasks.append({"path": str(dst)})
-out_cfg.write_text(json.dumps({"tasks": tasks}))
-PY
+  AGENT_CFG="$WORK/tasks-sealed.json"
   for h in "${MODEL_HOSTS[@]}" models.dev; do SEAL_ARGS+=(--allow-agent-host "$h"); done
   echo "== sealed: the agent reaches the lab, the model (${MODEL_HOSTS[*]}) and models.dev, nothing else. --open lifts this" >&2
 fi
@@ -155,7 +165,7 @@ fi
 cd "$JOBS_DIR"   # Harbor drops incidental files into the cwd; keep them out of the repo
 
 run_phase() {   # run_phase <label> <attempts> <harbor args...>
-  local label="$1" attempts="$2" cfg="$WORK/tasks.json"; shift 2
+  local label="$1" attempts="$2" cfg="$WORK/tasks-open.json"; shift 2
   [ "$label" = agent ] && cfg="$AGENT_CFG"
   echo "== $label: ${#TASKS[@]} task(s) x $attempts attempt(s)" >&2
   PYTHONPATH="$SCRIPTS${PYTHONPATH:+:$PYTHONPATH}" "$@" \
