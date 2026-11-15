@@ -233,7 +233,7 @@ def diagnose(ep: dict, score: dict) -> dict:
         for m in named:
             s = seen[m["alteration"]]
             where = "the biopsy" if s["cells"] == "tumour" else f"line {s['cells']}, grown from surviving cells"
-            why.append(f"named the {m['alteration']} clone ({pct(m['share'])} of the tumour) by sequencing {where} on day {s['day']:g}")
+            why.append(f"named the {m['alteration']} clone ({pct(m['share'])} of the tumour) by sequencing {where} (result read on day {s['day']:g})")
         if tested_t:
             why.append("cultured the submitted combination on tumour cells before submitting")
         if tested_h:
