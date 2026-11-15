@@ -439,8 +439,8 @@
     t.innerHTML = html;
     t.hidden = false;
     var w = t.offsetWidth, h = t.offsetHeight;
-    t.style.left = clamp(x + 12, 8, window.innerWidth - w - 8) + 'px';
-    t.style.top = clamp(y, 8, window.innerHeight - h - 8) + 'px';
+    t.style.left = Math.max(8, Math.min(x + 12, window.innerWidth - w - 8)) + 'px';
+    t.style.top = Math.max(8, Math.min(y, window.innerHeight - h - 8)) + 'px';
   }
   function hideTip() { $('tip').hidden = true; }
   function bindYear() {

@@ -150,6 +150,9 @@
 
   function initLattice(side) {
     var cv = side.canvas, dpr = window.devicePixelRatio || 1;
+    var soft = scale < 4 && dpr < 2;                // a phone-size lattice on a 1x screen: drawn at 2x and scaled down by the browser
+    if (soft) dpr = 2;
+    cv.style.imageRendering = soft ? 'auto' : '';
     var P = Math.max(1, Math.round(scale * dpr)), n = 64 * P;
     side.P = P;
     side.gap = P >= 5 ? Math.max(1, Math.round(P / 8)) : 0;
@@ -276,8 +279,17 @@
     function item(cls, text) { var li = el('li'); li.appendChild(el('i', 'sw ' + cls)); li.appendChild(document.createTextNode(text)); leg.appendChild(li); }
     item('sw-h', 'healthy cell');
     item('sw-c0', 'tumour: dominant clone');
-    if (S.view === 'overview' || S.view === 'treat') item('sw-c1', 'tumour: hidden resistant clone');
-    else p.clones.slice(1).forEach(function (c, i) { item('sw-c' + (i + 1), (p.clones.length > 2 ? '' : 'tumour: ') + c.label); });   // two hidden clones: keep the header on one line
+    // Yellow and purple go by the order of a patient's hidden clones, not by the kind of clone: say it the same way in every view.
+    // (Which clone that is for this patient is on the patient line, under the lattices and in the year band.)
+    if (S.view === 'replay' && p.clones.length === 2) item('sw-c1', 'tumour: hidden resistant clone');
+    else {
+      var hid = el('li');
+      hid.title = 'The colour shows the order of a patient’s hidden clones, not their kind: the first is yellow, the second purple.';
+      hid.appendChild(document.createTextNode('hidden resistant clones:'));
+      hid.appendChild(el('i', 'sw sw-c1')); hid.appendChild(document.createTextNode('first'));
+      hid.appendChild(el('i', 'sw sw-c2')); hid.appendChild(document.createTextNode('second'));
+      leg.appendChild(hid);
+    }
     item('sw-e', 'empty site');
   }
 
@@ -288,11 +300,23 @@
       + '<span class="sep">|</span>On the chart the agent gets: <b>' + esc(chart) + '</b>';
     var minors = p.clones.slice(1);
     if (minors.length) {
+      // several hidden clones: say "of the tumour" and "already resistant" once, so the line fits
       html += '<span class="sep">|</span>Not on the chart: ' + minors.map(function (c, i) {
-        return '<i class="sw sw-c' + (i + 1) + '"></i><span class="hid">a ' + esc(c.label) + ', ' + esc(pct(c.share)) + ' of the tumour, already resistant</span>';
-      }).join(' and ');
+        return '<i class="sw sw-c' + (i + 1) + '"></i><span class="hid">a ' + esc(c.label) + ', ' + esc(pct(c.share))
+          + (i === 0 ? ' of the tumour' : '') + (minors.length === 1 ? ', already resistant' : '') + '</span>';
+      }).join(' and ') + (minors.length > 1 ? '<span class="hid">, ' + (minors.length === 2 ? 'both' : 'all') + ' already resistant</span>' : '');
     }
     line.innerHTML = html;
+    fitPatientLine();
+  }
+  /* Wide windows keep the patient line 34 px high so nothing below it moves: when the text does not fit on one line,
+     it is set smaller, and if that is not enough as two small lines in the same space, instead of being cut off. */
+  function fitPatientLine() {
+    var line = $('patient-line');
+    line.classList.remove('sm', 'two');
+    if (line.scrollWidth <= line.clientWidth + 1) return;
+    line.classList.add('sm');
+    if (line.scrollWidth > line.clientWidth + 1) { line.classList.remove('sm'); line.classList.add('two'); }
   }
 
   function renderPick(side) {
@@ -395,6 +419,10 @@
     box.textContent = '';
     box.classList.remove('dense');
     closePop();
+    var who = el('p', 'flank-run');                 // shown on a phone only, where the two panels are stacked
+    who.appendChild(el('b', null, run.label));
+    who.appendChild(document.createTextNode(side.key === 'L' ? 'the run on the left' : 'the run on the right'));
+    box.appendChild(who);
     if (run.kind === 'best') {
       var h = el('h2', null, 'No lab work');
       box.appendChild(h);
@@ -609,8 +637,8 @@
     pop.innerHTML = html;
     pop.hidden = false;
     var r = anchor.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
-    var left = clamp(r.left, 8, window.innerWidth - pw - 8);
-    var top = r.bottom + 8 + ph > window.innerHeight - 8 ? Math.max(8, r.top - 8 - ph) : r.bottom + 8;
+    var left = Math.max(8, Math.min(r.left, window.innerWidth - pw - 8));
+    var top = r.bottom + 8 + ph > window.innerHeight - 8 ? Math.max(8, Math.min(r.top - 8 - ph, window.innerHeight - ph - 8)) : r.bottom + 8;
     pop.style.left = left + 'px';
     pop.style.top = top + 'px';
     if (popAnchor) popAnchor.classList.remove('pinned');
@@ -625,7 +653,7 @@
   }
 
   function viabilityHtml(run, x) {
-    var W = 390, H = 128, ml = 34, mr = 8, mt = 6, mb = 18, dur = x.end - x.start;
+    var W = Math.min(390, document.documentElement.clientWidth - 16 - 30), H = 128, ml = 34, mr = 8, mt = 6, mb = 18, dur = x.end - x.start;
     var maxC = 10;
     x.counts.forEach(function (row) { row.forEach(function (v) { if (v > maxC) maxC = v; }); });
     var lo = 1, hi = Math.log10(maxC * 1.15);
@@ -668,8 +696,8 @@
     t.innerHTML = html;
     t.hidden = false;
     var w = t.offsetWidth, h = t.offsetHeight;
-    t.style.left = clamp(x + 12, 8, window.innerWidth - w - 8) + 'px';
-    t.style.top = clamp(y, 8, window.innerHeight - h - 8) + 'px';
+    t.style.left = Math.max(8, Math.min(x + 12, window.innerWidth - w - 8)) + 'px';
+    t.style.top = Math.max(8, Math.min(y, window.innerHeight - h - 8)) + 'px';
   }
   function hideTip() { $('tip').hidden = true; }
 
@@ -677,7 +705,18 @@
   var TR = { drug: 30, cells: 58, norm: 27, gap: 6 };
   function yearGeom() {
     var W = $('year').clientWidth, gl = cssPx('--gl'), gr = cssPx('--gr');
-    return { W: W, gl: gl, gr: gr, pw: W - gl - gr, x: function (d) { return gl + d / DAYS * (W - gl - gr); } };
+    return { W: W, gl: gl, gr: gr, pw: W - gl - gr, narrow: gl < 100, x: function (d) { return gl + d / DAYS * (W - gl - gr); } };
+  }
+  /* A run name too long for the left gutter wraps on its words instead of being cut off. */
+  function nameLines(label, maxChars) {
+    var words = label.replace(/ · run (\d+)$/, ' ·' + NBSP + 'run' + NBSP + '$1').split(' '), lines = [''];
+    words.forEach(function (w) {
+      var cur = lines[lines.length - 1];
+      if (cur && (cur + ' ' + w).length > maxChars) lines.push(w);
+      else lines[lines.length - 1] = cur ? cur + ' ' + w : w;
+    });
+    if (lines.length > 3) { lines[2] = lines.slice(2).join(' ').slice(0, maxChars - 1) + '…'; lines.length = 3; }
+    return lines;
   }
 
   function renderYear(side) {
@@ -691,13 +730,21 @@
       s += '<line class="stop" x1="' + x(te) + '" x2="' + x(te) + '" y1="0" y2="' + H + '"/>';
     }
     // ---- drugs
-    var nm = run.label, room = G.gl - 10, need = nm.length * 7.3, fit = '';
-    if (need > room * 1.12) { nm = nm.slice(0, Math.floor(room * 1.12 / 7.3) - 1) + '…'; need = nm.length * 7.3; }
-    if (need > room) fit = ' textLength="' + room + '" lengthAdjust="spacingAndGlyphs"';
-    s += '<text class="t-run" x="0" y="' + (TR.drug / 2 + 5) + '"' + fit + '><title>' + esc(run.label) + '</title>' + esc(nm) + '</text>';
+    var nm = run.label, room = G.gl - 10, need = nm.length * 7.3, fit = '', head = '';
+    if (G.narrow) {                                 // a phone: no room in the gutter, the name and the drugs get a line of their own above
+      s += '<text class="t-trk" x="0" y="' + (TR.drug / 2 + 4) + '">drugs</text>';
+    } else if (need > room * 1.12) {
+      var nl = nameLines(nm, Math.floor(room / 7.3)), small = nl.length > 2, lh = small ? 13 : 15;
+      s += '<text class="t-run' + (small ? ' sm' : '') + '" x="0" y="' + (small ? 11 : 13) + '"><title>' + esc(run.label) + '</title>'
+        + nl.map(function (ln, i) { return '<tspan x="0"' + (i ? ' dy="' + lh + '"' : '') + '>' + esc(ln) + '</tspan>'; }).join('') + '</text>';
+    } else {
+      if (need > room) fit = ' textLength="' + room + '" lengthAdjust="spacingAndGlyphs"';
+      s += '<text class="t-run" x="0" y="' + (TR.drug / 2 + 5) + '"' + fit + '><title>' + esc(run.label) + '</title>' + esc(nm) + '</text>';
+    }
     var drugs = DRUGS.filter(function (d) { return run.regimen && run.regimen.phases.some(function (ph) { return ph.doses[d] > 0; }); });
     if (!run.regimen) {
-      s += '<text class="t-drug" x="' + (x(0) + 8) + '" y="' + (TR.drug / 2 + 4) + '">no drug: nothing was submitted, the patient is untreated</text>';
+      if (G.narrow) head = 'no drug: nothing was submitted';
+      else s += '<text class="t-drug" x="' + (x(0) + 8) + '" y="' + (TR.drug / 2 + 4) + '">no drug: nothing was submitted, the patient is untreated</text>';
     } else {
       var rh = Math.min(9, (TR.drug - 2) / Math.max(1, drugs.length));
       var top = (TR.drug - rh * drugs.length) / 2;
@@ -715,13 +762,14 @@
         return esc(d) + ' <tspan>' + seq.map(g).join('→') + '×</tspan>';
       }).join('   ');
       var nph = run.regimen.phases.length;
-      s += '<text class="t-drug" x="' + (x(te) + 12) + '" y="' + (TR.drug / 2 + 4) + '">' + list
-        + '<tspan dx="14" style="fill:var(--ink-3);font-family:var(--sans)">× = multiple of the labelled daily dose · ' + (nph > 1 ? nph + ' phases · ' : '') + 'dosed to day ' + te + ', then no drug</tspan></text>';
+      if (G.narrow) head = list.replace(/<(\/?)tspan>/g, '<$1i>') + ' · to day ' + te + ', then no drug';
+      else s += '<text class="t-drug" x="' + (x(te) + 12) + '" y="' + (TR.drug / 2 + 4) + '">' + list
+        + '<tspan class="t-note" dx="14" style="fill:var(--ink-3);font-family:var(--sans)">× = multiple of the labelled daily dose · ' + (nph > 1 ? nph + ' phases · ' : '') + 'dosed to day ' + te + ', then no drug</tspan></text>';
     }
     // ---- cells in the lesion (log)
     var cy0 = TR.drug + TR.gap, ch = TR.cells, lo = Math.log10(0.5), hi = Math.log10(4096);
     function Y(v) { return cy0 + (1 - (Math.log10(Math.max(v, 0.5)) - lo) / (hi - lo)) * ch; }
-    s += '<text class="t-trk" x="0" y="' + (cy0 + ch / 2 + 4) + '">cells in lesion</text>';
+    s += '<text class="t-trk" x="0" y="' + (cy0 + ch / 2 + 4) + '">' + (G.narrow ? 'cells' : 'cells in lesion') + '</text>';
     [10, 1000].forEach(function (t) {
       s += '<line class="grid" x1="' + G.gl + '" x2="' + (G.gl + G.pw) + '" y1="' + Y(t) + '" y2="' + Y(t) + '"/>';
       s += '<text class="t-num" text-anchor="end" x="' + (G.gl - 6) + '" y="' + (Y(t) + 3.5) + '">' + int(t) + '</text>';
@@ -750,18 +798,21 @@
       notes.push({ d: lastGone, text: 'last tumour cell gone, day ' + lastGone });
     }
     if (series[0].gone != null) notes.push({ d: series[0].gone, text: 'no healthy cells left, day ' + series[0].gone });
-    notes.forEach(function (nt) {
-      s += '<text class="t-end" x="' + (x(nt.d) + 7) + '" y="' + (cy0 + ch - 6) + '">' + esc(nt.text) + '</text>';
+    notes.forEach(function (nt, i) {
+      var wide = nt.text.length * 6.4, flip = G.narrow && x(nt.d) + 7 + wide > G.gl + G.pw;   // a phone: keep the note inside the plot
+      s += '<text class="t-end"' + (flip ? ' text-anchor="end"' : '') + ' x="' + (flip ? Math.max(x(nt.d) - 7, G.gl + wide) : x(nt.d) + 7)
+        + '" y="' + (cy0 + ch - 6 - (G.narrow ? i * 14 : 0)) + '">' + esc(nt.text) + '</text>';
     });
     ends.sort(function (a, b) { return a.y - b.y; });
     for (var i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+    if (G.narrow) ends = [];                        // no right gutter on a phone: the values are in the tooltip
     ends.forEach(function (e) {
       s += '<text class="t-end" x="' + (G.gl + G.pw + 8) + '" y="' + (e.y + 4) + '">' + esc(e.name) + ' <tspan>' + esc(cells(e.val)) + '</tspan></text>';
     });
     // ---- normal tissue (linear, 0 to 100 %)
     var ny0 = cy0 + ch + TR.gap, nh = TR.norm - 3;
     function NY(v) { return ny0 + 2 + (1 - clamp(v, 0, 1)) * nh; }
-    s += '<text class="t-trk" x="0" y="' + (ny0 + TR.norm / 2 + 4) + '">normal tissue</text>';
+    s += '<text class="t-trk" x="0" y="' + (ny0 + TR.norm / 2 + 4) + '">' + (G.narrow ? 'normal' : 'normal tissue') + '</text>';
     s += '<text class="t-num" text-anchor="end" x="' + (G.gl - 6) + '" y="' + (NY(1) + 3.5) + '">100' + NBSP + '%</text>';
     s += '<text class="t-num" text-anchor="end" x="' + (G.gl - 6) + '" y="' + (NY(0) + 1) + '">0</text>';
     var np = '', nv = rp.normal, mn = 0;
@@ -774,18 +825,25 @@
       s += '<line class="harm-drop" x1="' + x(mn) + '" x2="' + x(mn) + '" y1="' + NY(1) + '" y2="' + NY(nv[mn]) + '"/>';
       s += '<circle class="harm-dot" cx="' + x(mn) + '" cy="' + NY(nv[mn]) + '" r="3.5"/>';
     }
-    s += '<text class="t-end" x="' + (G.gl + G.pw + 8) + '" y="' + (ny0 + TR.norm / 2 + 4) + '">harm <tspan>' + harm.toFixed(2) + (harm > 0.005 ? ' · day ' + mn : '') + '</tspan></text>';
+    if (!G.narrow) s += '<text class="t-end" x="' + (G.gl + G.pw + 8) + '" y="' + (ny0 + TR.norm / 2 + 4) + '">harm <tspan>' + harm.toFixed(2) + (harm > 0.005 ? ' · day ' + mn : '') + '</tspan></text>';
     s += '</svg>';
+    if (G.narrow) {
+      s = '<div class="year-name"><b>' + esc(run.label) + '</b>' + head + ' · harm <i>' + harm.toFixed(2) + '</i>' + (harm > 0.005 ? ' on day ' + mn : '') + '</div>' + s;
+    }
     box.innerHTML = s;
+    // a window too narrow for the note after the doses: leave the note out, do not let it run off the page
+    var dt = box.querySelector('text.t-drug'), note = dt && dt.querySelector('.t-note'), bb = note && dt.getBBox ? dt.getBBox() : null;
+    if (bb && bb.x + bb.width > G.W) dt.removeChild(note);
   }
 
   function renderAxis() {
-    var G = yearGeom(), s = '<svg width="' + G.W + '" height="22">';
-    for (var d = 0; d <= DAYS; d += 28) {
+    var G = yearGeom(), s = '<svg width="' + G.W + '" height="22">', step = G.narrow ? 91 : 28;
+    var first = G.pw / DAYS * step < 52 ? '0' : 'day 0';   // ticks close together: "day 0" would run into the next number
+    for (var d = 0; d <= DAYS; d += step) {
       s += '<line class="grid" x1="' + G.x(d) + '" x2="' + G.x(d) + '" y1="0" y2="5"/>';
-      s += '<text class="t-num" text-anchor="' + (d === 0 ? 'start' : d === DAYS ? 'end' : 'middle') + '" x="' + G.x(d) + '" y="17">' + (d === 0 ? 'day 0' : d) + '</text>';
+      s += '<text class="t-num" text-anchor="' + (d === 0 ? 'start' : d === DAYS ? 'end' : 'middle') + '" x="' + G.x(d) + '" y="17">' + (d === 0 ? first : d) + '</text>';
     }
-    s += '<text class="t-trk" x="0" y="17">after submission</text>';
+    if (!G.narrow) s += '<text class="t-trk" x="0" y="17">after submission</text>';
     $('year-axis').innerHTML = s + '</svg>';
   }
 
@@ -808,17 +866,22 @@
     function dayAt(evn) { var r = hit.getBoundingClientRect(); return clamp((evn.clientX - r.left) / r.width * DAYS, 0, DAYS); }
     hit.addEventListener('pointerdown', function (evn) {
       drag = true; hit.setPointerCapture(evn.pointerId);
+      // a finger may be about to scroll the page (a phone lets it, see #year-hit in the stylesheet): the day follows it once it moves sideways or lifts
+      if (evn.pointerType === 'touch') return;
       pause(); setDay(Math.round(dayAt(evn)), true);
     });
     hit.addEventListener('pointermove', function (evn) {
       var d = Math.round(dayAt(evn));
-      if (drag) setDay(d, true);
+      if (drag) { if (S.playing) pause(); setDay(d, true); }
       $('hoverline').style.opacity = drag ? 0 : 1;
       $('hoverline').style.transform = 'translateX(' + (d / DAYS * hit.clientWidth) + 'px)';
       yearTip(d, evn);
     });
     function end() { if (drag) { drag = false; writeHash(); } }
-    hit.addEventListener('pointerup', end);
+    hit.addEventListener('pointerup', function (evn) {
+      if (drag && evn.pointerType === 'touch') { pause(); setDay(Math.round(dayAt(evn)), true); }   // a tap
+      end();
+    });
     hit.addEventListener('pointercancel', end);
     hit.addEventListener('pointerleave', function () { $('hoverline').style.opacity = 0; hideTip(); });
   }
@@ -877,7 +940,7 @@
         sum += r.reward; n++;
         return '<td><button type="button" data-p="' + esc(p.id) + '" data-r="' + esc(r.id) + '" style="--r:' + clamp(r.reward, 0, 1).toFixed(3) + '"><b>' + r.reward.toFixed(2) + '</b><span title="' + esc(r.tag || '') + '">' + esc(r.tag || '') + '</span></button></td>';
       }).join('');
-      return '<tr' + (sep ? ' class="sep"' : '') + '><th>' + esc(label) + '<small>' + esc(kindLabel) + '</small></th>' + tds + '<td class="mean">' + (n ? (sum / n).toFixed(2) : '') + '</td></tr>';
+      return '<tr' + (sep ? ' class="sep"' : '') + '><th>' + esc(label).replace(/ · run (\d+)$/, ' ·&nbsp;run&nbsp;$1') + '<small>' + esc(kindLabel) + '</small></th>' + tds + '<td class="mean">' + (n ? (sum / n).toFixed(2) : '') + '</td></tr>';
     }
     var kn = { reference: 'reference run', agent: 'AI agent', baseline: 'baseline' };
     renderLadder(labels);
@@ -894,6 +957,7 @@
       sc.innerHTML = 'reward 0<i></i>1 · reward = healed − harm, mean of 16 replicate lesions per patient';
       t.parentNode.parentNode.appendChild(sc);
     }
+    overviewHint();
     [].forEach.call(t.querySelectorAll('button'), function (b) {
       b.onclick = function () {
         var p = patient(b.dataset.p), r = entry(p, b.dataset.r), ref = reference(p);
@@ -905,17 +969,28 @@
     });
   }
 
+  /* The table scrolls sideways inside its own box when the window is narrower than it: say so, the scrollbar is easy to miss. */
+  function overviewHint() {
+    var hint = $('ov-hint'), box = hint && hint.nextElementSibling;
+    if (!hint || !box || S.view !== 'overview') return;
+    hint.hidden = box.scrollWidth <= box.clientWidth + 1;
+    if (!hint.hidden) hint.textContent = 'Scroll sideways to see all ' + IDX.patients.length + ' patients →';
+  }
+
   // ---------------------------------------------------------------- layout and wiring
   function layout() {
-    var W = document.documentElement.clientWidth, H = window.innerHeight, narrow = W <= 1240, tight = W <= 1500;
+    var W = document.documentElement.clientWidth, H = window.innerHeight, narrow = W <= 1240, tight = W <= 1500, phone = W <= 760;
     var pad = tight ? 16 : 24, gap = tight ? 16 : 20, flankMin = W >= 1800 ? 380 : 320;
-    var availW = narrow ? (W - 2 * pad - 16) / 2 : (W - 2 * pad - 16 - 2 * gap - 2 * flankMin) / 2;
+    var availW = phone ? (W - 2 * 12 - 8) / 2 : narrow ? (W - 2 * pad - 16) / 2 : (W - 2 * pad - 16 - 2 * gap - 2 * flankMin) / 2;
     var fixedV = 46 + 34 + 4 + (tight ? 104 : 58) + 100 + (2 * (TR.drug + TR.cells + TR.norm + 2 * TR.gap) + 22 + 30) + 8;
     var availH = narrow ? 1e9 : H - fixedV;
     var s = Math.floor(Math.min(availW, availH) / 64), fits = !narrow && s >= 6;
     // too short to show everything at a legible size: let the year band fall below the fold
     if (s < 6 && !narrow) s = Math.floor(Math.min(availW, availH + 2 * (TR.drug + TR.cells + TR.norm + 2 * TR.gap) + 52) / 64);
     s = clamp(s, 4, 12);
+    // A phone: two lattices side by side leave less than 4 px per cell. Go down to 2, in whole device pixels so the cells stay sharp
+    // (2.5 px per cell on a 2x screen is 5 device pixels).
+    if (availW < 4 * 64) { var dpr = Math.max(2, window.devicePixelRatio || 1); s = Math.max(2, Math.floor(availW * dpr / 64) / dpr); }
     var changed = s !== scale || !SIDE.L.px;
     scale = s;
     document.documentElement.style.setProperty('--lat', s * 64 + 'px');
@@ -937,6 +1012,7 @@
       if (layout()) { initLattice(SIDE.L); initLattice(SIDE.R); }
       renderYear(SIDE.L); renderYear(SIDE.R); renderAxis();
       setDay(S.day, true);
+      fitPatientLine();
     }
     renderTop();
     writeHash();
@@ -1039,13 +1115,16 @@
   window.addEventListener('resize', function () {
     clearTimeout(rz);
     rz = setTimeout(function () {
+      overviewHint();
       if (S.view !== 'replay' || !SIDE.L.run) return;
       var changed = layout();
-      ['L', 'R'].forEach(function (k) { if (changed) initLattice(SIDE[k]); renderYear(SIDE[k]); });
+      ['L', 'R'].forEach(function (k) { if (changed) { initLattice(SIDE[k]); renderCaption(SIDE[k]); } renderYear(SIDE[k]); });
       renderAxis();
       setDay(S.day, true);
+      fitPatientLine();
     }, 80);
   });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (S.view === 'replay') fitPatientLine(); });   // widths change when the font arrives
 
   applyHash(true);
 })();

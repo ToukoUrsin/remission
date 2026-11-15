@@ -238,7 +238,7 @@ def diagnose(ep: dict, score: dict) -> dict:
             why.append("cultured the submitted combination on tumour cells before submitting")
         if tested_h:
             why.append("checked it on the patient's healthy cells")
-        add("solved", TITLES["solved"], (f"Reward {reward:.2f} against {best:.2f} for the best regimen known. " +
+        add("solved", TITLES["solved"], (f"Reward {reward:.2f} (search with the hidden parameters: {best:.2f}). " +
                                          ("It " + "; ".join(why) + "." if why else "")).strip())
         out["summary"] = mistakes[0]["detail"]
         return out
